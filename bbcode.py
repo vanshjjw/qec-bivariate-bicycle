@@ -4,7 +4,6 @@ from numpy.linalg import matrix_rank as rank
 from numpy.linalg import matrix_power as power
 
 def rank_mod2(A):
-    # Step 1
     if np.count_nonzero(A) == 0:
         return A
 
@@ -12,19 +11,17 @@ def rank_mod2(A):
     row = 0
 
     for col in range(n):
-        # Step 2
         if A[row:, col].max() == 0:
             continue
         
-        # Step 3
         max_index = np.argmax(np.abs(A[row:, col])) + row
         A[[row, max_index]] = A[[max_index, row]]
 
-        # Step 4
+
         for r in range(row + 1, m):
             A[r] = (A[r] - A[r, col] * A[row]) % 2
 
-        # Step 5
+  
         row += 1
         if row >= m:
             break
