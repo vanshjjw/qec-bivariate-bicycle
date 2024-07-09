@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from numpy.linalg import matrix_rank as rank
 from numpy.linalg import matrix_power as power
 
-def row_echelon_form_mod2(A):
+def rank_mod2(A):
     # Step 1
     if np.count_nonzero(A) == 0:
         return A
@@ -29,16 +29,13 @@ def row_echelon_form_mod2(A):
         if row >= m:
             break
 
-    return A % 2
-
-def rank_mod2(A):
-    ref = row_echelon_form_mod2(A)
-    m, n = ref.shape
-    rank = 0
+        ref = A%2
+        m, n = ref.shape
+        rank = 0
     
-    for i in range(m):
-        if np.count_nonzero(ref[i, :]) > 0:
-            rank += 1
+        for i in range(m):
+            if np.count_nonzero(ref[i, :]) > 0:
+                rank += 1
             
     return rank
 
