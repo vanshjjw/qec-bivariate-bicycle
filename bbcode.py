@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from numpy.linalg import matrix_rank as rank
 from numpy.linalg import matrix_power as power
+from scipy.linalg import block_diag
+import itertools
 
 def rank_mod2(A):
     if np.count_nonzero(A) == 0:
@@ -36,6 +38,28 @@ def rank_mod2(A):
             
     return rank
 
+def distance(n, HX, HZ):
+    H = block_diag(HX, HZ)
+    hx = np.hstack((HX, np.zeros((n // 2, n))))
+    hz = np.hstack((np.zeros((n // 2, n)), HZ))
+    
+    logicals = []
+    l1 = [list(bits) for bits in itertools.product([0, 1], repeat=2 * HX.shape[1])]
+    l2 = [item for item in l1 if np.all(np.matmul(H, item) % 2 == 0)]
+    
+    for op in l2:
+        op = np.array(op)
+        if rank_mod2(np.vstack((hx, op))) <= rank_mod2(hx):
+            continue
+        if rank_mod2(np.vstack((hz, op))) <= rank_mod2(hz):
+            continue
+        if rank_mod2(np.vstack((H, op))) > rank_mod2(H):
+            logicals.append(op)
+    
+    x = np.array([np.sum(logical) for logical in logicals])
+    d = np.min(x)
+
+    return d
 
 def code(l,m, a=[3,1,2], b=[3,1,2], c=[1,1,0]):
     """
@@ -63,11 +87,13 @@ def code(l,m, a=[3,1,2], b=[3,1,2], c=[1,1,0]):
     HZ=np.hstack((B.transpose(),A.transpose()))
 
     n=2*l*m
-    k=n-rank_mod2(HX)-rank_mod2(HZ) #seems to work for even-even l,m only (probably need to do rank over F_2 ^(n/2 x n))
+    k=n-rank_mod2(HX)-rank_mod2(HZ)
+    d=distance(n,HX,HZ) 
 
-    return(n,k)
+    return(n,k,d)
 
-nt,kt=code(8,5,a=[0,1,0],b=[0,1,0],c=[1,1,0])
+nt,kt,dt=code(3,3,a=[0,1,0],b=[0,1,0],c=[1,1,0])
 
 print("n=%s" %nt)
 print("k=%s" %kt)
+print("d=%s" %dt)
