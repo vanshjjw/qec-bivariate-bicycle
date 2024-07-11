@@ -38,23 +38,27 @@ def rank_mod2(A):
             
     return rank
 
+def binary_combinations(length):
+    for bits in itertools.product([0, 1], repeat=length):
+        yield list(bits)
+
+
 def distance(n, HX, HZ):
     H = block_diag(HX, HZ)
-    hx = np.hstack((HX, np.zeros((n // 2, n))))
-    hz = np.hstack((np.zeros((n // 2, n)), HZ))
+    rx=rank_mod2(HX)
+    rz=rank_mod2(HZ)
     
     logicals = []
-    l1 = [list(bits) for bits in itertools.product([0, 1], repeat=2 * HX.shape[1])]
-    l2 = [item for item in l1 if np.all(np.matmul(H, item) % 2 == 0)]
+    l1 = binary_combinations(2 * HX.shape[1])
+    l2 = np.array([item for item in l1 if np.all(np.matmul(H, item) % 2 == 0)])
     
     for op in l2:
-        op = np.array(op)
-        if rank_mod2(np.vstack((hx, op))) <= rank_mod2(hx):
-            continue
-        if rank_mod2(np.vstack((hz, op))) <= rank_mod2(hz):
-            continue
-        if rank_mod2(np.vstack((H, op))) > rank_mod2(H):
+        if rank_mod2(np.vstack((HX, op[:int(n)]))) > rx:
             logicals.append(op)
+            continue
+        if rank_mod2(np.vstack((HZ, op[int(n):]))) > rz:
+            logicals.append(op)
+            continue
     
     x = np.array([np.sum(logical) for logical in logicals])
     d = np.min(x)
@@ -66,8 +70,8 @@ def code(l,m, a=[3,1,2], b=[3,1,2], c=[1,1,0]):
     A_1=x^a[0], A_2=y^a[1], A_3=y^a[2]
     B_1=y^b[0], B_2=x^b[1], B_3=x^b[2]
 
-    Coefficients c=[1,1,0] for Toric code (two term polynomials),
-    c=[1,1,1] for three term polynomials
+    Coefficients c=[1,1,0] for two term polynomials (Toric code),
+    c=[1,1,1] for three term polynomials (BB codes)
     """
     Sl = np.zeros(shape=(l,l),dtype=float)
     Sm = np.zeros(shape=(m,m),dtype=float)
@@ -92,7 +96,7 @@ def code(l,m, a=[3,1,2], b=[3,1,2], c=[1,1,0]):
 
     return(n,k,d)
 
-nt,kt,dt=code(3,3,a=[0,1,0],b=[0,1,0],c=[1,1,0])
+nt,kt,dt=code(3,2,a=[0,1,0],b=[0,1,0],c=[1,1,0])
 
 print("n=%s" %nt)
 print("k=%s" %kt)
