@@ -30,3 +30,25 @@ def calculate_rank_GF2(A):
     rank = np.linalg.matrix_rank(GF(A))
     return rank
 
+
+def generate_binary_strings_in_order(i:int, n:int, arr):
+    if i == n:
+        yield arr
+        return
+
+    arr[i] = 0
+    yield from generate_binary_strings_in_order(i + 1, n, arr)
+    arr[i] = 1
+    yield from generate_binary_strings_in_order(i + 1, n, arr)
+
+
+def calculate_distance_brute_force(H_x, H_z,  n, k):
+    all_operators = generate_binary_strings_in_order(0, 2 * n, np.zeros(2 * n, dtype=int))
+
+    for operator in all_operators:
+        if not any(operator):
+            continue
+        if not any(np.matmul(H_x, operator[:n]) % 2) and not any(np.matmul(H_z, operator[n:]) % 2):
+            print("Found a candidate operator")
+
+    return 0

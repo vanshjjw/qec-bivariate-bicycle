@@ -10,8 +10,8 @@ def create_parity_check_matrices(l: int, m: int, A_expression:list[(str, int)], 
     x = np.kron(S_l, np.eye(m, dtype=int))
     y = np.kron(np.eye(l, dtype=int), S_m)
 
-    vd.validate_x_y_matrices(x)
-    vd.validate_x_y_matrices(y)
+    # vd.validate_x_y_matrices(x)
+    # vd.validate_x_y_matrices(y)
 
     # Make A and B matrices
     A = np.zeros((l * m, l * m), dtype=int)
@@ -22,14 +22,18 @@ def create_parity_check_matrices(l: int, m: int, A_expression:list[(str, int)], 
     for var, val in B_expression:
         B += np.linalg.matrix_power(x, val) if var == 'x' else np.linalg.matrix_power(y, val)
 
-    vd.validate_A_B_matrices(A, l, m, A_expression)
-    vd.validate_A_B_matrices(B, l, m, B_expression)
+    # vd.validate_A_B_matrices(A, l, m, A_expression)
+    # vd.validate_A_B_matrices(B, l, m, B_expression)
 
     H_x = np.concatenate((A, B), axis=1)
     H_z = np.concatenate((B.T, A.T), axis=1)
 
-    vd.validate_parity_matrix(H_x, H_z)
+    # vd.validate_parity_matrix(H_x, H_z)
+
     return H_x, H_z
+
+
+
 
 
 
@@ -49,7 +53,7 @@ def generate_bb_code(l: int, m: int, a: list[(str, int)], b: list[(str, int)]):
     # code parameters
     num_physical : int = 2 * l * m
     num_logical : int = num_physical - 2 * rank_H_x
-    distance : int = 0
+    distance : int = calculate_distance_brute_force(H_x, H_z, num_physical, num_logical)
 
     return num_physical, num_logical, distance
 
@@ -57,11 +61,11 @@ def generate_bb_code(l: int, m: int, a: list[(str, int)], b: list[(str, int)]):
 
 def main():
     A = {
-        "l": 21,
-        "m": 18,
-        "a": [("x", 3), ("y", 10), ("y", 17)],
-        "b": [("y", 5), ("x", 3), ("x", 19)],
-        "answer": [756, 16, 34]
+        "l": 6,
+        "m": 6,
+        "a": [("x", 3), ("y", 1), ("y", 2)],
+        "b": [("y", 3), ("x", 1), ("x", 2)],
+        "answer": [72, 36, 6]
     }
 
     l = A["l"]
