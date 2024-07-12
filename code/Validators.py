@@ -20,10 +20,7 @@ def validate_x_y_matrices(x):
     pass
 
 
-def validate_A_B_matrices(A, l, m, A_expression):
-    # must have same shape as x and y matrices
-    assert A.shape == (l * m, l * m)
-
+def validate_A_B_matrices(A, A_expression):
     # Number of 1's in each row is equal to the number of terms in A_expression
     weight = len(A_expression)
     for i, row in enumerate(A):
