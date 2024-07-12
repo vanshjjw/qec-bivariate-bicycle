@@ -1,5 +1,6 @@
 import numpy as np
 import galois
+from copy import deepcopy
 
 def display(M, middle_line = False):
     size = len(M[0])
@@ -48,42 +49,35 @@ def find_all_logical_operators(H_x, H_z, n, k, status_updates=False):
     rank = (n - k) // 2
     check = 0
 
-    print(f"n: {n}")
-    print(f"Rank: {rank}")
-    print(f"size of H_x: {H_x.shape} and H_z: {H_z.shape}")
-    print(f"Number of operators to check: {2 ** (2 * n)}")
-
+    # print(f"n: {n}")
+    # print(f"Rank: {rank}")
+    # print(f"size of H_x: {H_x.shape} and H_z: {H_z.shape}")
+    print(f"\nFinding all logical operators. Checking : {2 ** (2 * n)} operators.")
 
     for operator in all_operators:
         if not any(np.matmul(H_x, operator[:n]) % 2) and not any(np.matmul(H_z, operator[n:]) % 2):
-            print("Found a candidate operator")
 
             expanded_H_x = np.concatenate((H_x, np.array([operator[:n]])), axis=0)
             expanded_H_z = np.concatenate((H_z, np.array([operator[n:]])), axis=0)
 
             if calculate_rank_GF2(expanded_H_x) > rank or calculate_rank_GF2(expanded_H_z) > rank:
-                logical_operators.append(operator)
-                print("Found a logical operator")
+                logical_operators.append(deepcopy(operator))
 
         if status_updates and check % 50000 == 0:
             print(f"Checked {check} operators")
         check += 1
 
+    print(f"Checked {check} operators. \nSearch complete.\n")
     return logical_operators
 
 
 def calculate_distance_brute_force(H_x, H_z,  n, k, status_updates=False):
     logical_operators = find_all_logical_operators(H_x, H_z, n, k, status_updates)
-    print(f"\nFound {len(logical_operators)} logical operators")
-    min_weight = 2 * n
-    min_operator = None
 
+    min_weight = 2 * n
     for operator in logical_operators:
-        weight = sum(operator)
-        if weight < min_weight:
-            min_weight = weight
-            min_operator = operator
-            print(f"New minimum weight: {min_weight}")
+        weight = sum([1 if operator[i] == 1 or operator[i + n] == 1 else 0 for i in range(n)])
+        min_weight = min(min_weight, weight)
 
     return min_weight
 

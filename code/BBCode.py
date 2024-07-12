@@ -32,6 +32,7 @@ def create_parity_check_matrices(l: int, m: int, A_expression:list[(str, int)], 
     H_z = np.concatenate((B.T, A.T), axis=1)
 
     # vd.validate_parity_matrix(H_x, H_z)
+    print("\nParity matrices created successfully")
 
     return H_x, H_z
 
@@ -61,7 +62,7 @@ def generate_bb_code(l: int, m: int, a: list[(str, int)], b: list[(str, int)]):
 
 def single_run():
     A = {
-        "l": 3,
+        "l": 2,
         "m": 2,
         "a": ["x0", "x1"],
         "b": ["y0", "y1"],
@@ -76,7 +77,8 @@ def single_run():
     n, k, d = generate_bb_code(l, m, a, b)
 
     print(f"obtained: [{n}, {k}, {d}]")
-    print(f"answer: {A['answer']}")
+    if "answer" in A:
+        print(f"answer: {A['answer']}")
 
 
 
