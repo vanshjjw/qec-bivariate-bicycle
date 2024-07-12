@@ -17,9 +17,12 @@ def create_parity_check_matrices(l: int, m: int, A_expression:list[(str, int)], 
     A = np.zeros((l * m, l * m), dtype=int)
     B = np.zeros((l * m, l * m), dtype=int)
 
-    for var, val in A_expression:
+    for elem in A_expression:
+        var, val = elem[0], int(elem[1:])
         A += np.linalg.matrix_power(x, val) if var == 'x' else np.linalg.matrix_power(y, val)
-    for var, val in B_expression:
+
+    for elem in B_expression:
+        var, val = elem[0], int(elem[1:])
         B += np.linalg.matrix_power(x, val) if var == 'x' else np.linalg.matrix_power(y, val)
 
     # vd.validate_A_B_matrices(A, l, m, A_expression)
@@ -34,9 +37,6 @@ def create_parity_check_matrices(l: int, m: int, A_expression:list[(str, int)], 
 
 
 
-
-
-
 def generate_bb_code(l: int, m: int, a: list[(str, int)], b: list[(str, int)]):
     # calculate parity check matrices
     H_x, H_z = create_parity_check_matrices(l, m, a, b)
@@ -45,27 +45,27 @@ def generate_bb_code(l: int, m: int, a: list[(str, int)], b: list[(str, int)]):
     rank_H_x = helper.calculate_rank_GF2(H_x)
     rank_H_z = helper.calculate_rank_GF2(H_z)
 
-    print(f"Rank of H_x: {rank_H_x}")
-    print(f"Rank of H_z: {rank_H_z}")
+    # print(f"Rank of H_x: {rank_H_x}")
+    # print(f"Rank of H_z: {rank_H_z}")
 
     vd.validate_rank(rank_H_x, rank_H_z)
 
     # code parameters
     num_physical : int = 2 * l * m
     num_logical : int = num_physical - 2 * rank_H_x
-    distance : int = calculate_distance_brute_force(H_x, H_z, num_physical, num_logical)
+    distance : int = helper.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
 
     return num_physical, num_logical, distance
 
 
 
-def main():
+def single_run():
     A = {
-        "l": 6,
-        "m": 6,
-        "a": [("x", 3), ("y", 1), ("y", 2)],
-        "b": [("y", 3), ("x", 1), ("x", 2)],
-        "answer": [72, 36, 6]
+        "l": 3,
+        "m": 2,
+        "a": ["x0", "x1"],
+        "b": ["y0", "y1"],
+        "answer": [72, 12, 6]
     }
 
     l = A["l"]
@@ -81,7 +81,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    single_run()
 
 
 
