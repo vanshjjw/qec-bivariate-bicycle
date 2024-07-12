@@ -4,39 +4,17 @@ from numpy.linalg import matrix_rank as rank
 from numpy.linalg import matrix_power as power
 from scipy.linalg import block_diag
 import itertools
+import galois
+
+def rref_mod2(A):
+    GF2 = galois.GF(2)
+    A = GF2(A)
+    rref_matrix, pivots = A.rref()
+    return np.array(rref_matrix)
 
 def rank_mod2(A):
-    if np.count_nonzero(A) == 0:
-        return A
-
-    m, n = A.shape
-    row = 0
-
-    for col in range(n):
-        if A[row:, col].max() == 0:
-            continue
-        
-        max_index = np.argmax(np.abs(A[row:, col])) + row
-        A[[row, max_index]] = A[[max_index, row]]
-
-
-        for r in range(row + 1, m):
-            A[r] = (A[r] - A[r, col] * A[row]) % 2
-
-  
-        row += 1
-        if row >= m:
-            break
-
-        ref = A%2
-        m, n = ref.shape
-        rank = 0
-    
-        for i in range(m):
-            if np.count_nonzero(ref[i, :]) > 0:
-                rank += 1
-            
-    return rank
+    GF2 = galois.GF(2)
+    return rank(GF2(A))
 
 def binary_combinations(length):
     for bits in itertools.product([0, 1], repeat=length):
@@ -60,8 +38,8 @@ def distance(n, HX, HZ):
             logicals.append(op)
             continue
     
-    x = np.array([np.sum(logical) for logical in logicals])
-    d = np.min(x)
+    weights = np.array([np.sum(logical) for logical in logicals])
+    d = np.min(weights)
 
     return d
 
@@ -96,7 +74,7 @@ def code(l,m, a=[3,1,2], b=[3,1,2], c=[1,1,0]):
 
     return(n,k,d)
 
-nt,kt,dt=code(3,2,a=[0,1,0],b=[0,1,0],c=[1,1,0])
+nt,kt,dt=code(2,2,a=[0,1,0],b=[0,1,0],c=[1,1,0])
 
 print("n=%s" %nt)
 print("k=%s" %kt)

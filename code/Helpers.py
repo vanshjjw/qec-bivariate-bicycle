@@ -30,6 +30,11 @@ def calculate_rank_GF2(A):
     rank = np.linalg.matrix_rank(GF(A))
     return rank
 
+def generators(A):
+    GF2 = galois.GF(2)
+    A = GF2(A)
+    rref_matrix, pivots = A.rref()
+    return rref_matrix[~np.all(rref_matrix == 0, axis=1)]
 
 def generate_binary_strings_in_order(i:int, n:int, arr):
     if i == n:
