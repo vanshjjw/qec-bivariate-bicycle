@@ -13,7 +13,6 @@ def validate_parity_matrix(H_x, H_z):
     pass
 
 def validate_standard_CSS(n, k, S_x, S_z, rank_S_x, rank_S_z):
-
     #check if there are n-k X and Z stabilizer generators
     assert S_x.shape == (rank_S_x, n) and S_z.shape == (n-k-rank_S_x, n)
     

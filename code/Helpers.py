@@ -2,6 +2,7 @@ import numpy as np
 import galois
 from copy import deepcopy
 
+
 def display(M, middle_line = False):
     size = len(M[0])
 
@@ -25,11 +26,15 @@ def calculate_rank_GF2(A):
     rank = np.linalg.matrix_rank(GF(A))
     return rank
 
-def generators(A):
-    GF2 = galois.GF(2)
-    A = GF2(A)
-    rref_matrix, pivots = A.rref()
-    return rref_matrix[~np.all(rref_matrix == 0, axis=1)]
 
+def find_reduced_row_echelon_form(Hx, Hz):
+    # return rref form of Hx and Hz
+    pass
+
+
+
+def find_logical_generators(Sx, Sz):
+    # return logical generators of the code
+    pass
 
 

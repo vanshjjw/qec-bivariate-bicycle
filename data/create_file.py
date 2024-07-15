@@ -1,4 +1,3 @@
-
 def write_raw_data(Main: dict):
     Main["0"] = {
         "l": 6,
@@ -62,6 +61,10 @@ def Multiple_runs():
         print(f"B: {Main[str(i)]['b']}")
         print(f"Answer: {Main[str(i)]['answer']}")
         print()
+
+        # code = BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
+
+
 
 
 

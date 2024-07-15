@@ -64,7 +64,7 @@ class BBCode:
         # code parameters
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x
-        distance : int = dbf.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=False)
+        distance : int = dbf.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
 
         return num_physical, num_logical, distance
 
@@ -72,8 +72,8 @@ class BBCode:
 
 def single_run():
     A = {
-        "l": 2,
-        "m": 2,
+        "l": 3,
+        "m": 3,
         "a": ["x0", "x1"],
         "b": ["y0", "y1"],
     }
