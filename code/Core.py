@@ -1,6 +1,9 @@
 import numpy as np
 import code.Helpers as helper
 import Validators as vd
+import distance_brute_force as dbf
+from scipy.linalg import block_diag
+
 
 
 def create_matrix_S(size):
@@ -76,9 +79,9 @@ class BBCode:
 
 def single_run():
     A = {
-        "l": 3,
+        "l": 2,
         "m": 2,
-        "a": ["x2", "x1"],
+        "a": ["x0", "x1"],
         "b": ["y0", "y1"],
     }
 
@@ -91,7 +94,7 @@ def single_run():
     print(f"A: {a}")
     print(f"B: {b}")
 
-    code = BBCode(l, m, a, b, debug=True)
+    code = BBCode(l, m, a, b, debug=False)
     n, k, d = code.generate_bb_code()
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")
@@ -113,13 +116,16 @@ def single_run_2():
     b = A["b"]
 
     code = BBCode(l, m, a, b, debug=False)
+    H_x, H_z = code.create_parity_check_matrices()
+    G=helper.G(H_x, H_z)
+    print(G)
+    print(helper.standard_form(G))
 
 
 
 
 if __name__ == "__main__":
-    single_run()
-
+    single_run2()
 
 
 

@@ -5,16 +5,12 @@ from numpy.linalg import matrix_power as power
 from scipy.linalg import block_diag
 import itertools
 import galois
-
-def rref_mod2(A):
-    GF2 = galois.GF(2)
-    A = GF2(A)
-    rref_matrix, pivots = A.rref()
-    return np.array(rref_matrix)
+from sympy import * 
+from utils_linalg import *
 
 def rank_mod2(A):
     GF2 = galois.GF(2)
-    return rank(GF2(A))
+    return rank(GF2(np.array(A, dtype=int)))
 
 def binary_combinations(length):
     for bits in itertools.product([0, 1], repeat=length):
@@ -72,10 +68,54 @@ def code(l,m, a=[3,1,2], b=[3,1,2], c=[1,1,0]):
     k=n-rank_mod2(HX)-rank_mod2(HZ)
     d=distance(n,HX,HZ) 
 
-    return(n,k,d)
+    return(HX, HZ)
 
-nt,kt,dt=code(2,2,a=[0,1,0],b=[0,1,0],c=[1,1,0])
+def G(H_x, H_z):
+    H_x=row_echelon_HS(H_x, full=False)[0]
+    H_z=row_echelon_HS(H_z, full=True)[0]
+    H_x = H_x[~np.all(H_x == 0, axis=1)]
+    H_z = H_z[~np.all(H_z == 0, axis=1)]
+    return block_diag(H_x, H_z)
 
-print("n=%s" %nt)
-print("k=%s" %kt)
-print("d=%s" %dt)
+H_x, H_z = code(2,2, a=[3,1,2], b=[3,1,2], c=[1,1,0])
+
+print(row_echelon_HS(H_x, full=True)[0])
+
+def G(H_x, H_z):
+    H_x=row_echelon_HS(H_x, full=False)[0]
+    H_z=row_echelon_HS(H_z, full=False)[0]
+    H_x = H_x[~np.all(H_x == 0, axis=1)]
+    H_z = H_z[~np.all(H_z == 0, axis=1)]
+    return block_diag(H_x, H_z)
+
+def standard_form(G):
+    n, m = G.shape[1] // 2, G.shape[0]
+    k = n-m
+    
+    G1 = G[:, :n]
+    G2 = G[:, n:]
+    G1_rref, r, G1_transform_rows, G1_transform_cols = reduced_row_echelon(G1)
+    G2=(G1_transform_rows@G2@G1_transform_cols)%2
+    G = np.hstack((G1_rref,(G1_transform_rows@G2@G1_transform_cols)%2))
+
+    E=G[r:][n+r:]
+    E_rref, s, E_transform_rows, E_transform_cols = reduced_row_echelon(E)
+    D=(E_transform_rows@G2[r:][:r])%2
+    C=(G2[:r][r:]@E_transform_cols)%2
+
+    A=(G1_rref[:r][r:]@E_transform_cols)%2
+
+    G1_rref[:r][r:]=A
+    G2[r:][n+r:]=E_rref
+    G2[r:][:r]=D
+    G2[:r][r:]=C
+
+    G_new=np.hstack((G1_rref, G2))
+
+    return G_new
+
+
+
+
+
+
