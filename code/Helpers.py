@@ -75,15 +75,15 @@ def compute_standard_form(G):
     Z_logicals_og_basis[:,n:] =  (Z_logicals[:,n:] @ inv_transform_cols)%2
     X_logicals_og_basis[:,:n] =  (X_logicals[:,:n] @ inv_transform_cols)%2
     X_logicals_og_basis[:,n:] =  (X_logicals[:,n:] @ inv_transform_cols)%2
-    ## DESTABILIZERS 
+    """ ## DESTABILIZERS 
     DX = np.hstack([np.zeros((r,n)),np.eye(r),np.zeros((r,n-r))])
     DZ = np.hstack([np.zeros((s,r)),np.eye(s),np.zeros((s,n+k))])
     D = np.array(np.vstack([DX,DZ]),dtype=int)
     D_og_basis = np.zeros_like(D)
     D_og_basis[:,:n] =  (D[:,:n] @ inv_transform_cols)%2
-    D_og_basis[:,n:] =  (D[:,n:] @ inv_transform_cols)%2
+    D_og_basis[:,n:] =  (D[:,n:] @ inv_transform_cols)%2 """
 
-    return G_new, X_logicals_og_basis, Z_logicals_og_basis, D_og_basis
+    return G_new, X_logicals_og_basis, Z_logicals_og_basis#, D_og_basis
 
 def symplectic_inner_prod(vec1, vec2):
 
