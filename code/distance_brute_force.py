@@ -3,35 +3,35 @@ from copy import deepcopy
 import Helpers as helper
 
 
-def generate_binary_strings_in_order(i:int, num_bits:int, arr):
+def generate_all_binary_combinations(i:int, num_bits:int, arr) -> np.ndarray:
     if i == num_bits:
         yield arr
         return
 
     arr[i] = 0
-    yield from generate_binary_strings_in_order(i + 1, num_bits, arr)
+    yield from generate_all_binary_combinations(i + 1, num_bits, arr)
     arr[i] = 1
-    yield from generate_binary_strings_in_order(i + 1, num_bits, arr)
+    yield from generate_all_binary_combinations(i + 1, num_bits, arr)
 
 
-def generate_new_binary_strings_in_order(i:int, num_bits:int, arr):
+def generate_all_binary_combinations_bbcode(i:int, num_bits:int, arr) -> np.ndarray:
     if i == num_bits:
         yield arr
         return
 
     if num_bits//4 <= i <= 3*num_bits//4:
         arr[i] = 0
-        yield from generate_new_binary_strings_in_order(i + 1, num_bits, arr)
+        yield from generate_all_binary_combinations_bbcode(i + 1, num_bits, arr)
     else:
         arr[i] = 0
-        yield from generate_binary_strings_in_order(i + 1, num_bits, arr)
+        yield from generate_all_binary_combinations_bbcode(i + 1, num_bits, arr)
         arr[i] = 1
-        yield from generate_binary_strings_in_order(i + 1, num_bits, arr)
+        yield from generate_all_binary_combinations_bbcode(i + 1, num_bits, arr)
 
 
 
-def find_all_logical_operators(H_x, H_z, n, k, status_updates=False):
-    all_operators = generate_new_binary_strings_in_order(0, 2 * n, np.zeros(2 * n, dtype=int))
+def find_all_logical_operators(H_x, H_z, n: int, k: int, status_updates=False) -> list[np.ndarray]:
+    all_operators = generate_all_binary_combinations_bbcode(0, 2 * n, np.zeros(2 * n, dtype=int))
     logical_operators = []
     rank = (n - k) // 2
     check = 0
@@ -59,7 +59,7 @@ def find_all_logical_operators(H_x, H_z, n, k, status_updates=False):
 
 
 
-def calculate_distance_brute_force(H_x, H_z,  n, k, status_updates=False):
+def calculate_distance_brute_force(H_x, H_z,  n: int, k: int, status_updates=False) -> int:
     logical_operators = find_all_logical_operators(H_x, H_z, n, k, status_updates)
 
     min_weight = 2 * n

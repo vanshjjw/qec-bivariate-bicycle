@@ -31,8 +31,11 @@ def find_reduced_row_echelon_form(Hx, Hz):
     # return rref form of Hx and Hz
     pass
 
-def hamming_weight(vect):
-    weight = sum([1 if vect[i] == 1 or vect[i + len(vect)//2] == 1 else 0 for i in range(len(vect)//2)])
+def hamming_weight(vector):
+    # hamming weight for a CSS code logical operator (length = 2n)
+    n = len(vector) // 2
+    weight = sum([1 if vector[i] == 1 or vector[i + n] == 1 else 0 for i in range(n)])
+    return weight
 
 
 def find_logical_generators(Sx, Sz):
