@@ -1,4 +1,3 @@
-import numpy as np
 from ldpc.mod2 import nullspace, row_echelon, reduced_row_echelon, rank, row_span, row_basis
 
 def are_matrices_equal(matrix1, matrix2, tolerance=1e-8):

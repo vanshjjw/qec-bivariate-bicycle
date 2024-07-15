@@ -38,6 +38,11 @@ def generate_all_logicals():
 
 
 
+
+
+
+
+
 if __name__ == "__main__":
     n = 7
     k = 6
