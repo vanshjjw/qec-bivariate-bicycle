@@ -1,9 +1,8 @@
 import numpy as np
 import code.Helpers as helper
-import Validators as vd
-import distance_brute_force as dbf
-from scipy.linalg import block_diag
-
+import code.Validators as vd
+import code.distance_brute_force as dbf
+import code.distance_from_generators as dfg
 
 
 def create_matrix_S(size):
@@ -58,8 +57,6 @@ class BBCode:
 
     def generate_bb_code(self):
         H_x, H_z = self.create_parity_check_matrices()
-        helper.find_standard_form(H_x, H_z)
-        pass
 
         rank_H_x = helper.calculate_rank_GF2(H_x)
         rank_H_z = helper.calculate_rank_GF2(H_z)
@@ -70,7 +67,7 @@ class BBCode:
         # code parameters
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x
-        # distance : int = dbf.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
+        distance : int = dfg.calculate_distance(H_x, H_z, num_physical, num_logical, rank_H_x, rank_H_z, status_updates=True)
         distance = 0
 
         return num_physical, num_logical, distance
@@ -79,8 +76,8 @@ class BBCode:
 
 def single_run():
     A = {
-        "l": 2,
-        "m": 2,
+        "l": 3,
+        "m": 3,
         "a": ["x0", "x1"],
         "b": ["y0", "y1"],
     }
@@ -104,10 +101,11 @@ def single_run():
 
 def single_run_2():
     A = {
-        "l": 3,
-        "m": 2,
-        "a": ["x2", "x1"],
-        "b": ["y0", "y1"],
+        "l": 9,
+        "m": 6,
+        "a": ["x3", "y1", "y2"],
+        "b": ["y3", "x1", "x2"],
+        "answer": [108, 8, 10]
     }
 
     l = A["l"]
@@ -116,16 +114,17 @@ def single_run_2():
     b = A["b"]
 
     code = BBCode(l, m, a, b, debug=False)
-    H_x, H_z = code.create_parity_check_matrices()
-    G=helper.G(H_x, H_z)
-    print(G)
-    print(helper.standard_form(G))
+    n, k, d = code.generate_bb_code()
+
+    print(f"\nRequired BB code: [{n}, {k}, {d}]")
+    if "answer" in A:
+        print(f"answer: {A['answer']}")
 
 
 
 
 if __name__ == "__main__":
-    single_run2()
+    single_run()
 
 
 
