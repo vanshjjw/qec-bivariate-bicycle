@@ -43,3 +43,4 @@ def validate_A_B_matrices(A, A_expression):
 def validate_rank(rank_H_x, rank_H_z):
     assert rank_H_x == rank_H_z
     pass
+

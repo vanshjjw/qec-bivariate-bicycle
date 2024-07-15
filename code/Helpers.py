@@ -31,5 +31,7 @@ def generators(A):
     rref_matrix, pivots = A.rref()
     return rref_matrix[~np.all(rref_matrix == 0, axis=1)]
 
+def hamming_weight(vect):
+    weight = sum([1 if vect[i] == 1 or vect[i + len(vect)//2] == 1 else 0 for i in range(len(vect)//2)])
 
 
