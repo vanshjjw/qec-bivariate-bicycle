@@ -1,3 +1,5 @@
+import code.Core as core
+
 def write_raw_data(Main: dict):
     Main["0"] = {
         "l": 6,
@@ -50,7 +52,7 @@ def write_raw_data(Main: dict):
     }
 
 
-def Multiple_runs():
+def run_bbcode_examples():
     Main = {}
     write_raw_data(Main)
 
@@ -62,11 +64,12 @@ def Multiple_runs():
         print(f"Answer: {Main[str(i)]['answer']}")
         print()
 
-        # code = BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
+        code = core.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
+        print(code)
 
 
 
 
 
 if __name__ == "__main__":
-    pass
+    run_bbcode_examples()

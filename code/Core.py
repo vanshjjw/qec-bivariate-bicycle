@@ -1,7 +1,6 @@
 import numpy as np
-import Helpers as helper
+import code.Helpers as helper
 import Validators as vd
-import distance_brute_force as dbf
 
 
 def create_matrix_S(size):
@@ -56,6 +55,8 @@ class BBCode:
 
     def generate_bb_code(self):
         H_x, H_z = self.create_parity_check_matrices()
+        helper.find_standard_form(H_x, H_z)
+        pass
 
         rank_H_x = helper.calculate_rank_GF2(H_x)
         rank_H_z = helper.calculate_rank_GF2(H_z)
@@ -75,9 +76,9 @@ class BBCode:
 
 def single_run():
     A = {
-        "l": 2,
+        "l": 3,
         "m": 2,
-        "a": ["x0", "x1"],
+        "a": ["x2", "x1"],
         "b": ["y0", "y1"],
     }
 
@@ -100,9 +101,9 @@ def single_run():
 
 def single_run_2():
     A = {
-        "l": 2,
+        "l": 3,
         "m": 2,
-        "a": ["x0", "x1"],
+        "a": ["x2", "x1"],
         "b": ["y0", "y1"],
     }
 

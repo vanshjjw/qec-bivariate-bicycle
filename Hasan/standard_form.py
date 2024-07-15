@@ -1,5 +1,5 @@
 from ldpc.mod2 import reduced_row_echelon, inverse
-from utils_linalg import *
+import numpy as np
 
 
 def compute_standard_form(G):

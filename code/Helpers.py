@@ -1,5 +1,6 @@
 import numpy as np
-import galois
+from ldpc.mod2 import reduced_row_echelon, rank
+from Hasan import standard_form
 
 def display(M, middle_line = False):
     size = len(M[0])
@@ -20,9 +21,7 @@ def display(M, middle_line = False):
 
 
 def calculate_rank_GF2(A):
-    GF = galois.GF(2)
-    rank = np.linalg.matrix_rank(GF(A))
-    return rank
+    return rank(A)
 
 
 def hamming_weight(vector):
