@@ -2,6 +2,8 @@ import numpy as np
 import Helpers as helper
 import Validators as vd
 import distance_brute_force as dbf
+from scipy.linalg import block_diag
+
 
 
 def create_matrix_S(size):
@@ -94,33 +96,33 @@ def single_run():
     if "answer" in A:
         print(f"answer: {A['answer']}")
 
+def single_run2():
+    A = {
+        "l": 2,
+        "m": 2,
+        "a": ["x0", "y1"],
+        "b": ["y0", "x1"],
+    }
+
+    l = A["l"]
+    m = A["m"]
+    a = A["a"]
+    b = A["b"]
+
+    code = BBCode(l, m, a, b, debug=False)
+    H_x, H_z = code.create_parity_check_matrices()
+    G=helper.G(H_x, H_z)
+    print(G)
+    print(helper.standard_form(G))
+    
+
 
 
 if __name__ == "__main__":
-    single_run()
+    single_run2()
 
 
 
 
-A = {
-        "l": 2,
-        "m": 2,
-        "a": ["x0", "x1"],
-        "b": ["y0", "y1"],
-    }
-
-l = A["l"]
-m = A["m"]
-a = A["a"]
-b = A["b"]
-
-
-
-code = BBCode(l, m, a, b, debug=False)
-H_x, H_z=code.create_parity_check_matrices()
-G=np.array(np.hstack((H_x,H_z)), dtype=int)
-Gnew, X_logicals_basis, Z_logicals_basis = helper.compute_standard_form(G)
-
-print(Gnew, X_logicals_basis, Z_logicals_basis)
 
 
