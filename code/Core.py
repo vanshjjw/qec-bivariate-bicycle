@@ -120,11 +120,35 @@ def single_run_2():
     if "answer" in A:
         print(f"answer: {A['answer']}")
 
+def single_run3():
+    A = {
+        "l": 3,
+        "m": 2,
+        "a": ["x0", "y1"],
+        "b": ["y0", "x1"],
+    }
+
+    l = A["l"]
+    m = A["m"]
+    a = A["a"]
+    b = A["b"]
+
+    print(f"l: {l}, m: {m}")
+    print(f"A: {a}")
+    print(f"B: {b}")
+
+    code = BBCode(l, m, a, b, debug=False)
+    H_x, H_z = code.create_parity_check_matrices()
+
+    d=dfg.calculate_distance(H_x, H_z, 12,2,5,5)
+    print(d)    
+    
+
 
 
 
 if __name__ == "__main__":
-    single_run()
+    single_run3()
 
 
 

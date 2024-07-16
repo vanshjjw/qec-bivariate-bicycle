@@ -1,5 +1,5 @@
 import numpy as np
-import code.Helpers as helper
+import Helpers as helper
 from copy import deepcopy
 
 
@@ -56,14 +56,18 @@ def calculate_distance(H_x, H_z, n:int, k: int, rank_x: int, rank_z: int, status
 
     iterator = generate_binary_combinations_for_generators(0, n + k, n - k, np.zeros(n + k, dtype=int))
 
-
+    distance=2**(2*n)
     for combination in iterator:
         p = np.zeros((2 * n), dtype=int)
-        print(len(combination))
-        for i in combination:
-            if i == 1:
+        #print(len(combination))
+        for i in range(len(combination)):
+            if combination[i] == 1:
                 p = [(p[j] + complete_matrix[i][j]) % 2 for j in range(2 * n)]
-        # do p weight calculation
+        d=helper.hamming_weight(p)
+        if d < distance:
+            distance=d
+    
+    return distance
 
 
 
@@ -76,4 +80,4 @@ def calculate_distance(H_x, H_z, n:int, k: int, rank_x: int, rank_z: int, status
 
 
 
-    return 0
+
