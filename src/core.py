@@ -1,8 +1,8 @@
 import numpy as np
-import Helpers as helper
-import Validators as vd
-import distance_brute_force as dbf
-import distance_from_generators as dfg
+import src.helpers as helper
+import src.validators as vd
+import src.distance_brute_force as dbf
+import src.distance_from_generators as dfg
 
 
 def create_matrix_S(size):
@@ -64,7 +64,7 @@ class BBCode:
         if self.debug_mode:
             vd.validate_rank(rank_H_x, rank_H_z)
 
-        # code parameters
+        # src parameters
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x
 

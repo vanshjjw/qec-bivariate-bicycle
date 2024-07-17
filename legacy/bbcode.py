@@ -71,7 +71,7 @@ def code(l,m, a=[3,1,2], b=[3,1,2], c=[1,1,0]):
     A_1=x^a[0], A_2=y^a[1], A_3=y^a[2]
     B_1=y^b[0], B_2=x^b[1], B_3=x^b[2]
 
-    Coefficients c=[1,1,0] for two term polynomials (Toric code),
+    Coefficients c=[1,1,0] for two term polynomials (Toric src),
     c=[1,1,1] for three term polynomials (BB codes)
     """
     Sl = np.zeros(shape=(l,l),dtype=float)

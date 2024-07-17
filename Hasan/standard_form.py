@@ -4,7 +4,7 @@ import numpy as np
 
 def compute_standard_form(G):
     """
-    Returns the standard form of a stabilizer code.
+    Returns the standard form of a stabilizer src.
     See Nielsen & Chuang Section 10.5.7.
     """
     n, m = G.shape[1] // 2, G.shape[0]

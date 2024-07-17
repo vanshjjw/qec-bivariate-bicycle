@@ -1,3 +1,4 @@
+import src.core as code
 def write_raw_data(Main: dict):
     Main["0"] = {
         "l": 6,
@@ -62,8 +63,12 @@ def run_bbcode_examples():
         print(f"Answer: {Main[str(i)]['answer']}")
         print()
 
-        # code = core.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
-        # print(code)
+        obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
+        n, k, d = obj.generate_bb_code()
+        print(f"Required BB code: [{n}, {k}, {d}]")
+
+        if "answer" in Main[str(i)]:
+            print(f"answer: {Main[str(i)]['answer']}")
 
 
 

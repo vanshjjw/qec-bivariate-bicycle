@@ -1,6 +1,6 @@
 import numpy as np
 from copy import deepcopy
-import Helpers as helper
+import src.helpers as helper
 
 
 def generate_all_binary_combinations(i:int, num_bits:int, arr) -> np.ndarray:
@@ -72,20 +72,3 @@ def calculate_distance_brute_force(H_x, H_z,  n: int, k: int, status_updates=Fal
 
 
 
-def check_binary_combinations_produce_correct_number(n: int, k: int) -> bool:
-    num_found = 0
-    all_operators = generate_all_binary_combinations_bbcode(0, 2 * n, np.zeros(2 * n, dtype=int))
-    for operator in all_operators:
-            print(operator)
-            num_found += 1
-    num_expected = int(2 ** (1.5 * n))
-
-    print(f"Number of operators found: {num_found} and expected: {num_expected}")
-
-
-
-if __name__ == "__main__":
-    num = 4
-    logical = 0
-    check_binary_combinations_produce_correct_number(num, logical)
-    pass
