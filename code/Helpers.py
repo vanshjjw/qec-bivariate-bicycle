@@ -65,4 +65,10 @@ def pre_process(H_x, H_z):
     H_z=row_echelon_HS(H_z, full=False)[0]
     H_x = H_x[~np.all(H_x == 0, axis=1)]
     H_z = H_z[~np.all(H_z == 0, axis=1)]
-    return block_diag(H_x, H_z)
+
+    G = np.block([
+        [H_x, np.zeros((H_x.shape[0], H_z.shape[1]), dtype=int)],
+        [np.zeros((H_z.shape[0], H_x.shape[1]), dtype=int), H_z]
+    ])
+
+    return G
