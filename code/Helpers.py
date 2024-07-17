@@ -1,6 +1,5 @@
 import numpy as np
 from ldpc.mod2 import reduced_row_echelon, rank
-from scipy.linalg import block_diag
 from Hasan.utils_linalg import row_echelon_HS
 
 def standard_form(G):

@@ -5,7 +5,7 @@ setup(
     version='0.1',
     packages=find_packages(),
     install_requires=[
-        'numpy',
-        'ldpc'
+        'ldpc==0.1.50',
+        'numpy==1.26.2',
     ],
 )

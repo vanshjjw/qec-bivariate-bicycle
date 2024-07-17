@@ -1,8 +1,8 @@
 import numpy as np
-import code.Helpers as helper
-import code.Validators as vd
-import code.distance_brute_force as dbf
-import code.distance_from_generators as dfg
+import Helpers as helper
+import Validators as vd
+import distance_brute_force as dbf
+import distance_from_generators as dfg
 
 
 def create_matrix_S(size):
