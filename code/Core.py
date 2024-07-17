@@ -120,10 +120,10 @@ def single_run_2():
     if "answer" in A:
         print(f"answer: {A['answer']}")
 
-def single_run3():
+def single_run_3():
     A = {
         "l": 3,
-        "m": 2,
+        "m": 3,
         "a": ["x0", "y1"],
         "b": ["y0", "x1"],
     }
@@ -140,15 +140,13 @@ def single_run3():
     code = BBCode(l, m, a, b, debug=False)
     H_x, H_z = code.create_parity_check_matrices()
 
-    d=dfg.calculate_distance(H_x, H_z, 12,2,5,5, status_updates=True)
+    d=dfg.calculate_distance(H_x, H_z, 12,2, 5,5, status_updates=True)
     print(d)    
     
 
 
-
-
 if __name__ == "__main__":
-    single_run3()
+    single_run()
 
 
 

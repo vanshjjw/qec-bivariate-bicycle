@@ -39,8 +39,6 @@ def find_logical_generators(G_standard, rank_x: int, status_updates=False) -> li
 
 
 def calculate_distance(H_x, H_z, n:int, k: int, rank_x: int, rank_z: int, status_updates=False):
-    G_standard = helper.standard_form(helper.pre_process(H_x, H_z))
-
     # refer Neilson and Chuang, Chapter 10, Eq. 10.111
     #
     #   column size = rank_x | n - k - rank_x | k
@@ -50,24 +48,35 @@ def calculate_distance(H_x, H_z, n:int, k: int, rank_x: int, rank_z: int, status
     #
     # For BB codes, rank_x = rank_z
 
+    G_standard = helper.standard_form(helper.pre_process(H_x, H_z))
     Lx, Lz = find_logical_generators(G_standard, rank_x, status_updates)
 
     complete_matrix = np.vstack((G_standard, Lx, Lz))
 
-    iterator = generate_binary_combinations_for_generators(0, n + k, n - k, np.zeros(n + k, dtype=int))
+    all_permutations = generate_binary_combinations_for_generators(0, n + k, n - k, np.zeros(n + k, dtype=int))
+    min_distance = 2 * n
 
-    distance=2**(2*n)
-    for combination in iterator:
-        p = np.zeros((2 * n), dtype=int)
-        #print(len(combination))
-        for i in range(len(combination)):
-            if combination[i] == 1:
-                p = [(p[j] + complete_matrix[i][j]) % 2 for j in range(2 * n)]
-        d=helper.hamming_weight(p)
-        if d < distance:
-            distance=d
-    
-    return distance
+    c = 0
+    if status_updates:
+        print(f"\nFinding all logical operators. Checking : {2 ** (n + k) - 2 ** (n - k)} operators.")
+
+    for perm in all_permutations:
+
+        if c % 100000 == 0 and status_updates:
+            print(f"Checked {c} operators")
+        c += 1
+
+        product = np.zeros((2 * n), dtype=int)
+        for index, value in enumerate(perm):
+            if value == 1:
+                product = [(product[j] + complete_matrix[index][j]) % 2 for j in range(2 * n)]
+
+        min_distance = min(min_distance, helper.hamming_weight(product))
+
+    if status_updates:
+        print(f"Checked {c} operators. \nSearch complete.\n")
+
+    return min_distance
 
 
 
