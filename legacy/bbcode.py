@@ -2,11 +2,38 @@ import numpy as np
 import matplotlib.pyplot as plt
 from numpy.linalg import matrix_rank as rank
 from numpy.linalg import matrix_power as power
-from scipy.linalg import block_diag
+#from numpy.linalg import block_diag
 import itertools
 import galois
-from sympy import * 
-from utils_linalg import *
+import subprocess
+import re
+
+
+def convert_to_gap_mat(mat):
+        """
+        Args: 
+            mat (np.array): matrix 
+        """
+        mat = np.array(mat,dtype=int)
+        n_rows, n_cols = mat.shape
+        mat_str = [','.join(map(str, row)) for row in mat]
+        mat_str = '],\n['.join(mat_str)
+        gap_code = "M := [".format(n_rows,n_cols) + "[" + mat_str + "]];;\n"
+        return gap_code 
+
+def definecode(h):    
+    commands='LoadPackage("guava");;'+convert_to_gap_mat(h)+'c:=GeneratorMatCode(M,GF(2));'
+    #start_time = time.time()
+    process = subprocess.Popen(['gap'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    stdout, stderr = process.communicate(commands)
+    #Remove the special characters from gap's output like colours etc so you can search through it
+    #ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+    #stdout=ansi_escape.sub('', stdout)
+    #stdout=stdout.strip().replace(" ", "")
+    print(stdout)
+    return stdout
+
+definecode([[1,1,0,0],[0,0,1,1]])
 
 def rank_mod2(A):
     GF2 = galois.GF(2)
@@ -113,7 +140,6 @@ def standard_form(G):
     G_new=np.hstack((G1_rref, G2))
 
     return G_new
-
 
 
 
