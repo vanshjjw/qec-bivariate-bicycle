@@ -140,7 +140,7 @@ def single_run3():
     code = BBCode(l, m, a, b, debug=False)
     H_x, H_z = code.create_parity_check_matrices()
 
-    d=dfg.calculate_distance(H_x, H_z, 12,2,5,5)
+    d=dfg.calculate_distance(H_x, H_z, 12,2,5,5, status_updates=True)
     print(d)    
     
 
