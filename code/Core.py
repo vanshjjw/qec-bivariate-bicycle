@@ -67,8 +67,9 @@ class BBCode:
         # code parameters
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x
+
         distance : int = dfg.calculate_distance(H_x, H_z, num_physical, num_logical, rank_H_x, rank_H_z, status_updates=True)
-        distance = 0
+        # distance : int = dbf.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
 
         return num_physical, num_logical, distance
 
@@ -76,7 +77,7 @@ class BBCode:
 
 def single_run():
     A = {
-        "l": 3,
+        "l": 4,
         "m": 3,
         "a": ["x0", "x1"],
         "b": ["y0", "y1"],
@@ -120,29 +121,6 @@ def single_run_2():
     if "answer" in A:
         print(f"answer: {A['answer']}")
 
-def single_run_3():
-    A = {
-        "l": 3,
-        "m": 3,
-        "a": ["x0", "y1"],
-        "b": ["y0", "x1"],
-    }
-
-    l = A["l"]
-    m = A["m"]
-    a = A["a"]
-    b = A["b"]
-
-    print(f"l: {l}, m: {m}")
-    print(f"A: {a}")
-    print(f"B: {b}")
-
-    code = BBCode(l, m, a, b, debug=False)
-    H_x, H_z = code.create_parity_check_matrices()
-
-    d=dfg.calculate_distance(H_x, H_z, 12,2, 5,5, status_updates=True)
-    print(d)    
-    
 
 
 if __name__ == "__main__":

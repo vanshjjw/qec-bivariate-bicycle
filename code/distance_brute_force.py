@@ -19,7 +19,7 @@ def generate_all_binary_combinations_bbcode(i:int, num_bits:int, arr) -> np.ndar
         yield arr
         return
 
-    if num_bits//4 <= i <= 3*num_bits//4:
+    if num_bits//4 <= i < num_bits//2:
         arr[i] = 0
         yield from generate_all_binary_combinations_bbcode(i + 1, num_bits, arr)
     else:
@@ -55,6 +55,7 @@ def find_all_logical_operators(H_x, H_z, n: int, k: int, status_updates=False) -
 
     if status_updates:
         print(f"Checked {check} operators. \nSearch complete.\n")
+        print("Logical operators found: ", len(logical_operators))
     return logical_operators
 
 
@@ -68,3 +69,23 @@ def calculate_distance_brute_force(H_x, H_z,  n: int, k: int, status_updates=Fal
         min_weight = min(min_weight, weight)
 
     return min_weight
+
+
+
+def check_binary_combinations_produce_correct_number(n: int, k: int) -> bool:
+    num_found = 0
+    all_operators = generate_all_binary_combinations_bbcode(0, 2 * n, np.zeros(2 * n, dtype=int))
+    for operator in all_operators:
+            print(operator)
+            num_found += 1
+    num_expected = int(2 ** (1.5 * n))
+
+    print(f"Number of operators found: {num_found} and expected: {num_expected}")
+
+
+
+if __name__ == "__main__":
+    num = 4
+    logical = 0
+    check_binary_combinations_produce_correct_number(num, logical)
+    pass

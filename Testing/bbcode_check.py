@@ -1,5 +1,3 @@
-import code.Core as core
-
 def write_raw_data(Main: dict):
     Main["0"] = {
         "l": 6,
@@ -64,8 +62,8 @@ def run_bbcode_examples():
         print(f"Answer: {Main[str(i)]['answer']}")
         print()
 
-        code = core.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
-        print(code)
+        # code = core.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
+        # print(code)
 
 
 
