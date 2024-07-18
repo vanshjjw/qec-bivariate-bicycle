@@ -21,8 +21,9 @@ def convert_to_gap_mat(mat):
         gap_code = "M := [".format(n_rows,n_cols) + "[" + mat_str + "]];;\n"
         return gap_code 
 
+
 def definecode(h):    
-    commands='LoadPackage("guava");;'+convert_to_gap_mat(h)+'c:=GeneratorMatCode(M,GF(2));'
+    commands='LoadPackage("guava");; q:=3;; F:=GF(q);; x:=Indeterminate(F,"x");; poly:=One(F)*(1+x^3-x^5-x^6);; n:=5;;mat:=QDR_DoCirc(poly,n-1,2*n,F);; d:=DistRandStab(mat,100,1,0 : field:=F,maxav:=20/n);'
     #start_time = time.time()
     process = subprocess.Popen(['gap'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     stdout, stderr = process.communicate(commands)

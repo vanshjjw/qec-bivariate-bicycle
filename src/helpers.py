@@ -26,7 +26,7 @@ def standard_form(G):
 
     G_new=np.hstack((G1_rref, G2))
 
-    return G_new
+    return G_new, 
 
 
 def display(M, middle_line = False):
