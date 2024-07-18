@@ -3,52 +3,52 @@ import src.gap_distance as gd
 def write_raw_data(Main: dict):
     Main["0"] = {
         "l": 6,
-        "m": 6,
-        "a": ["x3", "y1", "y2"],
-        "b": ["y3", "x1", "x2"],
-        "answer": [72, 12, 6]
+        "m": 9,
+        "a": ["x0", "y1", "y2"],
+        "b": ["y3", "x2", "x4"],
+        "answer": [[108, 16, 6]]
     }
     Main["1"] = {
-        "l": 15,
-        "m": 3,
-        "a": ["x9", "y1", "y2"],
-        "b": ["y0", "x2", "x7"],
-        "answer": [90, 8, 10]
+        "l": 9,
+        "m": 9,
+        "a": ["x0", "x1", "y1"],
+        "b": ["x3", "y1", "y2"],
+        "answer": [[162, 4, 16]]
     }
     Main["2"] = {
         "l": 9,
-        "m": 6,
-        "a": ["x3", "y1", "y2"],
-        "b": ["y3", "x1", "x2"],
-        "answer": [108, 8, 10]
+        "m": 9,
+        "a": ["x0", "x1", "y6"],
+        "b": ["y3", "x2", "x3"],
+        "answer": [[162, 12, 8]]
     }
     Main["3"] = {
-        "l": 12,
-        "m": 6,
-        "a": ["x3", "y1", "y2"],
-        "b": ["y3", "x1", "x2"],
-        "answer": [144, 12, 12]
+        "l": 9,
+        "m": 9,
+        "a": ["x0", "y1", "y2"],
+        "b": ["y3", "x3", "x6"],
+        "answer": [[162, 24, 6]]
     }
     Main["4"] = {
-        "l": 12,
-        "m": 12,
-        "a": ["x3", "y2", "y7"],
+        "l": 9,
+        "m": 15,
+        "a": ["x3", "y1", "y2"],
         "b": ["y3", "x1", "x2"],
-        "answer": [288, 12, 18]
+        "answer": [[270, 8, 18]]
     }
     Main["5"] = {
-        "l": 30,
-        "m": 6,
-        "a": ["x9", "y1", "y2"],
-        "b": ["y3", "x25", "x26"],
-        "answer": [360, 12, 24]
+        "l": 7,
+        "m": 7,
+        "a": ["x1", "y3", "y4"],
+        "b": ["y1", "x3", "x4"],
+        "answer": [[98, 6, 12]]
     }
     Main["6"] = {
-        "l": 21,
-        "m": 18,
-        "a": ["x3", "y10", "y17"],
-        "b": ["y5", "x3", "x19"],
-        "answer": [756, 16, 34]
+        "l": 9,
+        "m": 9,
+        "a": ["x3", "y1", "y2"],
+        "b": ["y3", "x1", "x2"],
+        "answer": [[162, 8, 12]]
     }
 
 
@@ -67,8 +67,7 @@ def run_bbcode_examples():
         n, k, d = obj.generate_bb_code(distance_method=0)
         H_x, H_z = obj.create_parity_check_matrices()
         stdout, stderr = gd.definecode(H_x, H_z)
-        print(type(stdout))
-        print(f"Obtained BB code: [{n}, {k}, {stdout[-5:]}]")
+        print(f"Obtained BB code: [{n}, {k}, {stdout}]")
 
         if "answer" in Main[str(i)]:
             print(f"Known BB code: {Main[str(i)]['answer']}\n")
