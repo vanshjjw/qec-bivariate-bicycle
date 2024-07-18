@@ -5,7 +5,7 @@ def are_matrices_equal(matrix1, matrix2, tolerance=1e-8):
     return np.allclose(matrix1, matrix2, atol=tolerance)
 
 def is_dot_product_mod2_zero(matrix1, matrix2, tolerance=1e-8):
-    # Check if the dot product results in the zero matrix
+    # Check if the dot product analysis in the zero matrix
     result = matrix1 @ matrix2
     result_mod2 = np.mod(result,2)
     zero_matrix = np.zeros_like(result_mod2)

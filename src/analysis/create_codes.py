@@ -1,57 +1,59 @@
+import numpy as np
+import src.helpers as helper
 import src.core as code
-import src.distance_from_gap as dis_gap
 
-def write_raw_data(Main: dict):
-    Main["0"] = {
+
+def raw_data(data: dict):
+    data["0"] = {
         "l": 6,
         "m": 9,
         "a": ["x0", "y1", "y2"],
         "b": ["y3", "x2", "x4"],
         "answer": [[108, 16, 6]]
     }
-    Main["1"] = {
+    data["1"] = {
         "l": 9,
         "m": 9,
         "a": ["x0", "x1", "y1"],
         "b": ["x3", "y1", "y2"],
         "answer": [[162, 4, 16]]
     }
-    Main["2"] = {
+    data["2"] = {
         "l": 9,
         "m": 9,
         "a": ["x0", "x1", "y6"],
         "b": ["y3", "x2", "x3"],
         "answer": [[162, 12, 8]]
     }
-    Main["3"] = {
+    data["3"] = {
         "l": 9,
         "m": 9,
         "a": ["x0", "y1", "y2"],
         "b": ["y3", "x3", "x6"],
         "answer": [[162, 24, 6]]
     }
-    Main["4"] = {
+    data["4"] = {
         "l": 9,
         "m": 15,
         "a": ["x3", "y1", "y2"],
         "b": ["y3", "x1", "x2"],
         "answer": [[270, 8, 18]]
     }
-    Main["5"] = {
+    data["5"] = {
         "l": 7,
         "m": 7,
         "a": ["x1", "y3", "y4"],
         "b": ["y1", "x3", "x4"],
         "answer": [[98, 6, 12]]
     }
-    Main["6"] = {
+    data["6"] = {
         "l": 9,
         "m": 9,
         "a": ["x3", "y1", "y2"],
         "b": ["y3", "x1", "x2"],
         "answer": [[162, 8, 12]]
     }
-    Main["7"] = {
+    data["7"] = {
         "l": 8,
         "m": 8,
         "a": ["x2", "y1", "y3", "y4"],
@@ -60,27 +62,51 @@ def write_raw_data(Main: dict):
     }
 
 
-def run_bbcode_examples():
+def write_matrix(matrix, file):
+    for row in matrix:
+        writable = "[ " + " ".join(map(str, row)) + " ]" + "\n"
+        file.write(writable)
+    file.write("\n\n")
+
+
+
+
+def save_results():
     Main = {}
-    write_raw_data(Main)
+    raw_data(Main)
 
-    for i in range(len(Main)):
-        print(f"Code {i}:")
-        print(f"l: {Main[str(i)]['l']}, m: {Main[str(i)]['m']}")
-        print(f"A: {Main[str(i)]['a']}")
-        print(f"B: {Main[str(i)]['b']}")
-        print()
+    for key in Main:
+        example = Main[key]
+        l = example["l"]
+        m = example["m"]
+        a = example["a"]
+        b = example["b"]
 
-        obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
+        obj = code.BBCode(l, m, a, b, debug=False)
         n, k, d = obj.generate_bb_code(distance_method=0)
         H_x, H_z = obj.create_parity_check_matrices()
-        d = dis_gap.calculate_distance(H_x, H_z)
 
-        print(f"Obtained BB code: [{n}, {k}, {d}]")
+        with open(f"Results/[[{n}.{k},{d}]].txt", 'w') as file:
+            file.write(f"l: {l}\n")
+            file.write(f"m: {m}\n")
+            file.write(f"A: {a}\n")
+            file.write(f"B: {b}\n")
 
-        if "answer" in Main[str(i)]:
-            print(f"Known BB code: {Main[str(i)]['answer']}\n")
+            file.write(f"\nBB code: [{n}, {k}, {d}]\n\n")
+
+            if "answer" in example:
+                file.write(f"\nKnown BB code: {example['answer']}\n\n")
+
+            file.write("H_x:\n")
+            write_matrix(H_x, file)
+            file.write("H_z:\n")
+            write_matrix(H_z, file)
+            file.flush()
+            file.close()
+
+
 
 
 if __name__ == "__main__":
-    run_bbcode_examples()
+    save_results()
+    print("Results saved.")
