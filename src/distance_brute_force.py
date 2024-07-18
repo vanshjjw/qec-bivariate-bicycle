@@ -46,7 +46,7 @@ def find_all_logical_operators(H_x, H_z, n: int, k: int, status_updates=False) -
             expanded_H_x = np.concatenate((H_x, np.array([operator[:n]])), axis=0)
             expanded_H_z = np.concatenate((H_z, np.array([operator[n:]])), axis=0)
 
-            if helper.calculate_rank_GF2(expanded_H_x) > rank or helper.calculate_rank_GF2(expanded_H_z) > rank:
+            if helper.binary_rank(expanded_H_x) > rank or helper.binary_rank(expanded_H_z) > rank:
                 logical_operators.append(deepcopy(operator))
 
         if status_updates and check % 1000000 == 0:

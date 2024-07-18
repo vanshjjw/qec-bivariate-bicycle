@@ -55,11 +55,11 @@ class BBCode:
 
         return H_x, H_z
 
-    def generate_bb_code(self):
+    def generate_bb_code(self, distance_method = 0):
         H_x, H_z = self.create_parity_check_matrices()
 
-        rank_H_x = helper.calculate_rank_GF2(H_x)
-        rank_H_z = helper.calculate_rank_GF2(H_z)
+        rank_H_x = helper.binary_rank(H_x)
+        rank_H_z = helper.binary_rank(H_z)
 
         if self.debug_mode:
             vd.validate_rank(rank_H_x, rank_H_z)
@@ -68,8 +68,12 @@ class BBCode:
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x
 
-        distance : int = dfg.calculate_distance(H_x, H_z, num_physical, num_logical, rank_H_x, rank_H_z, status_updates=True)
-        # distance : int = dbf.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
+        if distance_method == 0:
+            distance : int = 0
+        elif distance_method == 1:
+            distance : int = dfg.calculate_distance(H_x, H_z, num_physical, num_logical, rank_H_x, rank_H_z, status_updates=True)
+        else:
+            distance : int = dbf.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
 
         return num_physical, num_logical, distance
 
@@ -93,7 +97,7 @@ def single_run():
     print(f"B: {b}")
 
     code = BBCode(l, m, a, b, debug=False)
-    n, k, d = code.generate_bb_code()
+    n, k, d = code.generate_bb_code(distance_method=0)
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")
     if "answer" in A:
@@ -107,9 +111,20 @@ def single_run_2():
         [0, 0, 0, 1, 1, 1, 1],
     ]
     Hz = [
-
+        [0, 0, 0, 1, 1, 1, 1],
+        [0, 1, 1, 0, 0, 1, 1],
+        [0, 0, 0, 1, 1, 1, 1],
     ]
+    Hx = np.array(Hx)
+    Hz = np.array(Hz)
 
+    n = 7
+    k = 1
+    rk_x = 3
+    rk_z = 3
+
+    d = dfg.calculate_distance(Hx, Hz, n, k, rk_x, rk_z, status_updates=True)
+    print(f"Distance: {d}")
 
 
 if __name__ == "__main__":
