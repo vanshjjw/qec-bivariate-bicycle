@@ -31,7 +31,7 @@ def write_raw_data(Main: dict):
     Main["4"] = {
         "l": 12,
         "m": 12,
-        "a": ["x3", "y1", "y2"],
+        "a": ["x3", "y2", "y7"],
         "b": ["y3", "x1", "x2"],
         "answer": [288, 12, 18]
     }
@@ -60,15 +60,14 @@ def run_bbcode_examples():
         print(f"l: {Main[str(i)]['l']}, m: {Main[str(i)]['m']}")
         print(f"A: {Main[str(i)]['a']}")
         print(f"B: {Main[str(i)]['b']}")
-        print(f"Answer: {Main[str(i)]['answer']}")
         print()
 
         obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
         n, k, d = obj.generate_bb_code()
-        print(f"Required BB code: [{n}, {k}, {d}]")
+        print(f"Obtained BB code: [{n}, {k}, {d}]")
 
         if "answer" in Main[str(i)]:
-            print(f"answer: {Main[str(i)]['answer']}")
+            print(f"Known BB code: {Main[str(i)]['answer']}\n")
 
 
 
