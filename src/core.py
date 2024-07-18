@@ -77,7 +77,7 @@ class BBCode:
 
 def single_run():
     A = {
-        "l": 4,
+        "l": 3,
         "m": 3,
         "a": ["x0", "x1"],
         "b": ["y0", "y1"],
@@ -101,25 +101,14 @@ def single_run():
 
 
 def single_run_2():
-    A = {
-        "l": 9,
-        "m": 6,
-        "a": ["x3", "y1", "y2"],
-        "b": ["y3", "x1", "x2"],
-        "answer": [108, 8, 10]
-    }
+    Hx = [
+        [0, 0, 0, 1, 1, 1, 1],
+        [0, 1, 1, 0, 0, 1, 1],
+        [0, 0, 0, 1, 1, 1, 1],
+    ]
+    Hz = [
 
-    l = A["l"]
-    m = A["m"]
-    a = A["a"]
-    b = A["b"]
-
-    code = BBCode(l, m, a, b, debug=False)
-    n, k, d = code.generate_bb_code()
-
-    print(f"\nRequired BB code: [{n}, {k}, {d}]")
-    if "answer" in A:
-        print(f"answer: {A['answer']}")
+    ]
 
 
 
