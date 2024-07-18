@@ -3,49 +3,13 @@ import src.helpers as helper
 import src.validators as vd
 import src.distance_brute_force as dbf
 import src.distance_from_generators as dfg
-from Hasan.utils_linalg import *
-import subprocess
-import re
+
 
 def create_matrix_S(size):
     S = np.eye(size, dtype=int, k=1)
     S[size - 1][0] = 1
     return S
 
-def convert_to_gap_mat(mat1, mat2):
-        mat1 = np.array(mat1,dtype=int)
-        n_rows1, n_cols1 = mat1.shape
-        mat_str1 = [','.join(map(str, row)) for row in mat1]
-        mat_str1 = '],\n['.join(mat_str1)
-        gap_code1 = "Hx := [".format(n_rows1,n_cols1) + "[" + mat_str1 + "]];;\n"
-        mat2 = np.array(mat2,dtype=int)
-        n_rows2, n_cols2 = mat2.shape
-        mat_str2 = [','.join(map(str, row)) for row in mat2]
-        mat_str2 = '],\n['.join(mat_str2)
-        gap_code2 = "Hz := [".format(n_rows2,n_cols2) + "[" + mat_str2 + "]];;\n"
-        gap_code=gap_code1+gap_code2
-        return gap_code
-
-
-def define_commands(H_x, H_z):
-    commands = 'LoadPackage("guava");; LoadPackage("QDistRnd");;'+convert_to_gap_mat(H_x, H_z)+'d:=DistRandCSS(Hz,Hx,100,0,2 : field:=GF(2));'
-    return commands
-
-
-def definecode(H_x, H_z):
-    commands= define_commands(H_x, H_z)
-
-    # start_time = time.time()
-    process = subprocess.Popen(['gap'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    std_output, std_error = process.communicate(commands)
-
-    # Remove the special characters from gap's output like colours etc so you can search through it
-    # ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
-    # stdout=ansi_escape.sub('', stdout)
-    # stdout=stdout.strip().replace(" ", "")
-    print(std_error)
-    print(std_output)
-    return std_output, std_error
 
 class BBCode:
     def __init__(self, l: int, m: int, A_expression:list[str], B_expression: list[str], debug = False):
@@ -91,11 +55,11 @@ class BBCode:
 
         return H_x, H_z
 
-    def generate_bb_code(self):
+    def generate_bb_code(self, distance_method = 0):
         H_x, H_z = self.create_parity_check_matrices()
 
-        rank_H_x = helper.calculate_rank_GF2(H_x)
-        rank_H_z = helper.calculate_rank_GF2(H_z)
+        rank_H_x = helper.binary_rank(H_x)
+        rank_H_z = helper.binary_rank(H_z)
 
         if self.debug_mode:
             vd.validate_rank(rank_H_x, rank_H_z)
@@ -104,8 +68,12 @@ class BBCode:
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x
 
-        distance : int = dfg.calculate_distance(H_x, H_z, num_physical, num_logical, rank_H_x, rank_H_z, status_updates=True)
-        # distance : int = dbf.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
+        if distance_method == 0:
+            distance : int = 0
+        elif distance_method == 1:
+            distance : int = dfg.calculate_distance(H_x, H_z, num_physical, num_logical, rank_H_x, rank_H_z, status_updates=True)
+        else:
+            distance : int = dbf.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
 
         return num_physical, num_logical, distance
 
@@ -129,7 +97,7 @@ def single_run():
     print(f"B: {b}")
 
     code = BBCode(l, m, a, b, debug=False)
-    n, k, d = code.generate_bb_code()
+    n, k, d = code.generate_bb_code(distance_method=0)
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")
     if "answer" in A:
@@ -143,35 +111,24 @@ def single_run_2():
         [0, 0, 0, 1, 1, 1, 1],
     ]
     Hz = [
-
+        [0, 0, 0, 1, 1, 1, 1],
+        [0, 1, 1, 0, 0, 1, 1],
+        [0, 0, 0, 1, 1, 1, 1],
     ]
+    Hx = np.array(Hx)
+    Hz = np.array(Hz)
 
-def single_run3():
-    A = {
-        "l": 3,
-        "m": 3,
-        "a": ["x0", "x1"],
-        "b": ["y0", "y1"],
-    }
+    n = 7
+    k = 1
+    rk_x = 3
+    rk_z = 3
 
-    l = A["l"]
-    m = A["m"]
-    a = A["a"]
-    b = A["b"]
+    d = dfg.calculate_distance(Hx, Hz, n, k, rk_x, rk_z, status_updates=True)
+    print(f"Distance: {d}")
 
-    print(f"l: {l}, m: {m}")
-    print(f"A: {a}")
-    print(f"B: {b}")
-
-    code = BBCode(l, m, a, b, debug=False)
-    H_x, H_z = code.create_parity_check_matrices()
-    """ H_x=ldpc.mod2row_echelon(H_x, full=False)
-    H_z=row_echelon_HS(H_z, full=False) """
-    definecode(H_x, H_z)
-   
 
 if __name__ == "__main__":
-    single_run3()
+    single_run()
 
 
 

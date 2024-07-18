@@ -48,7 +48,7 @@ def calculate_distance(H_x, H_z, n:int, k: int, rank_x: int, rank_z: int, status
     #
     # For BB codes, rank_x = rank_z
 
-    G_standard = helper.standard_form(helper.pre_process(H_x, H_z))
+    G_standard = helper.standard_form(helper.make_block_diagonal(H_x, H_z))
     Lx, Lz = find_logical_generators(G_standard, rank_x, status_updates)
 
     complete_matrix = np.vstack((G_standard, Lx, Lz))

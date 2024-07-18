@@ -1,6 +1,5 @@
 import numpy as np
 from ldpc.mod2 import reduced_row_echelon, rank
-from Hasan.utils_linalg import row_echelon_HS
 
 def standard_form(G):
     n, m = G.shape[1] // 2, G.shape[0]
@@ -9,24 +8,24 @@ def standard_form(G):
     G1 = G[:, :n]
     G2 = G[:, n:]
     G1_rref, r, G1_transform_rows, G1_transform_cols = reduced_row_echelon(G1)
-    G2=(G1_transform_rows@G2@G1_transform_cols)%2
-    G = np.hstack((G1_rref,G2))
+    G2 = (G1_transform_rows@G2@G1_transform_cols)%2
 
-    E=G2[r:,r:]
+    E = G2[r:,r:]
     E_rref, s, E_transform_rows, E_transform_cols = reduced_row_echelon(E)
-    D=(E_transform_rows@G2[r:,:r])%2
-    C=(G2[:r,r:]@E_transform_cols)%2
+    D = ( E_transform_rows @ G2[r:,:r] ) % 2
+    C = ( G2[:r,r:] @ E_transform_cols ) % 2
 
-    A=(G1_rref[:r,r:]@E_transform_cols)%2
+    A = ( G1_rref[:r,r:] @ E_transform_cols ) % 2
 
-    G1_rref[:r,r:]=A
-    G2[r:,r:]=E_rref
-    G2[r:,:r]=D
-    G2[:r,r:]=C
+    G1_rref[:r,r:] = A
+    G2[r:,r:] = E_rref
+    G2[r:,:r] = D
+    G2[:r,r:] = C
 
-    G_new=np.hstack((G1_rref, G2))
+    G_new = np.hstack((G1_rref, G2))
+    G_standard = G_new[ ~ np.all(G_new == 0, axis=1)]
 
-    return G_new, 
+    return G_standard
 
 
 def display(M, middle_line = False):
@@ -47,7 +46,7 @@ def display(M, middle_line = False):
     pass
 
 
-def calculate_rank_GF2(A):
+def binary_rank(A):
     return rank(A)
 
 
@@ -58,16 +57,9 @@ def hamming_weight(vector):
     return weight
 
 
-
-def pre_process(H_x, H_z):
-    H_x=row_echelon_HS(H_x, full=False)[0]
-    H_z=row_echelon_HS(H_z, full=False)[0]
-    H_x = H_x[~np.all(H_x == 0, axis=1)]
-    H_z = H_z[~np.all(H_z == 0, axis=1)]
-
+def make_block_diagonal(H_x, H_z):
     G = np.block([
         [H_x, np.zeros((H_x.shape[0], H_z.shape[1]), dtype=int)],
         [np.zeros((H_z.shape[0], H_x.shape[1]), dtype=int), H_z]
     ])
-
     return G
