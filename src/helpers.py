@@ -1,7 +1,15 @@
 import numpy as np
 from ldpc.mod2 import reduced_row_echelon, rank
 
-def standard_form(G):
+def generators(G_standard):
+    G1=G_standard[:][:G_standard.shape[1]//2]
+    G2=G_standard[:][G_standard.shape[1]//2:]
+    H_x = G1[ ~ np.all(G1 == 0, axis=1)]
+    H_z=G2[ ~ np.all(G2 == 0, axis=1)]
+    return H_x, H_z
+
+def standard_form(H_x, H_z):
+    G=make_block_diagonal(H_x, H_z)
     n, m = G.shape[1] // 2, G.shape[0]
     k = n-m
 

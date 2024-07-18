@@ -3,6 +3,7 @@ import src.helpers as helper
 import src.validators as vd
 import src.distance_brute_force as dbf
 import src.distance_from_generators as dfg
+import src.gap_distance as gd
 
 
 def create_matrix_S(size):
@@ -55,7 +56,7 @@ class BBCode:
 
         return H_x, H_z
 
-    def generate_bb_code(self, distance_method = 0):
+    def generate_bb_code(self, distance_method=0):
         H_x, H_z = self.create_parity_check_matrices()
 
         rank_H_x = helper.binary_rank(H_x)
@@ -127,8 +128,31 @@ def single_run_2():
     print(f"Distance: {d}")
 
 
+
+def single_run_3():
+    A = {
+        "l": 3,
+        "m": 3,
+        "a": ["x0", "x1"],
+        "b": ["y0", "y1"],
+    }
+
+    l = A["l"]
+    m = A["m"]
+    a = A["a"]
+    b = A["b"]
+
+    print(f"l: {l}, m: {m}")
+    print(f"A: {a}")
+    print(f"B: {b}")
+
+    code = BBCode(l, m, a, b, debug=False)
+    H_x, H_z = code.create_parity_check_matrices()
+    gd.definecode(H_x, H_z)
+
+
 if __name__ == "__main__":
-    single_run()
+    single_run_3()
 
 
 
