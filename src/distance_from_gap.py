@@ -36,14 +36,15 @@ def calculate_distance(H_x, H_z, status_updates=False):
     std_output, std_error = define_code(H_x, H_z)
     if std_error is not None:
         print(f"Error in GAP: {std_error}")
+        # print("\n\n" + std_output + "\n\n")
 
-    d = 0
+    digits = ""
     for char in std_output[::-1]:
         if char.isspace():
             continue
         if char.isdigit():
-            d = d * 10 + int(char)
+            digits += char
         else:
             break
 
-    return d
+    return int(digits[::-1])

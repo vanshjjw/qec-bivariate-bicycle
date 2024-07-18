@@ -51,6 +51,13 @@ def write_raw_data(Main: dict):
         "b": ["y3", "x1", "x2"],
         "answer": [[162, 8, 12]]
     }
+    Main["7"] = {
+        "l": 8,
+        "m": 8,
+        "a": ["x2", "y1", "y3", "y4"],
+        "b": ["y2", "x1", "x2", "x4"],
+        "answer": [[128, 14, 12]]
+    }
 
 
 def run_bbcode_examples():
@@ -67,15 +74,17 @@ def run_bbcode_examples():
         obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
         n, k, d = obj.generate_bb_code(distance_method=0)
         H_x, H_z = obj.create_parity_check_matrices()
-        d = dis_gap.calculate_distance(H_x, H_z, status_updates=False)
-
-        print(f"Obtained BB code: [{n}, {k}, {d}]")
+        folder = 'paritycheck'
+        file_name = f"{Main[str(i)]['answer']}\n.npz"
+        os.makedirs(folder, exist_ok=True)
+        file_path = os.path.join(folder, file_name)
+        with open(file_path, 'wb') as f:
+            np.savez(f, Hx=H_x, Hz=H_z)
+        # stdout, stderr = gd.definecode(H_x, H_z)
+        # print(f"Obtained BB code: [{n}, {k}, {stdout}]")
 
         if "answer" in Main[str(i)]:
             print(f"Known BB code: {Main[str(i)]['answer']}\n")
-
-
-
 
 
 if __name__ == "__main__":
