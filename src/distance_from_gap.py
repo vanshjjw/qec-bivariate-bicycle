@@ -1,6 +1,7 @@
 import subprocess
 import numpy as np
-def convert_to_gap_mat(mat1, mat2):
+
+def convert_to_gap_matrix(mat1, mat2):
         mat1 = np.array(mat1,dtype=int)
         n_rows1, n_cols1 = mat1.shape
         mat_str1 = [','.join(map(str, row)) for row in mat1]
@@ -16,19 +17,33 @@ def convert_to_gap_mat(mat1, mat2):
 
 
 def define_commands(H_x, H_z):
-    commands = 'LoadPackage("guava");; LoadPackage("QDistRnd");;'+convert_to_gap_mat(H_x, H_z)+'F:=GF(2);; Hx:=One(F)*Hx;; Hz:=One(F)*Hz;;d:=DistRandCSS(Hz,Hx,100,0,2 : field:=F);'
+    commands = 'LoadPackage("guava");; LoadPackage("QDistRnd");;' \
+               + convert_to_gap_matrix(H_x, H_z) +\
+               'F:=GF(2);; Hx:=One(F)*Hx;; Hz:=One(F)*Hz;;d:=DistRandCSS(Hz,Hx,100,0,2 : field:=F);'
     return commands
 
 
-def definecode(H_x, H_z):
+def define_code(H_x, H_z):
     commands= define_commands(H_x, H_z)
 
-    # start_time = time.time()
     process = subprocess.Popen(['gap'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     std_output, std_error = process.communicate(commands)
 
-    # Remove the special characters from gap's output like colours etc so you can search through it
-    # ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
-    # stdout=ansi_escape.sub('', stdout)
-    # stdout=stdout.strip().replace(" ", "")
     return std_output, std_error
+
+
+def calculate_distance(H_x, H_z, status_updates=False):
+    std_output, std_error = define_code(H_x, H_z)
+    if std_error is not None:
+        print(f"Error in GAP: {std_error}")
+
+    d = 0
+    for char in std_output[::-1]:
+        if char.isspace():
+            continue
+        if char.isdigit():
+            d = d * 10 + int(char)
+        else:
+            break
+
+    return d

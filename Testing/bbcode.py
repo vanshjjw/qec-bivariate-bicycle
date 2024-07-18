@@ -1,5 +1,6 @@
 import src.core as code
-import src.gap_distance as gd
+import src.distance_from_gap as dis_gap
+
 def write_raw_data(Main: dict):
     Main["0"] = {
         "l": 6,
@@ -66,8 +67,9 @@ def run_bbcode_examples():
         obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
         n, k, d = obj.generate_bb_code(distance_method=0)
         H_x, H_z = obj.create_parity_check_matrices()
-        stdout, stderr = gd.definecode(H_x, H_z)
-        print(f"Obtained BB code: [{n}, {k}, {stdout}]")
+        d = dis_gap.calculate_distance(H_x, H_z, status_updates=False)
+
+        print(f"Obtained BB code: [{n}, {k}, {d}]")
 
         if "answer" in Main[str(i)]:
             print(f"Known BB code: {Main[str(i)]['answer']}\n")

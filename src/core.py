@@ -1,9 +1,9 @@
 import numpy as np
 import src.helpers as helper
 import src.validators as vd
-import src.distance_brute_force as dbf
-import src.distance_from_generators as dfg
-import src.gap_distance as gd
+import src.distance_brute_force as dis_brute
+import src.distance_from_generators as dis_gen
+import src.distance_from_gap as dis_gap
 
 
 def create_matrix_S(size):
@@ -68,13 +68,15 @@ class BBCode:
         # src parameters
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x
+        distance = 0
 
-        if distance_method == 0:
-            distance : int = 0
-        elif distance_method == 1:
-            distance : int = dfg.calculate_distance(H_x, H_z, num_physical, num_logical, rank_H_x, rank_H_z, status_updates=True)
-        else:
-            distance : int = dbf.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
+        if distance_method == 1:
+            distance = dis_gen.calculate_distance(H_x, H_z, num_physical, num_logical, rank_H_x, rank_H_z, status_updates=True)
+        elif distance_method == 2:
+            distance = dis_brute.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
+        elif distance_method == 3:
+            distance = dis_gap.calculate_distance(H_x, H_z, status_updates=True)
+
 
         return num_physical, num_logical, distance
 
@@ -124,7 +126,7 @@ def single_run_2():
     rk_x = 3
     rk_z = 3
 
-    d = dfg.calculate_distance(Hx, Hz, n, k, rk_x, rk_z, status_updates=True)
+    d = dis_gen.calculate_distance(Hx, Hz, n, k, rk_x, rk_z, status_updates=True)
     print(f"Distance: {d}")
 
 
@@ -148,7 +150,9 @@ def single_run_3():
 
     code = BBCode(l, m, a, b, debug=False)
     H_x, H_z = code.create_parity_check_matrices()
-    gd.definecode(H_x, H_z)
+    d = dis_gap.calculate_distance(H_x, H_z)
+    print(f"Distance: {d}")
+
 
 
 if __name__ == "__main__":
