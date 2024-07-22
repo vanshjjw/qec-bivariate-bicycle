@@ -3,6 +3,24 @@ import src.helpers as helper
 import src.core as code
 import os
 
+
+def interesting_cases(data: dict):
+    data["0"] = {
+        "l": 6,
+        "m": 9,
+        "a": ["x3", "y1", "y2"],
+        "b": ["y3", "x2", "x4"],
+        "answer": [[108, 16, 6]]
+    }
+    data["1"] = {
+        "l": 6,
+        "m": 9,
+        "a": ["x0", "y1", "y2"],
+        "b": ["y3", "x2", "x4"],
+        "answer": [[108, 16, 6]]
+    }
+
+
 def raw_data(data: dict):
     data["0"] = {
         "l": 6,
@@ -70,7 +88,7 @@ def write_matrix(matrix, file):
 
 
 
-
+# TODO - wsl does not naturally have the path to Results directory saved. Need to give it the relative path from root
 def save_results():
     Main = {}
     raw_data(Main)

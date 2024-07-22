@@ -35,8 +35,7 @@ def define_code(H_x, H_z):
 def calculate_distance(H_x, H_z, status_updates=False):
     std_output, std_error = define_code(H_x, H_z)
     if std_error is not None:
-        print(f"Error in GAP: {std_error}")
-        # print("\n\n" + std_output + "\n\n")
+        pass
 
     digits = ""
     for char in std_output[::-1]:
