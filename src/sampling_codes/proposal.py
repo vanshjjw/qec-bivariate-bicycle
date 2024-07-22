@@ -1,8 +1,8 @@
 import numpy as np
+import src.core as core
 
 
 class Proposal:
-
     def __init__(self, l: int, m: int):
         self.l = l
         self.m = m
@@ -45,3 +45,22 @@ class Proposal:
 
 
 
+def random_search():
+    l = 9
+    m = 9
+    num_Trials = 1000
+    p = Proposal(l, m)
+
+    for i in range(num_Trials):
+        inputs = p.create_input_parameters()
+        print(inputs)
+        code = core.BBCode(inputs["l"], inputs["m"], inputs["a"], inputs["b"], debug=False)
+        n, k, d = code.generate_bb_code(distance_method=0)
+        if k != 0:
+            print("inputs: ", inputs)
+            print(f"n: {n}, k: {k}, d: {d} \n")
+
+
+
+if __name__ == "__main__":
+    random_search()

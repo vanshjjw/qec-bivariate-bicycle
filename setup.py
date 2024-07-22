@@ -7,5 +7,6 @@ setup(
     install_requires=[
         'ldpc==0.1.50',
         'numpy==1.26.2',
+        'matplotlib==3.4.3',
     ],
 )

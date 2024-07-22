@@ -70,8 +70,6 @@ class BBCode:
 
         rank_H_x = helper.binary_rank(H_x)
         rank_H_z = helper.binary_rank(H_z)
-        print(f"Rank of H_x: {rank_H_x}")
-        print(f"Rank of H_z: {rank_H_z}")
 
         if self.debug_mode:
             vd.validate_rank(rank_H_x, rank_H_z)
@@ -120,7 +118,23 @@ def single_run():
 
 
 def single_run_2():
-    pass
+    A = {'l': 9, 'm': 9, 'a': ['x7', 'y0', 'x8'], 'b': ['x0', 'y3', 'y6'], 'n': 162, 'k': 24, 'd': 2}
+
+    l = A["l"]
+    m = A["m"]
+    a = A["a"]
+    b = A["b"]
+
+    print(f"l: {l}, m: {m}")
+    print(f"A: {a}")
+    print(f"B: {b}")
+
+    code = BBCode(l, m, a, b, debug=True)
+    n, k, d = code.generate_bb_code(distance_method=3)
+
+    print(f"\nRequired BB code: [{n}, {k}, {d}]")
+    if "answer" in A:
+        print(f"answer: {A['answer']}")
 
 
 
@@ -155,7 +169,7 @@ def single_run_3():
 
 # Example inpt for polynomial expressions: ["x0", "x1", "y11", "x21.y21", "x3.y15"]
 if __name__ == "__main__":
-    single_run()
+    single_run_2()
 
 
 
