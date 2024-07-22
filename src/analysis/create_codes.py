@@ -1,7 +1,7 @@
 import numpy as np
 import src.helpers as helper
 import src.core as code
-
+import os
 
 def raw_data(data: dict):
     data["0"] = {
@@ -81,28 +81,37 @@ def save_results():
         m = example["m"]
         a = example["a"]
         b = example["b"]
+        c=example["answer"]
 
         obj = code.BBCode(l, m, a, b, debug=False)
-        n, k, d = obj.generate_bb_code(distance_method=0)
+        n, k, d = obj.generate_bb_code(distance_method=3)
         H_x, H_z = obj.create_parity_check_matrices()
 
-        with open(f"Results/[[{n}.{k},{d}]].txt", 'w') as file:
-            file.write(f"l: {l}\n")
-            file.write(f"m: {m}\n")
-            file.write(f"A: {a}\n")
-            file.write(f"B: {b}\n")
+        folder = 'Results_npz'
+        file_name = f"{c}.npz"
+        os.makedirs(folder, exist_ok=True)
+        file_path = os.path.join(folder, file_name)
 
-            file.write(f"\nBB code: [{n}, {k}, {d}]\n\n")
+        with open(file_path, 'wb') as file:
+            np.savez(file, Hx=H_x, Hz=H_z)
 
-            if "answer" in example:
-                file.write(f"\nKnown BB code: {example['answer']}\n\n")
-
-            file.write("H_x:\n")
-            write_matrix(H_x, file)
-            file.write("H_z:\n")
-            write_matrix(H_z, file)
-            file.flush()
-            file.close()
+        # with open(f"Results/[[{n}.{k},{d}]].txt", 'wb') as file:
+        #     file.write(f"l: {l}\n")
+        #     file.write(f"m: {m}\n")
+        #     file.write(f"A: {a}\n")
+        #     file.write(f"B: {b}\n")
+        #
+        #     file.write(f"\nBB code: [{n}, {k}, {d}]\n\n")
+        #
+        #     if "answer" in example:
+        #         file.write(f"\nKnown BB code: {example['answer']}\n\n")
+        #
+        #     file.write("H_x:\n")
+        #     write_matrix(H_x, file)
+        #     file.write("H_z:\n")
+        #     write_matrix(H_z, file)
+        #     file.flush()
+        #     file.close()
 
 
 

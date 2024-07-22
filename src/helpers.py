@@ -1,6 +1,7 @@
 import numpy as np
 from ldpc.mod2 import reduced_row_echelon, rank
 
+
 def generators(G_standard):
     G1=G_standard[:][:G_standard.shape[1]//2]
     G2=G_standard[:][G_standard.shape[1]//2:]
