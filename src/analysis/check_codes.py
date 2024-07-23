@@ -62,7 +62,7 @@ def write_matrix(matrix, file):
 
 
 
-# TODO - wsl does not naturally have the path to Results directory saved. Need to give it the relative path from root
+# TODO - wsl does not naturally have the path to results directory saved. Need to give it the relative path from root
 def run_and_save_results():
     with open("known_codes", "r") as file:
         data = json.loads(file.read().replace("\'", "\""))
@@ -83,12 +83,12 @@ def run_and_save_results():
 
 
         if save_as_numpy:
-            file_path = os.path.join('Results_npz', f"[[{n}.{k},{d}]].npz")
+            file_path = os.path.join('results_npz', f"[[{n}.{k},{d}]].npz")
             with open(file_path, 'wb') as file:
                 np.savez(file, Hx = H_x, Hz = H_z)
             return
 
-        with open(f"Results/[[{n}.{k},{d}]].txt", 'wb') as file:
+        with open(f"results/[[{n}.{k},{d}]].txt", 'wb') as file:
             file.write(f"l: {l}\n")
             file.write(f"m: {m}\n")
             file.write(f"A: {a}\n")

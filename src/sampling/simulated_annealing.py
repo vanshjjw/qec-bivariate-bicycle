@@ -1,8 +1,8 @@
 import numpy as np
 from numpy import random
-from proposal import Proposal
 from typing import Callable
 import src.core as core
+from src.sampling.proposal import Proposal
 
 
 def bbcode_optimisation__function(p : Proposal):
@@ -68,7 +68,7 @@ def simulated_annealing(func : Callable, Temperature : float, num_iterations : i
 def run_search():
     T = 100
     T_reduce = 5
-    num_iter = 5
+    num_iter = 10
     l = 9
     m = 9
     write_results = True
@@ -102,7 +102,7 @@ def run_search():
             f.flush()
             f.close()
 
-        print("Results saved.")
+        print("results saved.")
 
 
 
