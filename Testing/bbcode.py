@@ -65,14 +65,14 @@ def run_bbcode_examples():
     write_raw_data(Main)
 
     for i in range(len(Main)):
-        print(f"Code {i}:")
-        print(f"l: {Main[str(i)]['l']}, m: {Main[str(i)]['m']}")
-        print(f"A: {Main[str(i)]['a']}")
-        print(f"B: {Main[str(i)]['b']}")
-        print()
+        # print(f"Code {i}:")
+        # print(f"l: {Main[str(i)]['l']}, m: {Main[str(i)]['m']}")
+        # print(f"A: {Main[str(i)]['a']}")
+        # print(f"B: {Main[str(i)]['b']}")
+        # print()
 
-        obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=False)
-        n, k, d = obj.generate_bb_code(distance_method=0)
+        obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=True)
+        n, k, d = obj.generate_bb_code(distance_method=4)
         H_x, H_z = obj.create_parity_check_matrices()
         d = dis_gap.calculate_distance(H_x, H_z)
 

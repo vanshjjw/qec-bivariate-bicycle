@@ -60,7 +60,7 @@ def find_all_logical_operators(H_x, H_z, n: int, k: int, status_updates=False) -
 
 
 
-def calculate_distance_brute_force(H_x, H_z,  n: int, k: int, status_updates=False) -> int:
+def calculate_distance(H_x, H_z, n: int, k: int, status_updates=False) -> int:
     logical_operators = find_all_logical_operators(H_x, H_z, n, k, status_updates)
 
     min_weight = 2 * n

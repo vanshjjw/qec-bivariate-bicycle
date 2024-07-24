@@ -1,17 +1,18 @@
 import numpy as np
 from ldpc.mod2 import reduced_row_echelon, rank
+from copy import deepcopy
 
 def generators(G_standard):
     G1=G_standard[:][:G_standard.shape[1]//2]
     G2=G_standard[:][G_standard.shape[1]//2:]
     H_x = G1[ ~ np.all(G1 == 0, axis=1)]
-    H_z=G2[ ~ np.all(G2 == 0, axis=1)]
+    H_z = G2[ ~ np.all(G2 == 0, axis=1)]
     return H_x, H_z
 
 def standard_form(H_x, H_z):
-    G=make_block_diagonal(H_x, H_z)
+    G = make_block_diagonal(H_x, H_z)
     n, m = G.shape[1] // 2, G.shape[0]
-    k = n-m
+    k = n - m
 
     G1 = G[:, :n]
     G2 = G[:, n:]
@@ -71,3 +72,23 @@ def make_block_diagonal(H_x, H_z):
         [np.zeros((H_z.shape[0], H_x.shape[1]), dtype=int), H_z]
     ])
     return G
+
+
+def find_logical_generators(G_standard, rank_x: int) -> list[np.ndarray]:
+    n = G_standard.shape[1] // 2
+    k = n - G_standard.shape[0]
+
+    A2 = deepcopy(G_standard[: rank_x, n - k: n])
+    E  = deepcopy(G_standard[rank_x:, n + n - k:])
+    C  = deepcopy(G_standard[: rank_x, n + n - k:])
+
+    zero_l = np.zeros((k, rank_x), dtype=int)
+    zero_m = np.zeros((k, n - k - rank_x), dtype=int)
+    zero_r = np.zeros((k, k), dtype=int)
+
+    identity = np.eye(k)
+
+    Lx = np.hstack((zero_l, E.T, identity, C.T, zero_m, zero_r))
+    Lz = np.hstack((zero_l, zero_m, zero_r, A2.T, zero_m, identity))
+
+    return Lx, Lz

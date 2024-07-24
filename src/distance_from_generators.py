@@ -18,27 +18,8 @@ def generate_binary_combinations_for_generators(i:int, num_bits:int, num_stabili
     yield from generate_binary_combinations_for_generators(i + 1, num_bits, num_stabilizers, arr)
 
 
-def find_logical_generators(G_standard, rank_x: int, status_updates=False) -> list[np.ndarray]:
-    n = G_standard.shape[1] // 2
-    k = n - G_standard.shape[0]
 
-    A2 = deepcopy(G_standard[: rank_x, n - k: n])
-    E = deepcopy(G_standard[rank_x:, n + n - k:])
-    C = deepcopy(G_standard[: rank_x, n + n - k:])
-    zero_l = np.zeros((k, rank_x), dtype=int)
-    zero_m = np.zeros((k, n - k - rank_x), dtype=int)
-    zero_r = np.zeros((k, k), dtype=int)
-    identity = np.eye(k)
-
-    Lx = np.hstack((zero_l, E.T, identity, C.T, zero_m, zero_r))
-    Lz = np.hstack((zero_l, zero_m, zero_r, A2.T, zero_m, identity))
-
-    return Lx, Lz
-
-
-
-
-def calculate_distance(H_x, H_z, n:int, k: int, rank_x: int, rank_z: int, status_updates=False):
+def calculate_distance(H_x, H_z, n:int, k: int, status_updates=False):
     # refer Neilson and Chuang, Chapter 10, Eq. 10.111
     #
     #   column size = rank_x | n - k - rank_x | k
@@ -48,8 +29,10 @@ def calculate_distance(H_x, H_z, n:int, k: int, rank_x: int, rank_z: int, status
     #
     # For BB codes, rank_x = rank_z
 
-    G_standard = helper.standard_form(helper.make_block_diagonal(H_x, H_z))
-    Lx, Lz = find_logical_generators(G_standard, rank_x, status_updates)
+    rank_x = helper.binary_rank(H_x)
+
+    G_standard = helper.standard_form(H_x, H_z)
+    Lx, Lz = helper.find_logical_generators(G_standard, rank_x)
 
     complete_matrix = np.vstack((G_standard, Lx, Lz))
 

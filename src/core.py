@@ -4,7 +4,7 @@ import src.validators as vd
 import src.distance_brute_force as dis_brute
 import src.distance_from_generators as dis_gen
 import src.distance_from_gap as dis_gap
-
+import src.distance_from_bposd as dis_bposd
 
 def create_matrix_S(size):
     S = np.eye(size, dtype=int, k=1)
@@ -75,12 +75,13 @@ class BBCode:
         distance = 0
 
         if distance_method == 1:
-            distance = dis_gen.calculate_distance(H_x, H_z, num_physical, num_logical, rank_H_x, rank_H_z, status_updates=True)
+            distance = dis_brute.calculate_distance(H_x, H_z, num_physical, num_logical, status_updates=self.debug_mode)
         elif distance_method == 2:
-            distance = dis_brute.calculate_distance_brute_force(H_x, H_z, num_physical, num_logical, status_updates=True)
+            distance = dis_gen.calculate_distance(H_x, H_z, num_physical, num_logical, status_updates=self.debug_mode)
         elif distance_method == 3:
-            distance = dis_gap.calculate_distance(H_x, H_z, status_updates=True)
-
+            distance = dis_gap.calculate_distance(H_x, H_z, status_updates=self.debug_mode)
+        elif distance_method == 4:
+            distance = dis_bposd.calculate_distance(H_x, H_z, use_x=True, status_updates=self.debug_mode)
 
         return num_physical, num_logical, distance
 
