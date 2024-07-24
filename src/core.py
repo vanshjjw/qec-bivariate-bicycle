@@ -19,9 +19,10 @@ class BBCode:
         self.A_expression = A_expression
         self.B_expression = B_expression
         self.debug_mode = debug
+        self.poly_variables = {}
 
 
-    def construct_matrix_from_expression(self, expression: list[str], x: np.ndarray, y: np.ndarray):
+    def construct_matrix_from_expression(self, expression: list[str]):
         size = self.l * self.m
         M = np.zeros((size, size), dtype=int)
 
@@ -29,11 +30,7 @@ class BBCode:
             p = np.eye(size, dtype=int)
             for elem in elements.split("."):
                 variable, exponent = elem[0], int(elem[1:])
-                match variable:
-                    case "x":
-                        p = p @ np.linalg.matrix_power(x, exponent)
-                    case "y":
-                        p = p @ np.linalg.matrix_power(y, exponent)
+                p = p @ np.linalg.matrix_power(self.poly_variables[variable], exponent)
             M = (M + p) % 2
 
         return M
@@ -43,19 +40,17 @@ class BBCode:
         S_m = create_matrix_S(self.m)
 
         # Make x and y matrices
-        x = np.kron(S_l, np.eye(self.m, dtype=int))
-        y = np.kron(np.eye(self.l, dtype=int), S_m)
+        self.poly_variables["x"] = np.kron(S_l, np.eye(self.m, dtype=int))
+        self.poly_variables["y"] = np.kron(np.eye(self.l, dtype=int), S_m)
 
         # Make A and B matrices
-        A = self.construct_matrix_from_expression(self.A_expression, x, y)
-        B = self.construct_matrix_from_expression(self.B_expression, x, y)
+        A = self.construct_matrix_from_expression(self.A_expression)
+        B = self.construct_matrix_from_expression(self.B_expression)
 
         H_x = np.concatenate((A, B), axis=1)
         H_z = np.concatenate((B.T, A.T), axis=1)
 
         if self.debug_mode:
-            vd.validate_x_y_matrices(x)
-            vd.validate_x_y_matrices(y)
             vd.validate_A_B_matrices(A, self.A_expression)
             vd.validate_A_B_matrices(B, self.B_expression)
             vd.validate_parity_matrix(H_x, H_z)
@@ -143,8 +138,7 @@ def single_run_3():
         "l": 6,
         "m": 9,
         "a": ["x3", "y1", "y2"],
-        #"b": ["y3", "x2", "x4"],
-        "b": ["x3", "y1", "y2"],
+        "b": ["y3", "x2", "x4"],
         "answer": [[108, 16, 6]]
     }
 
@@ -169,7 +163,7 @@ def single_run_3():
 
 # Example inpt for polynomial expressions: ["x0", "x1", "y11", "x21.y21", "x3.y15"]
 if __name__ == "__main__":
-    single_run_2()
+    single_run_3()
 
 
 
