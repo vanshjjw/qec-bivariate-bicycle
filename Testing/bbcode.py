@@ -58,6 +58,13 @@ def write_raw_data(Main: dict):
         "b": ["y2", "x1", "x2", "x4"],
         "answer": [[128, 14, 12]]
     }
+    Main["8"] = {
+        "l": 12,
+        "m": 12,
+        "a": ["x3", "y2", "y7"],
+        "b": ["y3", "x1", "x2"],
+        "answer": [[288, 12, 18]]
+    }
 
 
 def run_bbcode_examples():
@@ -65,16 +72,14 @@ def run_bbcode_examples():
     write_raw_data(Main)
 
     for i in range(len(Main)):
-        # print(f"Code {i}:")
-        # print(f"l: {Main[str(i)]['l']}, m: {Main[str(i)]['m']}")
-        # print(f"A: {Main[str(i)]['a']}")
-        # print(f"B: {Main[str(i)]['b']}")
-        # print()
+        print(f"Code {i}:")
+        print(f"l: {Main[str(i)]['l']}, m: {Main[str(i)]['m']}")
+        print(f"A: {Main[str(i)]['a']}")
+        print(f"B: {Main[str(i)]['b']}")
+        print()
 
         obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=True)
         n, k, d = obj.generate_bb_code(distance_method=4)
-        H_x, H_z = obj.create_parity_check_matrices()
-        d = dis_gap.calculate_distance(H_x, H_z)
 
         print(f"Obtained BB code: [{n}, {k}, {d}]")
 

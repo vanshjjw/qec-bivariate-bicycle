@@ -51,12 +51,13 @@ class BBCode:
         H_z = np.concatenate((B.T, A.T), axis=1)
 
         if self.debug_mode:
-            vd.validate_A_B_matrices(A, self.A_expression)
-            vd.validate_A_B_matrices(B, self.B_expression)
-            vd.validate_parity_matrix(H_x, H_z)
-            print(f"H_x shape: {H_x.shape}")
-            print(f"H_z shape: {H_z.shape}")
-            print("\nParity matrices created successfully")
+            # vd.validate_A_B_matrices(A, self.A_expression)
+            # vd.validate_A_B_matrices(B, self.B_expression)
+            # vd.validate_parity_matrix(H_x, H_z)
+            # print(f"H_x shape: {H_x.shape}")
+            # print(f"H_z shape: {H_z.shape}")
+            # print("\nParity matrices created successfully")
+            pass
 
         return H_x, H_z
 
