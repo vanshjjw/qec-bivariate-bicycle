@@ -4,6 +4,7 @@ import src.core as core
 import random
 from copy import deepcopy
 import matplotlib.pyplot as plt
+import json
 
 
 class ProposeParameters:
@@ -132,8 +133,8 @@ def search_close_parameters():
     # sorted_items = sorted(equivalence_classes.items())
     # equivalence_classes = dict(sorted_items)
 
-    with open("Equivalence_classes.txt", 'a') as file:
-        file.write(str(equivalence_classes))
+    with open("Equivalence_classes.json", 'a') as file:
+        json.dump(equivalence_classes, file)
 
 if __name__ == "__main__":
     search_close_parameters()
