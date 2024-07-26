@@ -1,3 +1,4 @@
+from __future__ import annotations
 import numpy as np
 import src.core as core
 import random
@@ -115,12 +116,24 @@ def search_close_parameters():
         print("\n\nCurrent input complete\n\n")
         print(f"Best results so far: {max(outputs, key = lambda x: x['score'])}\n\n")
 
-    y = [output["optimal"] for output in outputs]
+    y = [output["score"] for output in outputs]
     x = [i for i in range(len(y))]
     plt.plot(x, y, 'ro')
     plt.show()
 
+    equivalence_classes = {}
+    for item in outputs:
+        score = item['score']
+        if score not in equivalence_classes:
+            equivalence_classes[score] = []
+        equivalence_classes[score].append(item)
 
+    #sorting classes by kd2/n value
+    # sorted_items = sorted(equivalence_classes.items())
+    # equivalence_classes = dict(sorted_items)
+
+    with open("Equivalence_classes.txt", 'a') as file:
+        file.write(str(equivalence_classes))
 
 if __name__ == "__main__":
     search_close_parameters()
