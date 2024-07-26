@@ -70,11 +70,15 @@ class BBCode:
         if self.debug_mode:
             vd.validate_rank(rank_H_x, rank_H_z)
 
-        # src parameters
+        # code parameters
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x
-        distance = 0
 
+        # unreal edge case
+        if num_logical == 0:
+            return num_physical, num_logical, -1
+
+        distance = 0
         if distance_method == 1:
             distance = dis_brute.calculate_distance(H_x, H_z, num_physical, num_logical, status_updates=self.debug_mode)
         elif distance_method == 2:
@@ -154,7 +158,7 @@ def single_run_3():
     print(f"B: {b}")
 
     code = BBCode(l, m, a, b, debug=True)
-    n, k, d = code.generate_bb_code(distance_method=3)
+    n, k, d = code.generate_bb_code(distance_method=4)
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")
     if "answer" in A:
