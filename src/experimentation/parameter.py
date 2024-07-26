@@ -136,5 +136,40 @@ def search_close_parameters():
     with open("Equivalence_classes.json", 'a') as file:
         json.dump(equivalence_classes, file)
 
+def scaling():
+    with open("Equivalence_classes.json", 'r') as file:
+        classes = json.load(file)
+
+    param_list=classes[max(classes)]
+
+    for params in param_list:
+        y=[params['score']]
+        x=[params['n']]
+        l=params['l']
+        m=params['m']
+        for li in range(l+1,max(2*l+1, 2*m+1)):
+            code = core.BBCode(li, m, params["a"], params["b"], debug=False)
+            n, k, d = code.generate_bb_code(distance_method=3)
+            sc=k*(d**2)/n
+            y.append(sc)
+            x.append(n)
+        for mi in range(m,max(2*l+1, 2*m+1)):
+            code = core.BBCode(max(2*l+1, 2*m+1), mi, params["a"], params["b"], debug=False)
+            n, k, d = code.generate_bb_code(distance_method=3)
+            sc = k * (d ** 2) / n
+            y.append(sc)
+            x.append(n)
+
+        plt.plot(x,y,'o', label=f"A={params['a']}, B={params['b']}")
+
+    plt.xlabel('n')
+    plt.ylabel("$kd^2/n$")
+    plt.legend()
+    plt.show()
+
+
+
+
+
 if __name__ == "__main__":
-    search_close_parameters()
+    scaling()
