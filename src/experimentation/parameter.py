@@ -79,6 +79,21 @@ class ProposeParameters:
         }
 
 
+def create_equivalence_classes(outputs):
+    equivalence_classes = {}
+    for item in outputs:
+        score = item['score']
+        if score not in equivalence_classes:
+            equivalence_classes[score] = []
+        equivalence_classes[score].append(item)
+
+    # sorting classes by kd2/n value
+    # sorted_items = sorted(equivalence_classes.items())
+    # equivalence_classes = dict(sorted_items)
+
+    with open("Equivalence_classes.json", 'a') as file:
+        json.dump(equivalence_classes, file)
+
 
 def search_close_parameters():
     l = 8
@@ -122,37 +137,29 @@ def search_close_parameters():
     plt.plot(x, y, 'ro')
     plt.show()
 
-    equivalence_classes = {}
-    for item in outputs:
-        score = item['score']
-        if score not in equivalence_classes:
-            equivalence_classes[score] = []
-        equivalence_classes[score].append(item)
+    create_equivalence_classes(outputs)
 
-    #sorting classes by kd2/n value
-    # sorted_items = sorted(equivalence_classes.items())
-    # equivalence_classes = dict(sorted_items)
 
-    with open("Equivalence_classes.json", 'a') as file:
-        json.dump(equivalence_classes, file)
 
 def scaling():
     with open("Equivalence_classes.json", 'r') as file:
         classes = json.load(file)
 
-    param_list=classes[max(classes)]
+    param_list = classes[max(classes)]
 
     for params in param_list:
         y=[params['score']]
         x=[params['n']]
         l=params['l']
         m=params['m']
+
         for li in range(l+1,max(2*l+1, 2*m+1)):
             code = core.BBCode(li, m, params["a"], params["b"], debug=False)
             n, k, d = code.generate_bb_code(distance_method=3)
-            sc=k*(d**2)/n
+            sc = k * (d ** 2) / n
             y.append(sc)
             x.append(n)
+
         for mi in range(m,max(2*l+1, 2*m+1)):
             code = core.BBCode(max(2*l+1, 2*m+1), mi, params["a"], params["b"], debug=False)
             n, k, d = code.generate_bb_code(distance_method=3)
@@ -172,4 +179,5 @@ def scaling():
 
 
 if __name__ == "__main__":
+    search_close_parameters()
     scaling()

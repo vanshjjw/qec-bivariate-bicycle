@@ -79,7 +79,7 @@ def run_bbcode_examples():
         print()
 
         obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=True)
-        n, k, d = obj.generate_bb_code(distance_method=4)
+        n, k, d = obj.generate_bb_code(distance_method=3)
 
         print(f"Obtained BB code: [{n}, {k}, {d}]")
 
