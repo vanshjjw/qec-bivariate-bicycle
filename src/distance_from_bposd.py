@@ -8,7 +8,7 @@ def bposd_decoder_distance_estimate(Hx : np.ndarray, Lx : np.ndarray, status_upd
 
     for i, operator in enumerate(Lx):
         combined_matrix = np.vstack((Hx, operator))
-        error_rates = [0.03, 0.06]
+        error_rates = [0.02]
 
         for rate in error_rates:
             bpd = bposd_decoder(
@@ -18,8 +18,8 @@ def bposd_decoder_distance_estimate(Hx : np.ndarray, Lx : np.ndarray, status_upd
             max_iter = combined_matrix.shape[1], # The maximum number of iterations for BP
             bp_method = "ms",
             ms_scaling_factor = 0, # Min sum scaling factor. If set to zero the variable scaling factor method is used
-            osd_method = "osd_cs", #the OSD method. Choose from: 1) "osd_e", "osd_cs", "osd0"
-            osd_order = 3 # the osd search depth
+            osd_method = "osd_cs", # The OSD method. Choose from: 1) "osd_e", "osd_cs", "osd0"
+            osd_order = 10 # The osd search depth
             )
 
             current_distance = Hx.shape[1]
@@ -34,7 +34,6 @@ def bposd_decoder_distance_estimate(Hx : np.ndarray, Lx : np.ndarray, status_upd
 
             if current_distance < best_distance:
                 best_distance = current_distance
-                print(f"New Best Distance: {best_distance} found!")
 
 
     return best_distance
@@ -51,8 +50,6 @@ def calculate_distance(H_x, H_z, use_x = True, status_updates = False) -> int:
     Lz = np.delete(Lz, np.s_[ :n], axis=1)
 
     if use_x:
-        distance = bposd_decoder_distance_estimate(H_x, Lx, status_updates = status_updates, num_shots = 10)
+        return bposd_decoder_distance_estimate(H_x, Lx, status_updates = status_updates, num_shots = 10)
     else:
-        distance = bposd_decoder_distance_estimate(H_z, Lz, status_updates = status_updates, num_shots = 10)
-
-    return distance
+        return bposd_decoder_distance_estimate(H_z, Lz, status_updates = status_updates, num_shots = 10)

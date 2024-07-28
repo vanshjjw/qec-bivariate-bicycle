@@ -79,12 +79,12 @@ def run_bbcode_examples():
         print()
 
         obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=True)
-        n, k, d = obj.generate_bb_code(distance_method=3)
+        n, k, d = obj.generate_bb_code(distance_method=4)
 
         print(f"Obtained BB code: [{n}, {k}, {d}]")
 
         if "answer" in Main[str(i)]:
-            print(f"Known BB code: {Main[str(i)]['answer']}\n")
+            print(f"Known BB code: {Main[str(i)]['answer']}\n\n\n")
 
 
 if __name__ == "__main__":
