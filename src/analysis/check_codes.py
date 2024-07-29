@@ -83,7 +83,7 @@ def run_and_save_results():
 
 
         if save_as_numpy:
-            file_path = os.path.join('results_npz', f"[[{n}.{k},{d}]].npz")
+            file_path = os.path.join('results_numpy', f"[[{n}.{k},{d}]].npz")
             with open(file_path, 'wb') as file:
                 np.savez(file, Hx = H_x, Hz = H_z)
             return
