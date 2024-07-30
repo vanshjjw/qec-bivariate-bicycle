@@ -101,36 +101,34 @@ def single_run():
         "answer": [[108, 16, 6]]
     }
 
-    l = A["l"]
-    m = A["m"]
-    a = A["a"]
-    b = A["b"]
+    print(f"l: {A['l']}, m: {A['m']}")
+    print(f"A: {A['a']}")
+    print(f"B: {A['b']}")
 
-    print(f"l: {l}, m: {m}")
-    print(f"A: {a}")
-    print(f"B: {b}")
-
-    code = BBCode(l, m, a, b, debug=True)
+    code = BBCode(A['l'], A['m'], A['a'], A['b'], debug=True)
     n, k, d = code.generate_bb_code(distance_method=3)
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")
     if "answer" in A:
         print(f"answer: {A['answer']}")
+    pass
+
 
 
 def single_run_2():
-    A = {'l': 9, 'm': 9, 'a': ['x7', 'y0', 'x8'], 'b': ['x0', 'y3', 'y6'], 'n': 162, 'k': 24, 'd': 2}
+    A = {
+        'l': 10,
+        'm': 10,
+        'a': ['x0', 'x2', 'x4'],
+        'b': ['y0', 'y2', 'y4'],
+        'answer': [162, 24, 2]
+    }
 
-    l = A["l"]
-    m = A["m"]
-    a = A["a"]
-    b = A["b"]
+    print(f"l: {A['l']}, m: {A['m']}")
+    print(f"A: {A['a']}")
+    print(f"B: {A['b']}")
 
-    print(f"l: {l}, m: {m}")
-    print(f"A: {a}")
-    print(f"B: {b}")
-
-    code = BBCode(l, m, a, b, debug=True)
+    code = BBCode(A['l'], A['m'], A['a'], A['b'], debug=True)
     n, k, d = code.generate_bb_code(distance_method=3)
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")
@@ -141,34 +139,32 @@ def single_run_2():
 
 def single_run_3():
     A = {
-        "l": 6,
-        "m": 9,
-        "a": ["x3", "y1", "y2"],
-        "b": ["y3", "x2", "x4"],
-        "answer": [[108, 16, 6]]
+        "l": 10,
+        "m": 10,
+        "a": ["x1", "x2", "x4"],
+        "b": ["y1", "y2", "y4"],
+        "answer": [108, 16, 6]
     }
 
-    l = A["l"]
-    m = A["m"]
-    a = A["a"]
-    b = A["b"]
+    print(f"l: {A['l']}, m: {A['m']}")
+    print(f"A: {A['a']}")
+    print(f"B: {A['b']}")
 
-    print(f"l: {l}, m: {m}")
-    print(f"A: {a}")
-    print(f"B: {b}")
-
-    code = BBCode(l, m, a, b, debug=True)
-    n, k, d = code.generate_bb_code(distance_method=4)
+    code = BBCode(A['l'], A['m'], A['a'], A['b'], debug=True)
+    n, k, d = code.generate_bb_code(distance_method=3)
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")
     if "answer" in A:
         print(f"answer: {A['answer']}")
+
+    pass
 
 
 
 
 # Example inpt for polynomial expressions: ["x0", "x1", "y11", "x21.y21", "x3.y15"]
 if __name__ == "__main__":
+    single_run_2()
     single_run_3()
 
 

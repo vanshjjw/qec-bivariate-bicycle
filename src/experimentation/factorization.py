@@ -1,6 +1,8 @@
 from src.experimentation.parameter import ProposeParameters
 from src.core import BBCode
+from copy import deepcopy
 import random
+import numpy as np
 
 def multiply_polynomials_mod_2(poly1: list[str], poly2: list[str], l, m):
     result = set()
@@ -40,22 +42,29 @@ def check_product_polynomials():
         A3 = multiply_polynomials_mod_2(A1, A2, l, m)
         B3 = multiply_polynomials_mod_2(B1, B2, l, m)
 
+        A4 = multiply_polynomials_mod_2(A1, B2, l, m)
+        B4 = multiply_polynomials_mod_2(B1, A2, l, m)
+
         code1 = BBCode(l, m, A1, B1)
         code2 = BBCode(l, m, A2, B2)
         code3 = BBCode(l, m, A3, B3)
+        code4 = BBCode(l, m, A4, B4)
 
         n1, k1, d1 = code1.generate_bb_code(distance_method=3)
         n2, k2, d2 = code2.generate_bb_code(distance_method=3)
         n3, k3, d3 = code3.generate_bb_code(distance_method=3)
+        n4, k4, d4 = code4.generate_bb_code(distance_method=3)
 
         print(f"Trial {i}: l = {l}, m = {m}")
         print(f"Results for code 1: [{n1}, {k1}, {d1}]")
         print(f"Results for code 2: [{n2}, {k2}, {d2}]")
         print(f"Results for code 3: [{n3}, {k3}, {d3}]")
+        print(f"Results for code 4: [{n4}, {k4}, {d4}]")
         print("\n")
         print(f"Polynomials 1: {A1}, {B1}")
         print(f"Polynomials 2: {A2}, {B2}")
         print(f"Polynomials 3: {A3}, {B3}")
+        print(f"Polynomials 4: {A4}, {B4}")
         print("\n\n")
 
 
