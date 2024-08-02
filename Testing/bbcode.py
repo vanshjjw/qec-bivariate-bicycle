@@ -19,14 +19,14 @@ def write_raw_data(Main: dict):
     Main["2"] = {
         "l": 9,
         "m": 9,
-        "a": ["x0", "x1", "y6"],
+        "a": ["i", "x1", "y6"],
         "b": ["y3", "x2", "x3"],
         "answer": [[162, 12, 8]]
     }
     Main["3"] = {
         "l": 9,
         "m": 9,
-        "a": ["x0", "y1", "y2"],
+        "a": ["i", "y1", "y2"],
         "b": ["y3", "x3", "x6"],
         "answer": [[162, 24, 6]]
     }
@@ -79,7 +79,7 @@ def run_bbcode_examples():
         print()
 
         obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], debug=True)
-        n, k, d = obj.generate_bb_code(distance_method=4)
+        n, k, d = obj.generate_bb_code(distance_method=0)
 
         print(f"Obtained BB code: [{n}, {k}, {d}]")
 

@@ -1,10 +1,10 @@
 import numpy as np
 import src.helpers as helper
 import src.validators as vd
-import src.distances.distance_from_brute_force as dis_brute
-import src.distances.distance_from_generators as dis_gen
-import src.distances.distance_from_gap as dis_gap
-import src.distances.distance_from_bposd as dis_bposd
+import src.distances.distance_from_brute_force as brute_force
+import src.distances.distance_from_generators as generators
+import src.distances.distance_from_gap as qdistrand
+import src.distances.distance_from_bposd as bposd
 
 def create_matrix_S(size):
     S = np.eye(size, dtype=int, k=1)
@@ -21,6 +21,26 @@ class BBCode:
         self.debug_mode = debug
         self.poly_variables = {}
 
+    def find_distance(self, H_x, H_z, n, k, distance_method):
+        if distance_method == 1:
+            return brute_force.calculate_distance(H_x, H_z, n, k, status_updates=self.debug_mode)
+        if distance_method == 2:
+            return generators.calculate_distance(H_x, H_z, n, k, status_updates=self.debug_mode)
+        if distance_method == 3:
+            return qdistrand.calculate_distance(H_x, H_z, status_updates=self.debug_mode)
+        if distance_method == 4:
+            return bposd.calculate_distance(H_x, H_z, status_updates=self.debug_mode)
+
+    def create_poly_variables(self):
+        # currently using the cyclic groups, and bivariate polynomials
+        S_l = create_matrix_S(self.l)
+        S_m = create_matrix_S(self.m)
+
+        # Make x and y matrices
+        self.poly_variables["i"] = np.eye(self.l * self.m, dtype=int)
+        self.poly_variables["x"] = np.kron(S_l, np.eye(self.m, dtype=int))
+        self.poly_variables["y"] = np.kron(np.eye(self.l, dtype=int), S_m)
+        pass
 
     def construct_matrix_from_expression(self, expression: list[str]):
         size = self.l * self.m
@@ -28,20 +48,21 @@ class BBCode:
 
         for elements in expression:
             p = np.eye(size, dtype=int)
+
             for elem in elements.split("."):
-                variable, exponent = elem[0], int(elem[1:])
+                if len(elem) == 1:
+                    variable, exponent = elem, 1
+                else:
+                    variable, exponent = elem[0], int(elem[1:])
                 p = p @ np.linalg.matrix_power(self.poly_variables[variable], exponent)
+
             M = (M + p) % 2
 
         return M
 
     def create_parity_check_matrices(self):
-        S_l = create_matrix_S(self.l)
-        S_m = create_matrix_S(self.m)
-
-        # Make x and y matrices
-        self.poly_variables["x"] = np.kron(S_l, np.eye(self.m, dtype=int))
-        self.poly_variables["y"] = np.kron(np.eye(self.l, dtype=int), S_m)
+        # Create x and y matrices
+        self.create_poly_variables()
 
         # Make A and B matrices
         A = self.construct_matrix_from_expression(self.A_expression)
@@ -61,14 +82,14 @@ class BBCode:
 
         return H_x, H_z
 
-    def generate_bb_code(self, distance_method=0):
+    def generate_bb_code(self, distance_method = 0):
         H_x, H_z = self.create_parity_check_matrices()
 
         rank_H_x = helper.binary_rank(H_x)
         rank_H_z = helper.binary_rank(H_z)
 
         if self.debug_mode:
-            vd.validate_rank(rank_H_x, rank_H_z)
+            vd.validate_ranks(rank_H_x, rank_H_z)
             print(f"rank of H_x: {rank_H_x}")
             print(f"rank of H_z: {rank_H_z}")
             print("Rank of H_x and H_z validated successfully")
@@ -76,21 +97,13 @@ class BBCode:
         # code parameters
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x
-
-        # unreal edge case
-        if num_logical == 0:
-            return num_physical, num_logical, -1
-
         distance = 0
-        if distance_method == 1:
-            distance = dis_brute.calculate_distance(H_x, H_z, num_physical, num_logical, status_updates=self.debug_mode)
-        elif distance_method == 2:
-            distance = dis_gen.calculate_distance(H_x, H_z, num_physical, num_logical, status_updates=self.debug_mode)
-        elif distance_method == 3:
-            distance = dis_gap.calculate_distance(H_x, H_z, status_updates=self.debug_mode)
-        elif distance_method == 4:
-            distance = dis_bposd.calculate_distance(H_x, H_z, use_x=True, status_updates=self.debug_mode)
 
+        # no need to calculate distance
+        if num_logical == 0 or distance_method == 0:
+            return num_physical, num_logical, distance
+
+        distance = self.find_distance(H_x, H_z, num_physical, num_logical, distance_method)
         return num_physical, num_logical, distance
 
 

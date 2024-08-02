@@ -95,16 +95,25 @@ def find_logical_generators(G_standard, rank_x: int) -> list[np.ndarray]:
     return Lx, Lz
 
 
+def construct_answer(x_power: int, y_power: int):
+    if x_power == 0 and y_power == 0:
+        return "i"
+    if x_power == 0:
+        return f"y{y_power}"
+    if y_power == 0:
+        return f"x{x_power}"
+    return f"x{x_power}.y{y_power}"
+
+
 def multiply_polynomials_mod_2(poly1: list[str], poly2: list[str], l: int, m: int):
     result = []
     for value1 in poly1:
         for value2 in poly2:
-            all_combs = value1.split(".") + value2.split(".")
-            x_power = sum([int(a[1:]) for a in all_combs if a[0] == "x"])
-            y_power = sum([int(h[1:]) for h in all_combs if h[0] == "y"])
-            x_power %= l
-            y_power %= m
-            answer = f"x{x_power}.y{y_power}"
+            multiplicands = value1.split(".") + value2.split(".")
+
+            x_power = sum([int(m[1:]) for m in multiplicands if m[0] == "x"]) % l
+            y_power = sum([int(m[1:]) for m in multiplicands if m[0] == "y"]) % m
+            answer = construct_answer(x_power, y_power)
 
             if answer in result:
                 result.remove(answer)

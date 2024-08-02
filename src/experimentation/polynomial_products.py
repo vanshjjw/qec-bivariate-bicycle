@@ -7,7 +7,7 @@ import random
 def check_product_polynomials():
     l = 9
     m = 9
-    num_shots = 1000000
+    num_shots = 1000
     propose = ProposeParameters(l = l, m = m)
     print("\n")
 
@@ -41,7 +41,7 @@ def check_product_polynomials():
 
         n3, k3, d3 = code3.generate_bb_code(distance_method=0)
 
-        if k3 < k2 or k3 < k1:
+        if k3 >= k2 or k3 >= k1:
             print(f"Trial {i}: l = {l}, m = {m}")
             print(f"Results for code 1: [{n1}, {k1}, {d1}]")
             print(f"Results for code 2: [{n2}, {k2}, {d2}]")
@@ -80,7 +80,8 @@ def check_polynomial_powers():
 
 
 if __name__ == "__main__":
-    check_polynomial_powers()
+    check_product_polynomials()
+    pass
 
 
 
