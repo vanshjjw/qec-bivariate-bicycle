@@ -67,7 +67,7 @@ def check_polynomial_powers():
     B = ["y3", "x1", "x2"]
 
     for i in range(1, 5):
-        code = BBCode(l, m, A, B, debug=False)
+        code = BBCode(l, m, A, B, safe_mode=False)
         n, k, d = code.generate_bb_code(distance_method=3)
         print(f"A : {A}: \nB: {B} \n")
         print(f"Results: [{n}, {k}, {d}]")

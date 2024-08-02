@@ -7,7 +7,7 @@ from src.sampling.proposal import Proposal
 
 def bbcode_optimisation__function(p : Proposal):
     inputs = p.create_input_parameters()
-    code = core.BBCode(inputs["l"], inputs["m"], inputs["a"], inputs["b"], debug=False)
+    code = core.BBCode(inputs["l"], inputs["m"], inputs["a"], inputs["b"], safe_mode=False)
     n, k, d = code.generate_bb_code(distance_method=3)
 
     inputs["n"] = n

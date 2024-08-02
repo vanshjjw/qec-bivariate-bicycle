@@ -19,14 +19,14 @@ def plot_equivalence_classes_scaling():
         m = params['m']
 
         for li in range(l + 1, max(2 * l + 1, 2 * m + 1)):
-            code = core.BBCode(li, m, params["a"], params["b"], debug=False)
+            code = core.BBCode(li, m, params["a"], params["b"], safe_mode=False)
             n, k, d = code.generate_bb_code(distance_method=3)
             sc = k * (d ** 2) / n
             y.append(sc)
             x.append(n)
 
         for mi in range(m, max(2 * l + 1, 2 * m + 1)):
-            code = core.BBCode(max(2 * l + 1, 2 * m + 1), mi, params["a"], params["b"], debug=False)
+            code = core.BBCode(max(2 * l + 1, 2 * m + 1), mi, params["a"], params["b"], safe_mode=False)
             n, k, d = code.generate_bb_code(distance_method=3)
             sc = k * (d ** 2) / n
             y.append(sc)
@@ -72,7 +72,7 @@ def search_close_parameters(create_equivalence = False):
         print(f"Initial inputs: {inputs} for {num_shots} runs\n\n")
 
         for j in range(num_shots):
-            code = core.BBCode(inputs["l"], inputs["m"], inputs["a"], inputs["b"], debug=False)
+            code = core.BBCode(inputs["l"], inputs["m"], inputs["a"], inputs["b"], safe_mode=False)
             n, k, d = code.generate_bb_code(distance_method=3)
 
             if k != 0:

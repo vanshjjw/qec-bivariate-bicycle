@@ -54,7 +54,7 @@ def random_search():
     for i in range(num_Trials):
         inputs = p.create_input_parameters()
         print(inputs)
-        code = core.BBCode(inputs["l"], inputs["m"], inputs["a"], inputs["b"], debug=False)
+        code = core.BBCode(inputs["l"], inputs["m"], inputs["a"], inputs["b"], safe_mode=False)
         n, k, d = code.generate_bb_code(distance_method=0)
         if k != 0:
             print("inputs: ", inputs)

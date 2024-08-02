@@ -6,35 +6,30 @@ import src.distances.distance_from_generators as generators
 import src.distances.distance_from_gap as qdistrand
 import src.distances.distance_from_bposd as bposd
 
-def create_matrix_S(size):
-    S = np.eye(size, dtype=int, k=1)
-    S[size - 1][0] = 1
-    return S
-
 
 class BBCode:
-    def __init__(self, l: int, m: int, A_expression:list[str], B_expression: list[str], debug = False):
+    def __init__(self, l: int, m: int, A_expression:list[str], B_expression: list[str], safe_mode = False):
         self.l = l
         self.m = m
         self.A_expression = A_expression
         self.B_expression = B_expression
-        self.debug_mode = debug
+        self.safe_mode = safe_mode
         self.poly_variables = {}
 
     def find_distance(self, H_x, H_z, n, k, distance_method):
         if distance_method == 1:
-            return brute_force.calculate_distance(H_x, H_z, n, k, status_updates=self.debug_mode)
+            return brute_force.calculate_distance(H_x, H_z, n, k, status_updates=self.safe_mode)
         if distance_method == 2:
-            return generators.calculate_distance(H_x, H_z, n, k, status_updates=self.debug_mode)
+            return generators.calculate_distance(H_x, H_z, n, k, status_updates=self.safe_mode)
         if distance_method == 3:
-            return qdistrand.calculate_distance(H_x, H_z, status_updates=self.debug_mode)
+            return qdistrand.calculate_distance(H_x, H_z, status_updates=self.safe_mode)
         if distance_method == 4:
-            return bposd.calculate_distance(H_x, H_z, status_updates=self.debug_mode)
+            return bposd.calculate_distance(H_x, H_z, status_updates=self.safe_mode)
 
     def create_poly_variables(self):
         # currently using the cyclic groups, and bivariate polynomials
-        S_l = create_matrix_S(self.l)
-        S_m = create_matrix_S(self.m)
+        S_l = helper.create_matrix_S(self.l)
+        S_m = helper.create_matrix_S(self.m)
 
         # Make x and y matrices
         self.poly_variables["i"] = np.eye(self.l * self.m, dtype=int)
@@ -71,7 +66,7 @@ class BBCode:
         H_x = np.concatenate((A, B), axis=1)
         H_z = np.concatenate((B.T, A.T), axis=1)
 
-        if self.debug_mode:
+        if self.safe_mode:
             vd.validate_A_B_matrices(A, self.A_expression)
             vd.validate_A_B_matrices(B, self.B_expression)
             vd.validate_parity_matrix(H_x, H_z)
@@ -88,7 +83,7 @@ class BBCode:
         rank_H_x = helper.binary_rank(H_x)
         rank_H_z = helper.binary_rank(H_z)
 
-        if self.debug_mode:
+        if self.safe_mode:
             vd.validate_ranks(rank_H_x, rank_H_z)
             print(f"rank of H_x: {rank_H_x}")
             print(f"rank of H_z: {rank_H_z}")
@@ -121,7 +116,7 @@ def single_run():
     print(f"A: {A['a']}")
     print(f"B: {A['b']}")
 
-    code = BBCode(A['l'], A['m'], A['a'], A['b'], debug=True)
+    code = BBCode(A['l'], A['m'], A['a'], A['b'], safe_mode=True)
     n, k, d = code.generate_bb_code(distance_method=3)
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")
@@ -144,7 +139,7 @@ def single_run_2():
     print(f"A: {A['a']}")
     print(f"B: {A['b']}")
 
-    code = BBCode(A['l'], A['m'], A['a'], A['b'], debug=True)
+    code = BBCode(A['l'], A['m'], A['a'], A['b'], safe_mode=True)
     n, k, d = code.generate_bb_code(distance_method=3)
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")
@@ -165,7 +160,7 @@ def single_run_3():
     print(f"A: {A['a']}")
     print(f"B: {A['b']}")
 
-    code = BBCode(A['l'], A['m'], A['a'], A['b'], debug=True)
+    code = BBCode(A['l'], A['m'], A['a'], A['b'], safe_mode=True)
     n, k, d = code.generate_bb_code(distance_method=3)
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")

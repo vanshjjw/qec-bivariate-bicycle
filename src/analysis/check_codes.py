@@ -77,7 +77,7 @@ def run_and_save_results():
         b = example["b"]
         c = example["answer"]
 
-        obj = core.BBCode(l, m, a, b, debug=False)
+        obj = core.BBCode(l, m, a, b, safe_mode=False)
         n, k, d = obj.generate_bb_code(distance_method=3)
         H_x, H_z = obj.create_parity_check_matrices()
 
