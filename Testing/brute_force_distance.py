@@ -1,4 +1,4 @@
-from src.distance_brute_force import generate_all_binary_combinations_bbcode
+from src.distances.distance_from_brute_force import generate_all_binary_combinations_bbcode
 import numpy as np
 
 def check_binary_combinations_produce_correct_number(n: int, k: int) -> bool:

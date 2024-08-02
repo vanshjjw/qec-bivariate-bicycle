@@ -1,10 +1,10 @@
 import numpy as np
 import src.helpers as helper
 import src.validators as vd
-import src.distance_brute_force as dis_brute
-import src.distance_from_generators as dis_gen
-import src.distance_from_gap as dis_gap
-import src.distance_from_bposd as dis_bposd
+import src.distances.distance_from_brute_force as dis_brute
+import src.distances.distance_from_generators as dis_gen
+import src.distances.distance_from_gap as dis_gap
+import src.distances.distance_from_bposd as dis_bposd
 
 def create_matrix_S(size):
     S = np.eye(size, dtype=int, k=1)

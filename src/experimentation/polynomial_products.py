@@ -1,24 +1,7 @@
-from src.experimentation.parameter import ProposeParameters
+from src.experimentation.propose_parameters import ProposeParameters
 from src.core import BBCode
+import src.helpers as helper
 import random
-
-def multiply_polynomials_mod_2(poly1: list[str], poly2: list[str], l, m):
-    result = set()
-    for m1 in poly1:
-        for m2 in poly2:
-            all_combs = m1.split(".") + m2.split(".")
-            x_power = sum([int(a[1:]) for a in all_combs if a[0] == "x"])
-            y_power = sum([int(h[1:]) for h in all_combs if h[0] == "y"])
-            x_power %= l
-            y_power %= m
-            answer = f"x{x_power}.y{y_power}"
-
-            if answer in result:
-                result.remove(answer)
-            else:
-                result.add(answer)
-
-    return list(result)
 
 
 def check_product_polynomials():
@@ -51,8 +34,8 @@ def check_product_polynomials():
         if k1 == 0 and k2 == 0:
             continue
 
-        A3 = multiply_polynomials_mod_2(A1, A2, l, m)
-        B3 = multiply_polynomials_mod_2(B1, B2, l, m)
+        A3 = helper.multiply_polynomials_mod_2(A1, A2, l, m)
+        B3 = helper.multiply_polynomials_mod_2(B1, B2, l, m)
 
         code3 = BBCode(l, m, A3, B3)
 
@@ -74,21 +57,10 @@ def check_product_polynomials():
             l = random.randint(8, 14)
             m = random.randint(8, 14)
 
-        # print(f"Trial {i}: l = {l}, m = {m}")
-        # print(f"Results for code 1: [{n1}, {k1}, {d1}]")
-        # print(f"Results for code 2: [{n2}, {k2}, {d2}]")
-        # print(f"Results for code 3: [{n3}, {k3}, {d3}]")
-        # print("\n")
-        # print(f"Polynomials 1: {A1}, {B1}")
-        # print(f"Polynomials 2: {A2}, {B2}")
-        # print(f"Polynomials 3: {A3}, {B3}")
-        # print("\n\n")
         pass
 
 
-
-
-def polynomial_powers():
+def check_polynomial_powers():
     l = 12
     m = 12
     A = ["x3", "y2", "y7"]
@@ -101,15 +73,14 @@ def polynomial_powers():
         print(f"Results: [{n}, {k}, {d}]")
         print("\n\n")
 
-        A = multiply_polynomials_mod_2(A, A, l, m)
-        B = multiply_polynomials_mod_2(B, B, l, m)
+        A = helper.multiply_polynomials_mod_2(A, A, l, m)
+        B = helper.multiply_polynomials_mod_2(B, B, l, m)
 
-        A = ["x0", f"x{i ** 2}"]
-        B = ["y0", f"y{i ** 2}"]
+
 
 
 if __name__ == "__main__":
-    polynomial_powers()
+    check_polynomial_powers()
 
 
 

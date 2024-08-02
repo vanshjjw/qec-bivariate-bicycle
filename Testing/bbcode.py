@@ -1,5 +1,5 @@
 import src.core as code
-import src.distance_from_gap as dis_gap
+
 
 def write_raw_data(Main: dict):
     Main["0"] = {

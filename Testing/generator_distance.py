@@ -1,5 +1,5 @@
 import numpy as np
-from src.distance_from_generators import generate_binary_combinations_for_generators
+from src.distances.distance_from_generators import generate_binary_combinations_for_generators
 
 
 def check_binary_combinations_produce_right_number_of_operators(n: int, k: int) -> bool:

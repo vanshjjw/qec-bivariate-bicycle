@@ -9,6 +9,7 @@ def generators(G_standard):
     H_z = G2[ ~ np.all(G2 == 0, axis=1)]
     return H_x, H_z
 
+
 def standard_form(H_x, H_z):
     G = make_block_diagonal(H_x, H_z)
     n, m = G.shape[1] // 2, G.shape[0]
@@ -59,7 +60,7 @@ def binary_rank(A):
     return rank(A)
 
 
-def hamming_weight(vector):
+def hamming_weight(vector: list[int]):
     # hamming weight for a CSS src logical operator (length = 2n)
     n = len(vector) // 2
     weight = sum([1 if vector[i] == 1 or vector[i + n] == 1 else 0 for i in range(n)])
@@ -92,3 +93,22 @@ def find_logical_generators(G_standard, rank_x: int) -> list[np.ndarray]:
     Lz = np.hstack((zero_l, zero_m, zero_r, A2.T, zero_m, identity))
 
     return Lx, Lz
+
+
+def multiply_polynomials_mod_2(poly1: list[str], poly2: list[str], l: int, m: int):
+    result = []
+    for value1 in poly1:
+        for value2 in poly2:
+            all_combs = value1.split(".") + value2.split(".")
+            x_power = sum([int(a[1:]) for a in all_combs if a[0] == "x"])
+            y_power = sum([int(h[1:]) for h in all_combs if h[0] == "y"])
+            x_power %= l
+            y_power %= m
+            answer = f"x{x_power}.y{y_power}"
+
+            if answer in result:
+                result.remove(answer)
+            else:
+                result.append(answer)
+
+    return result

@@ -1,6 +1,6 @@
 import numpy as np
 import src.core as core
-from src.experimentation.parameter import ProposeParameters
+from src.experimentation.propose_parameters import ProposeParameters
 from copy import deepcopy
 import matplotlib.pyplot as plt
 import json

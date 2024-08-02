@@ -1,7 +1,6 @@
 import numpy as np
 import random
 
-
 class ProposeParameters:
     def __init__(self, l: int = 20, m: int = 20):
         self.l = l
@@ -26,15 +25,16 @@ class ProposeParameters:
         B = all_monomials[num_A:]
         return A, B
 
-    def redraw_l_m_from_normal_distribution(self, threshold: float = 0.01):
+    def redraw_l_m_from_normal_distribution(self, threshold: float = 0.01, std_dev_power: float = 0.5):
         a = np.random.random()
-        std_dev_power = 0.5
         if a < threshold:
             new_l = np.random.normal(self.l, self.l ** std_dev_power)
             new_m = np.random.normal(self.m, self.m ** std_dev_power)
             if 1 <= new_l <= 100 and 1 <= new_m <= 100:
                 self.l = int(new_l)
                 self.m = int(new_m)
+            else :
+                self.redraw_l_m_from_normal_distribution(threshold, std_dev_power)
         pass
 
     def draw_random_monomials(self, num_x_monomials: int = 3, num_y_monomials: int = 3):
