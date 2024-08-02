@@ -90,7 +90,7 @@ def check_product_polynomials():
 
 
 
-def new_func():
+def polynomial_powers():
     l = 12
     m = 12
     A = ["x3", "y2", "y7"]
@@ -111,7 +111,7 @@ def new_func():
 
 
 if __name__ == "__main__":
-    new_func()
+    polynomial_powers()
 
 
 
