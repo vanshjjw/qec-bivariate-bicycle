@@ -44,6 +44,10 @@ class ProposeParameters:
         random.shuffle(monomials)
         return monomials
 
+
+    def draw_connected_monomials(self, num_x: int, num_y: int):
+        pass
+
     def change_one_monomial(self, monomial_expression: list[str], index: int):
         variable, exp = monomial_expression[index][0], int(monomial_expression[index][1:])
         if variable == "x":

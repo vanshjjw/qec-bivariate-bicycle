@@ -63,7 +63,7 @@ def find_logical_generators(G_standard, rank_x: int) -> list[np.ndarray]:
 ## ----------------- Polynomial Helpers ----------------- ##
 
 
-def construct_answer(x_power: int, y_power: int):
+def _construct_expression(x_power: int, y_power: int):
     if x_power == 0 and y_power == 0:
         return "i"
     if x_power == 0:
@@ -73,16 +73,63 @@ def construct_answer(x_power: int, y_power: int):
     return f"x{x_power}.y{y_power}"
 
 
+def _construct_powers(monomial: str, l: int, m: int):
+    x_power = 0
+    y_power = 0
+    for mu in monomial.split("."):
+        if mu[0] == "x":
+            x_power += int(mu[1:])
+        if mu[0] == "y":
+            y_power += int(mu[1:])
+
+    return x_power % l, y_power % m
+
+
+def construct_expression_from_powers(S : list[(int, int)], l: int, m: int):
+    return [_construct_expression(x_power, y_power) for x_power, y_power in S]
+
+
+def construct_powers_from_expression(polynomial_expression: list[str], l: int, m: int):
+    return [_construct_powers(monomial, l, m) for monomial in polynomial_expression]
+
+
+def multiply_m1_and_m2_inverse(m1: str, m2: str, l: int, m: int):
+    x_power = 0
+    y_power = 0
+
+    for mu in m1.split("."):
+        if mu[0] == "x":
+            x_power += int(mu[1:])
+        if mu[0] == "y":
+            y_power += int(mu[1:])
+
+    for mu in m2.split("."):
+        if mu[0] == "x":
+            x_power -= int(mu[1:])
+        if mu[0] == "y":
+            y_power -= int(mu[1:])
+
+    return x_power % l, y_power % m
+
+
 def multiply_polynomials_mod_2(poly1: list[str], poly2: list[str], l: int, m: int):
     result = []
     for value1 in poly1:
         for value2 in poly2:
             multiplicands = value1.split(".") + value2.split(".")
+            x_power = 0
+            y_power = 0
 
-            x_power = sum([int(m[1:]) for m in multiplicands if m[0] == "x"]) % l
-            y_power = sum([int(m[1:]) for m in multiplicands if m[0] == "y"]) % m
-            answer = construct_answer(x_power, y_power)
+            for mu in multiplicands:
+                if mu[0] == "x":
+                    x_power += int(mu[1:])
+                if mu[0] == "y":
+                    y_power += int(mu[1:])
 
+            x_power %= l
+            y_power %= m
+
+            answer = _construct_expression(x_power, y_power)
             if answer in result:
                 result.remove(answer)
             else:
@@ -126,5 +173,20 @@ def make_block_diagonal(H_x, H_z):
     return G
 
 
+def create_matrix_S(size):
+    S = np.eye(size, dtype=int, k=1)
+    S[size - 1][0] = 1
+    return S
+
+
 def binary_rank(A):
     return rank(A)
+
+
+## ----------------- Miscellaneous ----------------- ##
+
+def remove_dependent_generators(generators: list[str], l: int, m: int) -> list[str]:
+    answer = [
+        val1 for i, val1 in enumerate(generators) if not any(val1 == val2 for val2 in generators[:i])
+    ]
+    return answer
