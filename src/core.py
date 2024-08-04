@@ -170,9 +170,7 @@ def single_run_3():
     pass
 
 
-
-
-# Example inpt for polynomial expressions: ["x0", "x1", "y11", "x21.y21", "x3.y15"]
+# Example input for polynomial expressions: ["x0", "x1", "y11", "x21.y21", "x3.y15"]
 if __name__ == "__main__":
     single_run_3()
 

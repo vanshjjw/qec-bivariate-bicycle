@@ -3,7 +3,7 @@ from ldpc.mod2 import reduced_row_echelon, rank
 from copy import deepcopy
 
 
-## ----------------- QEC Specific Functions ----------------- ##
+## ----------------- QEC Specific Helpers ----------------- ##
 
 
 def generators(G_standard):
@@ -60,85 +60,8 @@ def find_logical_generators(G_standard, rank_x: int) -> list[np.ndarray]:
     return Lx, Lz
 
 
-## ----------------- Polynomial Helpers ----------------- ##
+## ----------------- Linear Algebra Helpers ----------------- ##
 
-
-def _construct_expression(x_power: int, y_power: int):
-    if x_power == 0 and y_power == 0:
-        return "i"
-    if x_power == 0:
-        return f"y{y_power}"
-    if y_power == 0:
-        return f"x{x_power}"
-    return f"x{x_power}.y{y_power}"
-
-
-def _construct_powers(monomial: str, l: int, m: int):
-    x_power = 0
-    y_power = 0
-    for mu in monomial.split("."):
-        if mu[0] == "x":
-            x_power += int(mu[1:])
-        if mu[0] == "y":
-            y_power += int(mu[1:])
-
-    return x_power % l, y_power % m
-
-
-def construct_expression_from_powers(S : list[(int, int)], l: int, m: int):
-    return [_construct_expression(x_power, y_power) for x_power, y_power in S]
-
-
-def construct_powers_from_expression(polynomial_expression: list[str], l: int, m: int):
-    return [_construct_powers(monomial, l, m) for monomial in polynomial_expression]
-
-
-def multiply_m1_and_m2_inverse(m1: str, m2: str, l: int, m: int):
-    x_power = 0
-    y_power = 0
-
-    for mu in m1.split("."):
-        if mu[0] == "x":
-            x_power += int(mu[1:])
-        if mu[0] == "y":
-            y_power += int(mu[1:])
-
-    for mu in m2.split("."):
-        if mu[0] == "x":
-            x_power -= int(mu[1:])
-        if mu[0] == "y":
-            y_power -= int(mu[1:])
-
-    return x_power % l, y_power % m
-
-
-def multiply_polynomials_mod_2(poly1: list[str], poly2: list[str], l: int, m: int):
-    result = []
-    for value1 in poly1:
-        for value2 in poly2:
-            multiplicands = value1.split(".") + value2.split(".")
-            x_power = 0
-            y_power = 0
-
-            for mu in multiplicands:
-                if mu[0] == "x":
-                    x_power += int(mu[1:])
-                if mu[0] == "y":
-                    y_power += int(mu[1:])
-
-            x_power %= l
-            y_power %= m
-
-            answer = _construct_expression(x_power, y_power)
-            if answer in result:
-                result.remove(answer)
-            else:
-                result.append(answer)
-
-    return result
-
-
-## ----------------- Matrix Helpers ----------------- ##
 
 def display(M, middle_line = False):
     size = len(M[0])
