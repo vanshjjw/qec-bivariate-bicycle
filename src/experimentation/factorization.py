@@ -4,6 +4,38 @@ import numpy as np
 import src.helpers as helper
 import math
 
+
+def is_whole_group_generated(generators: list[(int, int)], l: int, m: int) -> bool:
+    if type(generators[0]) is str:
+        generators = helper.construct_powers_from_expression(generators, l, m)
+
+    x_indices = []
+    y_indices = []
+
+    for i, value in enumerate(generators):
+        if math.gcd(value[0], l) == 1:
+            x_indices.append(i)
+            if y_indices is not None:
+                # Found a new x generator and a y generator already exists
+                return True
+
+        if math.gcd(value[1], m) == 1:
+            y_indices.append(i)
+            if x_indices is not None and i not in x_indices:
+                # Found a new y generator and a different x generator already exists
+                return True
+
+    return False
+
+
+
+
+
+
+def find_subgroup_size(generators: list[str], l: int, m: int) -> int:
+    pass
+
+
 def generate_subgroup(value: (int, int), l: int, m: int) -> list[(int, int)]:
     order = find_min_order(value, l, m)
     group = []
@@ -22,8 +54,10 @@ def find_min_order(value: (int, int), l: int, m: int) -> int:
 
 
 def custom_contains(generators: list[(int, int)], value: (int, int), l, m) -> bool:
-    if len(generators) == 0 or value == (0, 0):
+    if len(generators) == 0:
         return False
+    if value == (0, 0):
+        return True
 
     value_order = find_min_order(value, l, m)
 
@@ -40,19 +74,17 @@ def custom_contains(generators: list[(int, int)], value: (int, int), l, m) -> bo
     return False
 
 
-
-def remove_duplicate_generators(generators: list[str], l: int, m: int) -> list[str]:
-    generator_powers: list[(int, int)] = helper.construct_powers_from_expression(generators, l, m)
+def remove_duplicate_generators(generators: list[(int, int)], l: int, m: int) -> list[str]:
     unique: list[(int, int)] = []
 
-    for generator in generator_powers:
+    for generator in generators:
         if not custom_contains(unique, generator, l, m):
             unique.append(generator)
 
     return helper.construct_expression_from_powers(unique, l, m)
 
 
-def generators_for_graph(A: list[str], B: list[str], l: int, m: int) -> list[str]:
+def find_generators(A: list[str], B: list[str], l: int, m: int, unique = True) -> list[str]:
     generators : list[str] = []
 
     for i in range(len(A)):
@@ -65,32 +97,31 @@ def generators_for_graph(A: list[str], B: list[str], l: int, m: int) -> list[str
             answer = helper.multiply_m1_and_m2_inverse(B[i], B[j], l, m)
             generators.append(answer)
 
-    return helper.construct_expression_from_powers(generators, l, m)
+    if unique:
+        return remove_duplicate_generators(generators, l, m)
+    else:
+        return helper.construct_expression_from_powers(generators, l, m)
 
 
 
 def check():
-    l = 16
-    m = 16
+    l = 15
+    m = 15
     num_shots = 5
     p = ProposeParameters(l, m)
 
     for i in range(num_shots):
-        # A, B = p.distribute_monomials(p.draw_random_monomials(3, 3))
+        A, B = p.distribute_monomials(p.draw_random_monomials(3, 3))
 
-        A = ['i', 'x2']
-        B = ['i', 'y2']
+        A = ['x3', 'y5']
+        B = ['y3', 'x5']
+        print(f"A: {A}, B: {B}\n")
 
-        print(f"l = {l}, m = {m}, A = {A}, B = {B} \n")
+        H_unique = find_generators(A, B, l, m, unique=True)
+        print(f"Unique generators: {H_unique}")
 
-        G_all = generators_for_graph(A, B, l, m)
-        print(f"All generators G = {G_all}\n")
-
-        G_unique = remove_duplicate_generators(G_all, l, m)
-        print(f"Unique generators G = {G_unique}\n")
-
-        G_removed = [x for x in G_all if x not in G_unique]
-        print(f"Removed {len(G_removed)} generators = {G_removed}\n\n\n")
+        is_whole_group = is_whole_group_generated(H_unique, l, m)
+        print(f"Whole group generated: {is_whole_group}\n\n")
 
 
 if __name__ == "__main__":
