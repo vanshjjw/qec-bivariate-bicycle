@@ -185,8 +185,3 @@ def binary_rank(A):
 
 ## ----------------- Miscellaneous ----------------- ##
 
-def remove_dependent_generators(generators: list[str], l: int, m: int) -> list[str]:
-    answer = [
-        val1 for i, val1 in enumerate(generators) if not any(val1 == val2 for val2 in generators[:i])
-    ]
-    return answer
