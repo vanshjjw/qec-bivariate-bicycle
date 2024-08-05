@@ -1,4 +1,5 @@
 from src.experimentation.propose_parameters import ProposeParameters
+from src.polynomials import PolynomialHelper
 from src.core import BBCode
 import src.helpers as helper
 import random
@@ -76,12 +77,36 @@ def check_polynomial_powers():
         A = helper.multiply_polynomials_mod_2(A, A, l, m)
         B = helper.multiply_polynomials_mod_2(B, B, l, m)
 
+def product():
+    l = 6
+    m = 6
+    poly_help = PolynomialHelper(l, m)
+
+    A1 = ["x3", "y1", "y2"]
+    B1 = ["y3", "x1", "x2"]
+    code1 = BBCode(l, m, A1, B1, safe_mode=False)
+    G1=code1.graph()
+    helper.compute_sub_graphs(G1)
+
+    A2 = ["x3", "y2", "y5"]
+    B2 = ["y3", "x2", "x5"]
+    code2 = BBCode(l, m, A2, B2, safe_mode=False)
+    G2 = code1.graph()
+    helper.compute_sub_graphs(G2)
+
+    A3 = poly_help.multiply_polynomials(A1, A2)
+    B3 = poly_help.multiply_polynomials(B1, B2)
+
+    code3 = BBCode(l, m, A3, B3, safe_mode=False)
+    G3 = code1.graph()
+    helper.compute_sub_graphs(G3)
+
+
 
 
 
 if __name__ == "__main__":
-    check_product_polynomials()
-    pass
+    product()
 
 
 

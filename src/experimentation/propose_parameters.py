@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 import random
 
@@ -16,7 +18,7 @@ class ProposeParameters:
         pass
 
     @staticmethod
-    def distribute_monomials(all_monomials: list[str], num_A: int | None = None):
+    def distribute_monomials(all_monomials: list[str], num_A: Optional[int] = None):
         num_monomials = len(all_monomials)
         if num_A is None:
             num_A = num_monomials // 2
