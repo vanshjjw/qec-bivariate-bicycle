@@ -7,8 +7,6 @@ import src.distances.distance_from_gap as qdistrand
 import src.distances.distance_from_bposd as bposd
 
 
-# I am an idiot, I should have used the class to store the variables
-
 class BBCode:
     def __init__(self, l: int, m: int, A_expression:list[str], B_expression: list[str], safe_mode = False):
         self.l = l
