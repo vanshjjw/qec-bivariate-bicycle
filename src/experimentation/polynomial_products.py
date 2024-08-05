@@ -10,6 +10,7 @@ def check_product_polynomials():
     m = 9
     num_shots = 1000
     propose = ProposeParameters(l = l, m = m)
+    poly_help = PolynomialHelper(l, m)
     print("\n")
 
     for i in range(num_shots):
@@ -35,8 +36,8 @@ def check_product_polynomials():
         if k1 == 0 and k2 == 0:
             continue
 
-        A3 = helper.multiply_polynomials_mod_2(A1, A2, l, m)
-        B3 = helper.multiply_polynomials_mod_2(B1, B2, l, m)
+        A3 = poly_help.multiply_polynomials(A1, A2)
+        B3 = poly_help.multiply_polynomials(B1, B2)
 
         code3 = BBCode(l, m, A3, B3)
 
@@ -64,6 +65,7 @@ def check_product_polynomials():
 def check_polynomial_powers():
     l = 12
     m = 12
+    poly_help = PolynomialHelper(l, m)
     A = ["x3", "y2", "y7"]
     B = ["y3", "x1", "x2"]
 
@@ -74,8 +76,8 @@ def check_polynomial_powers():
         print(f"Results: [{n}, {k}, {d}]")
         print("\n\n")
 
-        A = helper.multiply_polynomials_mod_2(A, A, l, m)
-        B = helper.multiply_polynomials_mod_2(B, B, l, m)
+        A = poly_help.multiply_polynomials(A, A)
+        B = poly_help.multiply_polynomials(B, B)
 
 def product():
     l = 6
@@ -86,21 +88,23 @@ def product():
     B1 = ["y3", "x1", "x2"]
     code1 = BBCode(l, m, A1, B1, safe_mode=False)
     G1=code1.graph()
-    helper.compute_sub_graphs(G1)
+    sub_graphs_1 = helper.compute_sub_graphs(G1)
+    print(f"Sub Graphs code 1: {len(sub_graphs_1)}")
 
     A2 = ["x3", "y2", "y5"]
     B2 = ["y3", "x2", "x5"]
     code2 = BBCode(l, m, A2, B2, safe_mode=False)
-    G2 = code1.graph()
-    helper.compute_sub_graphs(G2)
+    G2 = code2.graph()
+    sub_graphs_2 = helper.compute_sub_graphs(G2)
+    print(f"Sub Graphs code 2: {len(sub_graphs_2)}")
 
     A3 = poly_help.multiply_polynomials(A1, A2)
     B3 = poly_help.multiply_polynomials(B1, B2)
 
     code3 = BBCode(l, m, A3, B3, safe_mode=False)
-    G3 = code1.graph()
-    helper.compute_sub_graphs(G3)
-
+    G3 = code3.graph()
+    sub_graphs_3 = helper.compute_sub_graphs(G3)
+    print(f"Sub Graphs: {len(sub_graphs_3)}")
 
 
 
