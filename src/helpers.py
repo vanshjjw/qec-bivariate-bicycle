@@ -111,7 +111,11 @@ def binary_rank(A):
 
 ## ----------------- Miscellaneous ----------------- ##
 
-def plot_graph(G : nx.Graph, hx : list[str], hz : list[str], d : list[str]):
+def plot_graph(G : nx.Graph):
+    hx = [node for node, attribute in G.nodes.data('is_x_check') if attribute]
+    hz = [node for node, attribute in G.nodes.data('is_z_check') if attribute]
+    d = [node for node, attribute in G.nodes.data('is_qubit') if attribute]
+
     pos = {}
     pos_hx = {}
     x = 0.100
@@ -131,7 +135,6 @@ def plot_graph(G : nx.Graph, hx : list[str], hz : list[str], d : list[str]):
     for i in range(len(d)):
         pos_d[d[i]] = [xd, y - i * const]
 
-
     nx.draw_networkx_nodes(G, pos_hx, nodelist=hx, node_color='r', node_size=300, alpha=0.8)
     nx.draw_networkx_nodes(G, pos_hz, nodelist=hz, node_color='b', node_size=300, alpha=0.8)
     nx.draw_networkx_nodes(G, pos_d, nodelist=d, node_color='g', node_size=300, alpha=0.8)
@@ -146,35 +149,34 @@ def plot_graph(G : nx.Graph, hx : list[str], hz : list[str], d : list[str]):
 
 
 def compute_sub_graphs(G: nx.Graph):
-    A = [G.subgraph(c) for c in nx.connected_components(G)]
-    print(f"Number of connected components: {len(A)}")
-    return A
+    return [G.subgraph(c) for c in nx.connected_components(G)]
 
 
 
-def make_graph(Hx: np.ndarray, Hz: np.ndarray, plot=True):
+def make_graph(Hx: np.ndarray, Hz: np.ndarray, plot=False):
     G = nx.Graph()
 
-    hx = ['X' + str(i) for i in range(len(Hx))]
-    hz = ['Z' + str(j) for j in range(len(Hz))]
-    d = [str(k) for k in range(len(Hx[0]))]
-    G.add_nodes_from(hx, bipartite=0)
-    G.add_nodes_from(hz, bipartite=1)
-    G.add_nodes_from(d, bipartite=2)
+    hx = ['x' + str(i) for i in range(len(Hx))]
+    hz = ['z' + str(i) for i in range(len(Hz))]
+    data = [str(i) for i in range(len(Hx[0]))]
+
+    G.add_nodes_from(hx, is_x_check = True)
+    G.add_nodes_from(hz, is_z_check = True)
+    G.add_nodes_from(data, is_qubit = True)
 
     for i in range(len(Hx)):
         for j in range(len(Hx[i])):
             if Hx[i][j] != 0:
-                G.add_edge(hx[i], d[j])
+                G.add_edge(hx[i], data[j])
 
     for i in range(len(Hz)):
         for j in range(len(Hz[i])):
             if Hz[i][j] != 0:
-                G.add_edge(hz[i], d[j])
+                G.add_edge(hz[i], data[j])
 
     if plot:
-        plot_graph(G, hx, hz, d)
-
-    return G
+        plot_graph(G)
+    else:
+        return G
 
 
