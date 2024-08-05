@@ -111,63 +111,70 @@ def binary_rank(A):
 
 ## ----------------- Miscellaneous ----------------- ##
 
-def tanner_graph(self, plot=True):
-    #create graph from adjacency matrices
-    H_x, H_z = self.create_parity_check_matrices()
-    G=nx.Graph()
-    hx = ['X' + str(i) for i in range(len(H_x))]
-    hz = ['Z' + str(j) for j in range(len(H_z))]
-    d = [str(k) for k in range(len(H_x[0]))]
+def plot_graph(G : nx.Graph, hx : list[str], hz : list[str], d : list[str]):
+    pos = {}
+    pos_hx = {}
+    x = 0.100
+    const = 0.100
+    y = 1.0
+
+    for i in range(len(hx)):
+        pos_hx[hx[i]] = [x, y - i * const]
+
+    xb = 0.900
+    pos_hz = {}
+    for i in range(len(hz)):
+        pos_hz[hz[i]] = [xb, y - i * const]
+
+    xd = 0.500
+    pos_d = {}
+    for i in range(len(d)):
+        pos_d[d[i]] = [xd, y - i * const]
+
+
+    nx.draw_networkx_nodes(G, pos_hx, nodelist=hx, node_color='r', node_size=300, alpha=0.8)
+    nx.draw_networkx_nodes(G, pos_hz, nodelist=hz, node_color='b', node_size=300, alpha=0.8)
+    nx.draw_networkx_nodes(G, pos_d, nodelist=d, node_color='g', node_size=300, alpha=0.8)
+    pos.update(pos_hx)
+    pos.update(pos_hz)
+    pos.update(pos_d)
+    nx.draw_networkx_edges(G,pos,edgelist=nx.edges(G),width=1,alpha=0.8,edge_color='k')
+    nx.draw_networkx_labels(G, pos, font_size=10, font_family='sans-serif')
+
+    plt.show()
+
+
+
+def compute_sub_graphs(G: nx.Graph):
+    A = [G.subgraph(c) for c in nx.connected_components(G)]
+    print(f"Number of connected components: {len(A)}")
+    return A
+
+
+
+def make_graph(Hx: np.ndarray, Hz: np.ndarray, plot=True):
+    G = nx.Graph()
+
+    hx = ['X' + str(i) for i in range(len(Hx))]
+    hz = ['Z' + str(j) for j in range(len(Hz))]
+    d = [str(k) for k in range(len(Hx[0]))]
     G.add_nodes_from(hx, bipartite=0)
     G.add_nodes_from(hz, bipartite=1)
     G.add_nodes_from(d, bipartite=2)
 
-    for i in range(len(H_x)):
-        for j in range(len(H_x[i])):
-            if H_x[i][j] != 0:
+    for i in range(len(Hx)):
+        for j in range(len(Hx[i])):
+            if Hx[i][j] != 0:
                 G.add_edge(hx[i], d[j])
 
-    for i in range(len(H_z)):
-        for j in range(len(H_z[i])):
-            if H_z[i][j] != 0:
+    for i in range(len(Hz)):
+        for j in range(len(Hz[i])):
+            if Hz[i][j] != 0:
                 G.add_edge(hz[i], d[j])
 
     if plot:
-        pos_hx = {}
-        x = 0.100
-        const = 0.100
-        y = 1.0
-        for i in range(len(hx)):
-            pos_hx[hx[i]] = [x, y - i * const]
+        plot_graph(G, hx, hz, d)
 
-        xb = 0.900
-        pos_hz = {}
-        for i in range(len(hz)):
-            pos_hz[hz[i]] = [xb, y - i * const]
-
-        xd = 0.500
-        pos_d = {}
-        for i in range(len(d)):
-            pos_d[d[i]] = [xd, y - i * const]
+    return G
 
 
-        nx.draw_networkx_nodes(G, pos_hx, nodelist=hx, node_color='r', node_size=300, alpha=0.8)
-        nx.draw_networkx_nodes(G, pos_hz, nodelist=hz, node_color='b', node_size=300, alpha=0.8)
-        nx.draw_networkx_nodes(G, pos_d, nodelist=d, node_color='g', node_size=300, alpha=0.8)
-
-        pos = {}
-        pos.update(pos_hx)
-        pos.update(pos_hz)
-        pos.update(pos_d)
-        nx.draw_networkx_edges(G,pos,edgelist=nx.edges(G),width=1,alpha=0.8,edge_color='k')
-        nx.draw_networkx_labels(G, pos, font_size=10, font_family='sans-serif')
-
-        plt.show()
-
-    A = list(G.subgraph(c) for c in nx.connected_components(G))
-
-    #edges of components
-    if len(A)>1:
-        print(f"Number of connected components: {len(A)}")
-        for i in A:
-            print(i.edges)

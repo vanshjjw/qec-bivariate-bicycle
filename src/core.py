@@ -101,6 +101,9 @@ class BBCode:
         distance = self.find_distance(H_x, H_z, num_physical, num_logical, distance_method)
         return num_physical, num_logical, distance
 
+    def graph(self):
+        Hx, Hz = self.create_parity_check_matrices()
+        helper.make_graph(Hx, Hz, plot=True)
 
 
 def single_run():
@@ -150,8 +153,8 @@ def single_run_2():
 
 def single_run_3():
     A = {
-        "l": 16,
-        "m": 16,
+        "l": 4,
+        "m": 4,
         "a": ["x1", "y2"],
         "b": ["x1", "y2"],
     }
@@ -161,7 +164,8 @@ def single_run_3():
     print(f"B: {A['b']}")
 
     code = BBCode(A['l'], A['m'], A['a'], A['b'], safe_mode=True)
-    n, k, d = code.generate_bb_code(distance_method=3)
+    n, k, d = code.generate_bb_code(distance_method=0)
+    code.graph()
 
     print(f"\nRequired BB code: [{n}, {k}, {d}]")
     if "answer" in A:
