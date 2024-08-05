@@ -1,9 +1,5 @@
 import math
 
-# Hi, vansh
-# How is it going?
-
-
 class PolynomialHelper:
     def __init__(self, l, m):
         self.l = l
