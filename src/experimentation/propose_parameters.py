@@ -26,17 +26,16 @@ class ProposeParameters:
         B = all_monomials[num_A:]
         return A, B
 
-    def redraw_l_m_from_normal_distribution(self, threshold: float = 0.01, std_dev_power: float = 0.5):
+    def redraw_l_m_from_normal_distribution(self, change_with_probability: float = 0.01, std_dev_power: float = 0.5):
         a = np.random.random()
-        if a < threshold:
+        if a < change_with_probability:
             new_l = np.random.normal(self.l, self.l ** std_dev_power)
             new_m = np.random.normal(self.m, self.m ** std_dev_power)
-            if 1 <= new_l <= 100 and 1 <= new_m <= 100:
+            if 1 <= new_l <= 40 and 1 <= new_m <= 40:
                 self.l = int(new_l)
                 self.m = int(new_m)
-            else :
-                self.redraw_l_m_from_normal_distribution(threshold, std_dev_power)
-        pass
+                return True
+        return False
 
     def draw_random_monomials(self, num_x_monomials: int = 3, num_y_monomials: int = 3):
         x_exponents = np.random.choice(self.l, num_x_monomials, replace=False, p=None)
@@ -46,8 +45,14 @@ class ProposeParameters:
         return monomials
 
 
-    def draw_connected_monomials(self, num_x: int, num_y: int):
-        pass
+    def draw_odd_exponents_monomials(self, num_x_monomials: int = 3, num_y_monomials: int = 3):
+        x_candidates = [i for i in range(1, self.l, 2)]
+        y_candidates = [i for i in range(1, self.m, 2)]
+        x_exponents = np.random.choice(x_candidates, num_x_monomials, replace=False, p=None)
+        y_exponents = np.random.choice(y_candidates, num_y_monomials, replace=False, p=None)
+        monomials = [f"x{i}" for i in x_exponents] + [f"y{i}" for i in y_exponents]
+        random.shuffle(monomials)
+        return monomials
 
     def change_one_monomial(self, monomial_expression: list[str], index: int):
         variable, exp = monomial_expression[index][0], int(monomial_expression[index][1:])

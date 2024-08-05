@@ -82,7 +82,7 @@ class PolynomialHelper:
 
 
 
-class PolynomialGenerator:
+class PolynomialToGraphs:
     def __init__(self, l, m):
         self.l = l
         self.m = m
@@ -187,9 +187,4 @@ class PolynomialGenerator:
 
         if self.is_whole_group_generated(generators):
             return self.l * self.m
-
-        all_elements = set()
-        for generator in generators:
-            all_elements.update(self.generate_subgroup(generator, expression=False))
-
-        return len(all_elements)
+        return None
