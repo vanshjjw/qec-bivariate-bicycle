@@ -77,8 +77,54 @@ class PolynomialHelper:
 
         return result
 
+    def check_toric(self, poly1: list[str], poly2: list[str]):
 
+        A_orders=[]
+        for i in range(len(poly1)):
+            pi = int(poly1[i][1:])
+            if poly1[i][0] == "x":
+                a=self.l/math.gcd(pi,self.l)
+            elif poly1[i][0] == "i":
+                a=0
+            else:
+                a = self.m / math.gcd(pi, self.m)
+            for j in range(i+1, len(poly1)):
+                if poly1[j][0]=="x":
+                    pj = self.l - int(poly1[j][1:])
+                    b=self.l/math.gcd(pj,self.l)
+                elif poly1[j][0] == "i":
+                    b=0
+                else:
+                    pj = self.m - int(poly1[j][1:])
+                    b=self.m / math.gcd(pj, self.m)
+                A_orders.append(math.lcm(a,b))
 
+        B_orders = []
+        for i in range(len(poly2)):
+            pi = int(poly2[i][1:])
+            if poly2[i][0] == "x":
+                a = self.l / math.gcd(pi, self.l)
+            elif poly2[i][0] == "i":
+                a = 0
+            else:
+                a = self.m / math.gcd(pi, self.m)
+            for j in range(i + 1, len(poly2)):
+                if poly2[j][0] == "x":
+                    pj = self.l - int(poly2[j][1:])
+                    b = self.l / math.gcd(pj, self.l)
+                elif poly2[j][0] == "i":
+                    b = 0
+                else:
+                    pj = self.m - int(poly2[j][1:])
+                    b = self.m / math.gcd(pj, self.m)
+                B_orders.append(math.lcm(a, b))
+
+        for x in A_orders:
+            for y in B_orders:
+                if x*y==self.l*self.m:
+                    return True
+
+        return False
 
 
 
