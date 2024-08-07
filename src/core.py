@@ -70,14 +70,11 @@ class BBCode:
             vd.validate_A_B_matrices(A, self.A_expression)
             vd.validate_A_B_matrices(B, self.B_expression)
             vd.validate_parity_matrix(H_x, H_z)
-            print(f"H_x shape: {H_x.shape}")
-            print(f"H_z shape: {H_z.shape}")
-            print("\nParity matrices created successfully")
             pass
 
         return H_x, H_z
 
-    def generate_bb_code(self, distance_method = 0, plot_graph = False):
+    def generate_bb_code(self, distance_method = 0, draw = False):
         H_x, H_z = self.create_parity_check_matrices()
 
         rank_H_x = helper.binary_rank(H_x)
@@ -85,22 +82,18 @@ class BBCode:
 
         if self.safe_mode:
             vd.validate_ranks(rank_H_x, rank_H_z)
-            print(f"rank of H_x: {rank_H_x}")
-            print(f"rank of H_z: {rank_H_z}")
-            print("Rank of H_x and H_z validated successfully")
 
         # code parameters
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x
-        distance = 0
 
         # no need to calculate distance
         if num_logical == 0 or distance_method == 0:
-            return num_physical, num_logical, distance
+            return num_physical, num_logical, 0
 
         distance = self.find_distance(H_x, H_z, num_physical, num_logical, distance_method)
 
-        if plot_graph:
+        if draw:
             helper.make_graph(H_x, H_z, plot=True)
 
         return num_physical, num_logical, distance
