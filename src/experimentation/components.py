@@ -3,11 +3,12 @@ from src.polynomials import PolynomialToGraphs
 from src.core import BBCode
 import numpy as np
 import src.helpers as helper
+import networkx as nx
 
 
 def check():
-    l = 16
-    m = 16
+    l = 12
+    m = 12
     num_shots = 1000
     num_x = 3
     num_y = 3
@@ -36,9 +37,9 @@ def check():
             continue
 
         G_unique_1 = poly_graph.find_graph_generators(A, B, unique=True)
-        is_connected = poly_graph.group_size(G_unique_1) == l * m
+        is_connected_local = poly_graph.group_size(G_unique_1) == l * m
 
-        if not is_connected:
+        if not is_connected_local:
             continue
 
         # base polynomials gives non-zero encoding and produces a connected graph...
@@ -46,27 +47,38 @@ def check():
         print(f"code: [{n1}, {k1}, {d1}]")
         print("\n")
 
-        # square the polynomials
-        A2 = poly_graph.poly_help.multiply_polynomials(A, A)
+        # square only A
+        A2 = A
         B2 = poly_graph.poly_help.multiply_polynomials(B, B)
 
         code_2 = BBCode(l, m, A2, B2, safe_mode=False)
         n2, k2, d2 = code_2.generate_bb_code(distance_method=0)
 
         G_unique_2 = poly_graph.find_graph_generators(A2, B2, unique=True)
+        graph_2 = code_2.graph()
 
         # print squared polynomials results
         print(f"A^2: {A2}, B^2: {B2}")
         print(f"code^2: [{n2}, {k2}, {d2}]")
-        is_connected = poly_graph.group_size(G_unique_2) == l * m
-        if is_connected:
+        is_connected_local = poly_graph.group_size(G_unique_2) == l * m
+        is_connected_global = helper.is_connected(graph_2)
+        num_components = helper.num_connected_components(graph_2)
+
+        if is_connected_local:
             print("Squared polynomials are connected")
-            input("\nPress the <ENTER> key to continue...\n")
+            if not is_connected_global:
+                print(f"NX disagrees with the local formula. Says it has {num_components} components")
+                input("\nPress the <ENTER> key to continue...\n")
         else:
-            components = helper.compute_sub_graphs(code_2.graph())
-            print(f"Number of components in squared polynomials: {len(components)}")
-            print(f"k increased by : {(k2 / k1)}, components by: {len(components)}")
-            if int(k2 / k1) != len(components):
+            print("Squared polynomials are not connected")
+            if is_connected_global:
+                print("NX disagrees with the local formula")
+            else:
+                print(f"Number of components in squared polynomials: {num_components}")
+
+            print(f"Graph generators: {G_unique_2}")
+            print(f"k increased by : {(k2 / k1)}, components by: {num_components}")
+            if int(k2 / k1) != num_components:
                 print("k increased by a different amount than the number of components")
                 input("\nPress the <ENTER> key to continue...\n")
         print("\n")

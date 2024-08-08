@@ -73,11 +73,11 @@ def check_polynomial_squares():
     for i in range(1, 10):
         code = BBCode(l, m, A, B, safe_mode=False)
         n, k, d = code.generate_bb_code(distance_method=0)
-        components = helper.compute_sub_graphs(code.graph())
+        num_components = helper.num_connected_components(code.graph())
 
         print(f"A : {A}: \nB: {B} \n")
         print(f"code: [{n}, {k}, {d}]")
-        print(f"Number of components: {len(components)}")
+        print(f"Number of components: {num_components}")
         print("\n\n")
 
         A = poly_help.multiply_polynomials(A, A)
