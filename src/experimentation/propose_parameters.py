@@ -38,6 +38,12 @@ class ProposeParameters:
                 return True
         return False
 
+    def draw_bivariate_monomials(self, num_monomials: int = 3):
+        x_exponents = np.random.choice(self.l, num_monomials, replace=False, p=None)
+        y_exponents = np.random.choice(self.m, num_monomials, replace=False, p=None)
+        monomials = [f"x{i}.y{j}" for i, j in zip(x_exponents, y_exponents)]
+        return monomials
+
     def draw_random_monomials(self, num_x_monomials: int = 3, num_y_monomials: int = 3):
         x_exponents = np.random.choice(self.l, num_x_monomials, replace=False, p=None)
         y_exponents = np.random.choice(self.m, num_y_monomials, replace=False, p=None)
