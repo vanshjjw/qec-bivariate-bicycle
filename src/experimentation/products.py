@@ -6,9 +6,10 @@ import random
 
 
 def check_product_polynomials():
+    # multiply two random polynomials and check if the resulting code has a larger k value
     l = 9
     m = 9
-    num_shots = 1000
+    num_shots = 1
     propose = ProposeParameters(l = l, m = m)
     poly_help = PolynomialHelper(l, m)
     print("\n")
@@ -62,55 +63,30 @@ def check_product_polynomials():
         pass
 
 
-def check_polynomial_powers():
-    l = 12
-    m = 12
+def check_polynomial_squares():
+    l = 32
+    m = 32
     poly_help = PolynomialHelper(l, m)
-    A = ["x3", "y2", "y7"]
-    B = ["y3", "x1", "x2"]
+    A = ["i", "x"]
+    B = ["i", "y"]
 
-    for i in range(1, 5):
+    for i in range(1, 10):
         code = BBCode(l, m, A, B, safe_mode=False)
-        n, k, d = code.generate_bb_code(distance_method=3)
+        n, k, d = code.generate_bb_code(distance_method=0)
+        components = helper.compute_sub_graphs(code.graph())
+
         print(f"A : {A}: \nB: {B} \n")
-        print(f"Results: [{n}, {k}, {d}]")
+        print(f"code: [{n}, {k}, {d}]")
+        print(f"Number of components: {len(components)}")
         print("\n\n")
 
         A = poly_help.multiply_polynomials(A, A)
         B = poly_help.multiply_polynomials(B, B)
 
-def product():
-    l = 6
-    m = 6
-    poly_help = PolynomialHelper(l, m)
-
-    A1 = ["x3", "y1", "y2"]
-    B1 = ["y3", "x1", "x2"]
-    code1 = BBCode(l, m, A1, B1, safe_mode=False)
-    G1=code1.graph()
-    sub_graphs_1 = helper.compute_sub_graphs(G1)
-    print(f"Sub Graphs code 1: {len(sub_graphs_1)}")
-
-    A2 = ["x3", "y2", "y5"]
-    B2 = ["y3", "x2", "x5"]
-    code2 = BBCode(l, m, A2, B2, safe_mode=False)
-    G2 = code2.graph()
-    sub_graphs_2 = helper.compute_sub_graphs(G2)
-    print(f"Sub Graphs code 2: {len(sub_graphs_2)}")
-
-    A3 = poly_help.multiply_polynomials(A1, A2)
-    B3 = poly_help.multiply_polynomials(B1, B2)
-
-    code3 = BBCode(l, m, A3, B3, safe_mode=False)
-    G3 = code3.graph()
-    sub_graphs_3 = helper.compute_sub_graphs(G3)
-    print(f"Sub Graphs: {len(sub_graphs_3)}")
-
-
 
 
 if __name__ == "__main__":
-    product()
+    check_polynomial_squares()
 
 
 
