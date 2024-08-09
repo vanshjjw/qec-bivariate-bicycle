@@ -3,21 +3,11 @@ from src.experimentation.propose_parameters import ProposeParameters
 from src.core import BBCode
 import src.helpers as helper
 import math
-import networkx as nx
 
-def interesting_cases():
-    inputs = {
-        'l': 12,
-        'm': 12,
-        'A': ['y7', 'x5', 'y0'],
-        'B': ['x', 'x8', 'y4']
-    }
-    inputs = {
-        'l': 12,
-        'm': 12,
-        'A': ['x', 'y4', 'y2'],
-        'B': ['y11', 'x7', 'x3']
-    }
+
+def checked_hypothesis():
+    # polynomials with only x and only y monomials have the same probability of non-zero k
+    # as mixed polynomials
     pass
 
 

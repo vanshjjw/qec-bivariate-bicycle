@@ -1,4 +1,5 @@
 import math
+import galois
 
 class PolynomialHelper:
     def __init__(self, l, m):
@@ -77,6 +78,33 @@ class PolynomialHelper:
 
         return result
 
+    def galois_factors_to_expression(self, factors: list[galois.Poly], exponents: list[int], is_x : bool):
+        answer = []
+        for f, exp in zip(factors, exponents):
+            non_zero_degrees = f.nonzero_degrees
+            if len(non_zero_degrees) == 1:
+                continue
+
+            powers = [(d, 0) if is_x else (0, d) for d in non_zero_degrees]
+            polynomial = self.construct_expression_from_powers(powers)
+            for _ in range(exp):
+                answer.append(polynomial)
+
+        return answer
+
+
+    def factorize(self, polynomial: list[str], is_x: bool, return_native = False):
+        GF2 = galois.GF(2)
+        powers = [p[0] if is_x else p[1] for p in self.construct_powers_from_expression(polynomial)]
+
+        # Construct the polynomial expression for galois
+        expression = [1 if i in powers else 0 for i in range(self.l if is_x else self.m, -1, -1)]
+        factors = galois.Poly(expression, field=GF2).factors()
+
+        if return_native:
+            return factors
+        else:
+            return self.galois_factors_to_expression(factors[0], factors[1], is_x)
 
 
 
