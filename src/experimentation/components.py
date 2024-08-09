@@ -6,10 +6,10 @@ import src.helpers as helper
 import networkx as nx
 
 
-def check_squared_polynomials():
+def check_k_and_components():
     l = 12
     m = 12
-    num_shots = 1000
+    num_shots = 10000
     num_x = 3
     num_y = 3
     parameters = ProposeParameters(l, m)
@@ -120,4 +120,4 @@ def check_squared_polynomials():
 
 
 if __name__ == "__main__":
-    check_squared_polynomials()
+    check_k_and_components()
