@@ -6,7 +6,7 @@ import src.helpers as helper
 import networkx as nx
 
 
-def check():
+def check_squared_polynomials():
     l = 12
     m = 12
     num_shots = 1000
@@ -19,14 +19,14 @@ def check():
 
     for i in range(num_shots):
         if i % 20 == 0:
-            print(f"Trial {i} completed.")
-            # if i % 200 == 0 and i != 0:
-            #     l = np.random.randint(8, 14)
-            #     m = np.random.randint(8, 14)
-            #     parameters = ProposeParameters(l, m)
-            #     poly_graph = PolynomialToGraphs(l, m)
-            #     print(f"New parameters: l = {l}, m = {m}")
-            #     print("\n")
+            print(f"{i}/{num_shots} completed.")
+            if i % 200 == 0 and i != 0:
+                l = np.random.randint(8, 14)
+                m = np.random.randint(8, 14)
+                parameters = ProposeParameters(l, m)
+                poly_graph = PolynomialToGraphs(l, m)
+                print(f"New parameters: l = {l}, m = {m}")
+                print("\n")
 
         # create base polynomials
         A, B = parameters.distribute_monomials(parameters.draw_random_monomials(num_x, num_y))
@@ -36,10 +36,10 @@ def check():
         if k1 == 0:
             continue
 
-        G_unique_1 = poly_graph.find_graph_generators(A, B, unique=True)
-        is_connected_local = poly_graph.group_size(G_unique_1) == l * m
+        graph_1 = code_1.graph()
+        is_connected = helper.is_connected(graph_1)
 
-        if not is_connected_local:
+        if not is_connected:
             continue
 
         # base polynomials gives non-zero encoding and produces a connected graph...
@@ -47,41 +47,52 @@ def check():
         print(f"code: [{n1}, {k1}, {d1}]")
         print("\n")
 
-        # square only A
+        ### square 2nd polynomial
         A2 = A
         B2 = poly_graph.poly_help.multiply_polynomials(B, B)
 
         code_2 = BBCode(l, m, A2, B2, safe_mode=False)
         n2, k2, d2 = code_2.generate_bb_code(distance_method=0)
 
-        G_unique_2 = poly_graph.find_graph_generators(A2, B2, unique=True)
         graph_2 = code_2.graph()
+        is_connected_2 = helper.is_connected(graph_2)
 
         # print squared polynomials results
-        print(f"A^2: {A2}, B^2: {B2}")
-        print(f"code^2: [{n2}, {k2}, {d2}]")
-        is_connected_local = poly_graph.group_size(G_unique_2) == l * m
-        is_connected_global = helper.is_connected(graph_2)
-        num_components = helper.num_connected_components(graph_2)
+        print(f"B-squared: {B2}")
+        print(f"new code: [{n2}, {k2}, {d2}]")
 
-        if is_connected_local:
+        if is_connected_2:
             print("Squared polynomials are connected")
-            if not is_connected_global:
-                print(f"NX disagrees with the local formula. Says it has {num_components} components")
-                input("\nPress the <ENTER> key to continue...\n")
         else:
+            num_components = helper.num_connected_components(graph_2)
             print("Squared polynomials are not connected")
-            if is_connected_global:
-                print("NX disagrees with the local formula")
-            else:
-                print(f"Number of components in squared polynomials: {num_components}")
-
-            print(f"Graph generators: {G_unique_2}")
             print(f"k increased by : {(k2 / k1)}, components by: {num_components}")
             if int(k2 / k1) != num_components:
-                print("k increased by a different amount than the number of components")
-                input("\nPress the <ENTER> key to continue...\n")
+                input("\nException Found. Press the <ENTER> key to continue...\n")
         print("\n")
+
+        ### square 1st polynomial
+        A3 = poly_graph.poly_help.multiply_polynomials(A, A)
+        B3 = B
+
+        code_3 = BBCode(l, m, A3, B3, safe_mode=False)
+        n3, k3, d3 = code_3.generate_bb_code(distance_method=0)
+
+        graph_3 = code_3.graph()
+        is_connected_3 = helper.is_connected(graph_3)
+
+        # print squared polynomials results
+        print(f"A-squared: {A3}")
+        print(f"new code: [{n3}, {k3}, {d3}]")
+
+        if is_connected_3:
+            print("Squared polynomials are connected")
+        else:
+            num_components = helper.num_connected_components(graph_3)
+            print("Squared polynomials are not connected")
+            print(f"k increased by : {(k3 / k1)}, components by: {num_components}")
+            if int(k3 / k1) != num_components:
+                input("\nException Found. Press the <ENTER> key to continue...\n")
 
         # cube the polynomials
         # A3 = poly_graph.poly_help.multiply_polynomials(A2, A)
@@ -104,9 +115,9 @@ def check():
         #     print(f"k increased by : {(k3 / k1)}, components by: {len(components)}")
         #     program_pause = input("\nPress the <ENTER> key to continue...\n")
 
-        print("\n\n\n")
+        print("------------\n\n")
         pass
 
 
 if __name__ == "__main__":
-    check()
+    check_squared_polynomials()

@@ -140,11 +140,10 @@ def single_run_2():
     print(f"B: {A['b']}")
 
     code = BBCode(A['l'], A['m'], A['a'], A['b'], safe_mode=True)
-    n, k, d = code.generate_bb_code(distance_method=3)
+    graph = code.graph()
 
-    print(f"\nRequired BB code: [{n}, {k}, {d}]")
-    if "answer" in A:
-        print(f"answer: {A['answer']}")
+    print(graph)
+
 
 
 
@@ -173,7 +172,7 @@ def single_run_3():
 
 # Example input for polynomial expressions: ["x0", "x1", "y11", "x21.y21", "x3.y15"]
 if __name__ == "__main__":
-    single_run_3()
+    single_run_2()
 
 
 

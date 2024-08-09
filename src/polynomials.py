@@ -192,27 +192,29 @@ class PolynomialToGraphs:
 
 
     def is_whole_group_generated(self, generators: list[(int, int)]) -> bool:
-        x_indices = []
-        y_indices = []
-        for i, value in enumerate(generators):
-            if math.gcd(value[0], self.l) == 1:
-                x_indices.append(i)
-                if y_indices:
-                    # Found a new x generator and a y generator already exists
-                    return True
-
-            if math.gcd(value[1], self.m) == 1:
-                y_indices.append(i)
-                if x_indices and i not in x_indices:
-                    # Found a new y generator and a different x generator already exists
-                    return True
-
-        return False
+        # x_indices = []
+        # y_indices = []
+        # for i, value in enumerate(generators):
+        #     if math.gcd(value[0], self.l) == 1:
+        #         x_indices.append(i)
+        #         if y_indices:
+        #             # Found a new x generator and a y generator already exists
+        #             return True
+        #
+        #     if math.gcd(value[1], self.m) == 1:
+        #         y_indices.append(i)
+        #         if x_indices and i not in x_indices:
+        #             # Found a new y generator and a different x generator already exists
+        #             return True
+        #
+        # return False
+        pass
 
 
     def group_size(self, generators: list[str]) -> int:
-        generators = self.poly_help.construct_powers_from_expression(generators)
-
-        if self.is_whole_group_generated(generators):
-            return self.l * self.m
-        return None
+        # generators = self.poly_help.construct_powers_from_expression(generators)
+        #
+        # if self.is_whole_group_generated(generators):
+        #     return self.l * self.m
+        # return None
+        pass

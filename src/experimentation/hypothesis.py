@@ -12,33 +12,7 @@ def checked_hypothesis():
 
 
 def check_fully_connected_hypothesis():
-    l = 12
-    m = 12
-    poly_help = PolynomialHelper(l, m)
-    poly_graph = PolynomialToGraphs(l, m)
-
-    A = ['y5', 'x8', 'y3']
-    B = ['x4', 'x11', 'y9']
-    A = poly_help.multiply_polynomials(A, A)
-
-    S1 = poly_graph.find_graph_generators(A, B, unique=True)
-    code = BBCode(l, m, A, B)
-    graph = code.graph()
-
-    print(f"A: {A}, B: {B}")
-    print(f"S1: {S1}")
-
-    is_local_connected = poly_graph.group_size(S1) == l * m
-    is_global_connected = helper.is_connected(graph)
-    num_connected = helper.num_connected_components(graph)
-
-    print("\n")
-    print(f"Is local connected: {is_local_connected}")
-    print(f"Is global connected: {is_global_connected}")
-    print(f"Number of connected components: {num_connected}")
-    if not is_local_connected and is_global_connected:
-        print("Hypothesis is wrong.")
-        input("Press <Enter> to continue...")
+    # The co-prime conjecture was not fully accurate.
     pass
 
 

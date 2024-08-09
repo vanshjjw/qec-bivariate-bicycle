@@ -7,6 +7,7 @@ import random
 
 def check_product_polynomials():
     # multiply two random polynomials and check if the resulting code has a larger k value
+    # conclusion: the k value of the product polynomial is always >= k of original polynomials
     l = 9
     m = 9
     num_shots = 1
@@ -64,6 +65,8 @@ def check_product_polynomials():
 
 
 def check_polynomial_squares():
+    # square a polynomial and check if the resulting code has a larger k value
+    # conclusion: the k value increases by the same factor as the number of connected components
     l = 32
     m = 32
     poly_help = PolynomialHelper(l, m)
