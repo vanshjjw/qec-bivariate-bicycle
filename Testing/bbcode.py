@@ -71,15 +71,15 @@ def run_bbcode_examples():
     Main = {}
     write_raw_data(Main)
 
-    for i in range(len(Main)):
+    for i in range(6):
         print(f"Code {i}:")
         print(f"l: {Main[str(i)]['l']}, m: {Main[str(i)]['m']}")
         print(f"A: {Main[str(i)]['a']}")
         print(f"B: {Main[str(i)]['b']}")
         print()
 
-        obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], safe_mode=True)
-        n, k, d = obj.generate_bb_code(distance_method=0)
+        obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], safe_mode=False)
+        n, k, d = obj.generate_bb_code(distance_method=4)
 
         print(f"Obtained BB code: [{n}, {k}, {d}]")
 
