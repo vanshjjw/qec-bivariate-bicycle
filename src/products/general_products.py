@@ -90,6 +90,7 @@ def square_polynomials():
 
 if __name__ == "__main__":
     square_polynomials()
+    pass
 
 
 
