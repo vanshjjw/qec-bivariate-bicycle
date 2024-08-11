@@ -41,11 +41,11 @@ def factorize_disconnected_polynomials():
     zero_k = 0
     connected = 0
 
-    for i in range(num_shots):
-        if i % 50 == 0:
-            print(f"{i}/{num_shots} completed.")
-            print(f"No k value: {zero_k}/{i}")
-            print(f"Connected: {connected}/{i - zero_k}")
+    for shot in range(num_shots):
+        if shot % 50 == 0:
+            print(f"{shot}/{num_shots} completed.")
+            print(f"No k value: {zero_k}/{shot}")
+            print(f"Connected: {connected}/{shot - zero_k}")
             print("\n")
 
         A = parameters.draw_random_monomials(3, 0)
@@ -78,20 +78,43 @@ def factorize_disconnected_polynomials():
         print(f"Factorization of B: {factors_as_strings(B_Factors)}")
         print("\n")
 
-        k_cumulative = 0
+        k_cumulative_base = 0
+        k_cumulative_raised = 0
+        non_zero_codes = 0
 
         for i, a in enumerate(A_Factors[0]):
             for j, b in enumerate(B_Factors[0]):
 
                 code = BBCode(l, m, a, b)
-                n, k, d = code.generate_bb_code(distance_method=3)
+                n2, k2, d2 = code.generate_bb_code(distance_method=3)
+                num_components = helper.num_connected_components(code.graph())
+                print(f"checking factors a{i} and b{j}: code [{n2}, {k2}, {d2}]: has {num_components} components.")
 
-                print(f"checking factors a{i} and b{j}: code [{n}, {k}, {d}]")
+                if k2 == 0:
+                    continue
+                else:
+                    non_zero_codes += 1
 
-                k_for_factors = k * A_Factors[1][i] * B_Factors[1][j]
-                k_cumulative += k_for_factors
+                a_power = A_Factors[1][i]
+                b_power = B_Factors[1][j]
 
-        print(f"cumulative k: {k_cumulative}, original k: {k}")
+                if a_power == 1 and b_power == 1:
+                    continue
+
+                a_raised = poly_help.raise_polynomial_to_power(a, a_power)
+                b_raised = poly_help.raise_polynomial_to_power(b, b_power)
+
+                code = BBCode(l, m, a_raised, b_raised)
+                n3, k3, d3 = code.generate_bb_code(distance_method=3)
+                num_components_3 = helper.num_connected_components(code.graph())
+                print(f"checking factors a{i}^{a_power} and b{j}^{b_power}: code [{n3}, {k3}, {d3}]: has {num_components_3} components.")
+                print(f"num_components_2 and powers: {num_components_3 == (a_power * b_power)}")
+                print("\n")
+
+                k_cumulative_base = k_cumulative_base + (k2 * a_power * b_power)
+                k_cumulative_raised = k_cumulative_raised + k3
+
+        print(f"k original: {k}, k cumulative base: {k_cumulative_base}, k cumulative raised: {k_cumulative_raised}")
         print("-------------\n\n")
 
 
@@ -107,11 +130,11 @@ def factorize_connected_polynomials():
     zero_k = 0
     disconnected = 0
 
-    for i in range(num_shots):
-        if i % 50 == 0:
-            print(f"{i}/{num_shots} completed.")
-            print(f"No k value: {zero_k}/{i}")
-            print(f"Disconnected: {disconnected}/{i - zero_k}")
+    for shot in range(num_shots):
+        if shot % 50 == 0:
+            print(f"{shot}/{num_shots} completed.")
+            print(f"No k value: {zero_k}/{shot}")
+            print(f"Disconnected: {disconnected}/{shot - zero_k}")
             print("\n")
 
         A = parameters.draw_random_monomials(3, 0)
@@ -142,20 +165,49 @@ def factorize_connected_polynomials():
         print(f"Factorization of B: {factors_as_strings(B_Factors)}")
         print("\n")
 
-        k_cumulative = 0
-        for a, power_a in zip(A_Factors[0], A_Factors[1]):
-            for b, power_b in zip(B_Factors[0], B_Factors[1]):
+        k_cumulative_base = 0
+        k_cumulative_raised = 0
+        non_zero_codes = 0
 
-                a_new = poly_help.raise_polynomial_to_power(a, power_a)
-                b_new = poly_help.raise_polynomial_to_power(b, power_b)
-                k_new = __check_and_print_code(l, m, a_new, b_new)
+        for i, a in enumerate(A_Factors[0]):
+            for j, b in enumerate(B_Factors[0]):
 
-        print("-------------------\n\n")
+                code = BBCode(l, m, a, b)
+                n2, k2, d2 = code.generate_bb_code(distance_method=3)
+                num_components_2 = helper.num_connected_components(code.graph())
+                print(f"checking factors a{i} and b{j}: code [{n2}, {k2}, {d2}]: has {num_components_2} components.")
 
+
+                if k2 == 0:
+                    continue
+
+                non_zero_codes += 1
+                a_power = A_Factors[1][i]
+                b_power = B_Factors[1][j]
+
+                if a_power == 1 and b_power == 1:
+                    continue
+
+                a_raised = poly_help.raise_polynomial_to_power(a, a_power)
+                b_raised = poly_help.raise_polynomial_to_power(b, b_power)
+
+                code = BBCode(l, m, a_raised, b_raised)
+                n3, k3, d3 = code.generate_bb_code(distance_method=3)
+                num_components_3 = helper.num_connected_components(code.graph())
+                print(f"checking factors a{i}^{a_power} and b{j}^{b_power}: code [{n3}, {k3}, {d3}]: has {num_components_3} components.")
+                print(f"num_components_2 and powers: {num_components_3 == (a_power * b_power)}")
+                print("\n")
+
+                k_cumulative_base = k_cumulative_base + (k2 * a_power * b_power)
+                k_cumulative_raised = k_cumulative_raised + k3
+
+        print(f"k original: {k}, k cumulative base: {k_cumulative_base}, k cumulative raised: {k_cumulative_raised}")
+        print(f"Non-zero codes: {non_zero_codes}")
+        print("-------------\n\n")
 
 
 
 if __name__ == "__main__":
-    factorize_disconnected_polynomials()
+    print("FACTORIZING CONNECTED POLYNOMIALS\n")
     factorize_connected_polynomials()
     pass
