@@ -1,11 +1,11 @@
-from src.experimentation.propose_parameters import ProposeParameters
+from src.propose_parameters import ProposeParameters
 from src.polynomials import PolynomialHelper
 from src.core import BBCode
 import src.helpers as helper
 import random
 
 
-def check_product_polynomials():
+def multiply_random_polynomials():
     # multiply two random polynomials and check if the resulting code has a larger k value
     # conclusion: the k value of the product polynomial is always >= k of original polynomials
     l = 9
@@ -64,7 +64,7 @@ def check_product_polynomials():
         pass
 
 
-def check_polynomial_squares():
+def square_polynomials():
     # square a polynomial and check if the resulting code has a larger k value
     # conclusion: the k value increases by the same factor as the number of connected components
     l = 32
@@ -89,7 +89,7 @@ def check_polynomial_squares():
 
 
 if __name__ == "__main__":
-    check_polynomial_squares()
+    square_polynomials()
 
 
 

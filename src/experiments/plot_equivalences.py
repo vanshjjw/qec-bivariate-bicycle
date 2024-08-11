@@ -1,6 +1,6 @@
 import numpy as np
 import src.core as core
-from src.experimentation.propose_parameters import ProposeParameters
+from src.propose_parameters import ProposeParameters
 from copy import deepcopy
 import matplotlib.pyplot as plt
 import json
@@ -102,7 +102,6 @@ def search_close_parameters(create_equivalence = False):
         create_equivalence_classes(outputs)
 
     pass
-
 
 
 if __name__ == "__main__":

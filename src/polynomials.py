@@ -80,6 +80,7 @@ class PolynomialHelper:
 
     def galois_factors_to_expression(self, factors: list[galois.Poly], exponents: list[int], is_x : bool):
         answer = []
+        answer_exp = []
         for f, exp in zip(factors, exponents):
             non_zero_degrees = f.nonzero_degrees
             if len(non_zero_degrees) == 1:
@@ -87,10 +88,11 @@ class PolynomialHelper:
 
             powers = [(d, 0) if is_x else (0, d) for d in non_zero_degrees]
             polynomial = self.construct_expression_from_powers(powers)
-            for _ in range(exp):
-                answer.append(polynomial)
 
-        return answer
+            answer.append(polynomial)
+            answer_exp.append(exp)
+
+        return answer, answer_exp
 
 
     def factorize(self, polynomial: list[str], is_x: bool, return_native = False):

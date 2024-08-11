@@ -1,7 +1,6 @@
-from src.polynomials import PolynomialHelper, PolynomialToGraphs
-from src.experimentation.propose_parameters import ProposeParameters
+from src.polynomials import PolynomialHelper
+from src.propose_parameters import ProposeParameters
 from src.core import BBCode
-import src.helpers as helper
 import math
 
 

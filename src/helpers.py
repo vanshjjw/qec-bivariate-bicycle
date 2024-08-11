@@ -109,7 +109,7 @@ def binary_rank(A):
     return rank(A)
 
 
-## ----------------- Miscellaneous ----------------- ##
+## ----------------- Tanner Graphs ----------------- ##
 
 def plot_graph(G : nx.Graph):
     hx = [node for node, attribute in G.nodes.data('is_x_check') if attribute]
