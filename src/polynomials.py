@@ -109,6 +109,13 @@ class PolynomialHelper:
             return self.galois_factors_to_expression(factors[0], factors[1], is_x)
 
 
+    def raise_polynomial_to_power(self, polynomial: list[str], power: int):
+        answer = ["i"]
+        for _ in range(power):
+            answer = self.multiply_polynomials(answer, polynomial)
+        return answer
+
+
 
 
 
