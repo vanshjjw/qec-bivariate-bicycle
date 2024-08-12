@@ -122,10 +122,7 @@ class PolynomialHelper:
             result = subprocess.run(['sage', '-python', 'factor_bivariate.py'], input=str(L), capture_output=True,
                                     text=True, check=True)
 
-            output = result.stdout
-            print("Output from Sage file:\n", output)
-
-            return output
+            return result.stdout
 
         except subprocess.CalledProcessError as e:
             print("Error running Sage file:\n", e.stderr)
@@ -241,7 +238,8 @@ class PolynomialToGraphs:
             return self.l * self.m
         return None
 
-# if __name__ == '__main__':
-#     poly_help=PolynomialHelper(8,8)
-#     A=["x2.y2", "i"]
-#     factors=poly_help.factorize_bivariate(A)
+if __name__ == '__main__':
+    poly_help=PolynomialHelper(8,8)
+    A=["x2.y2", "i"]
+    factors=poly_help.factorize_bivariate(A)
+    print(factors)

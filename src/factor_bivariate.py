@@ -1,8 +1,44 @@
 from sage.all import *
 import ast
+import re
 
 
-def factor(P,l,m):
+def convert_polynomial_to_list(polynomial):
+    # Split the polynomial string into terms
+    terms = polynomial.split(' + ')
+    result = []
+
+    # Regular expression patterns for matching terms
+    x_pattern = re.compile(r'x\^(\d+)')
+    y_pattern = re.compile(r'y\^(\d+)')
+
+    for term in terms:
+        # Extract exponents of x and y
+        x_match = x_pattern.search(term)
+        y_match = y_pattern.search(term)
+
+        # Determine the exponent values, default to 0 if not found
+        x_exp = x_match.group(1) if x_match else '1'
+        y_exp = y_match.group(1) if y_match else '1'
+
+        if 'x' in term and 'y' in term:
+            # Both x and y present
+            formatted_term = f"x{x_exp}.y{y_exp}"
+        elif 'x' in term:
+            # Only x present
+            formatted_term = f"x{x_exp}"
+        elif 'y' in term:
+            # Only y present
+            formatted_term = f"y{y_exp}"
+        else:
+            # Neither x nor y present (constant term)
+            formatted_term = "i"
+
+        result.append(formatted_term)
+
+    return result
+
+def factorise(P,l,m):
 
     F = GF(2)
 
@@ -27,19 +63,20 @@ def factor(P,l,m):
     factors = p.factor()
 
     # Print the polynomial and its factors in the original ring
-    print(f"Polynomial in original ring: {p}")
-    print(f"Factors in original ring: {factors}")
+    # print(f"Polynomial in original ring: {p}")
+    # print(f"Factors in original ring: {factors}")
 
     # Step 7: Map the factors into the quotient ring
     Q_factors = [(Q(f), multiplicity) for f, multiplicity in factors]
 
     # Print the factors in the quotient ring
-    Q=[]
+    f_list=[]
     for factor, multiplicity in Q_factors:
-        Q.append((str(factor).replace("bar", ""), multiplicity))
+        f=str(factor).replace("bar", "")
+        pf=convert_polynomial_to_list(f)
+        f_list.append((pf, multiplicity))
 
-
-
+    return f_list
 
 if __name__ == '__main__':
     L=input()
@@ -47,4 +84,4 @@ if __name__ == '__main__':
     P=L[0]
     l=int(L[1])
     m=int(L[2])
-    factor(P,l,m)
+    factorise(P,l,m)
