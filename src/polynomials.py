@@ -1,6 +1,6 @@
 import math
 import galois
-
+import subprocess
 class PolynomialHelper:
     def __init__(self, l, m):
         self.l = l
@@ -115,6 +115,18 @@ class PolynomialHelper:
             answer = self.multiply_polynomials(answer, polynomial)
         return answer
 
+    def factorize_bivariate(self,P):
+        P = self.construct_powers_from_expression(P)
+        L=[P, self.l, self.m]
+        try:
+            result = subprocess.run(['sage', '-python', 'factor_bivariate.py'], input=str(L), capture_output=True,
+                                    text=True, check=True)
+
+            return result.stdout
+
+        except subprocess.CalledProcessError as e:
+            print("Error running Sage file:\n", e.stderr)
+            return None
 
 
 
@@ -201,28 +213,33 @@ class PolynomialToGraphs:
 
 
     def is_whole_group_generated(self, generators: list[(int, int)]) -> bool:
-        # x_indices = []
-        # y_indices = []
-        # for i, value in enumerate(generators):
-        #     if math.gcd(value[0], self.l) == 1:
-        #         x_indices.append(i)
-        #         if y_indices:
-        #             # Found a new x generator and a y generator already exists
-        #             return True
-        #
-        #     if math.gcd(value[1], self.m) == 1:
-        #         y_indices.append(i)
-        #         if x_indices and i not in x_indices:
-        #             # Found a new y generator and a different x generator already exists
-        #             return True
-        #
-        pass
+        x_indices = []
+        y_indices = []
+        for i, value in enumerate(generators):
+            if math.gcd(value[0], self.l) == 1:
+                x_indices.append(i)
+                if y_indices:
+                    # Found a new x generator and a y generator already exists
+                    return True
+
+            if math.gcd(value[1], self.m) == 1:
+                y_indices.append(i)
+                if x_indices and i not in x_indices:
+                    # Found a new y generator and a different x generator already exists
+                    return True
+
+        return False
 
 
     def group_size(self, generators: list[str]) -> int:
-        # generators = self.poly_help.construct_powers_from_expression(generators)
-        #
-        # if self.is_whole_group_generated(generators):
-        #     return self.l * self.m
-        # return None
-        pass
+        generators = self.poly_help.construct_powers_from_expression(generators)
+
+        if self.is_whole_group_generated(generators):
+            return self.l * self.m
+        return None
+
+if __name__ == '__main__':
+    poly_help=PolynomialHelper(8,8)
+    A=["x2.y2", "i"]
+    factors=poly_help.factorize_bivariate(A)
+    print(factors)
