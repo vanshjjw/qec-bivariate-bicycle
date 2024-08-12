@@ -1,6 +1,6 @@
 import math
 import galois
-
+import subprocess
 class PolynomialHelper:
     def __init__(self, l, m):
         self.l = l
@@ -115,6 +115,21 @@ class PolynomialHelper:
             answer = self.multiply_polynomials(answer, polynomial)
         return answer
 
+    def factorize_bivariate(self,P):
+        P = self.construct_powers_from_expression(P)
+        L=[P, self.l, self.m]
+        try:
+            result = subprocess.run(['sage', '-python', 'factor_bivariate.py'], input=str(L), capture_output=True,
+                                    text=True, check=True)
+
+            output = result.stdout
+            print("Output from Sage file:\n", output)
+
+            return output
+
+        except subprocess.CalledProcessError as e:
+            print("Error running Sage file:\n", e.stderr)
+            return None
 
 
 
@@ -225,3 +240,4 @@ class PolynomialToGraphs:
         if self.is_whole_group_generated(generators):
             return self.l * self.m
         return None
+
