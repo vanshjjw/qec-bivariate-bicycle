@@ -15,6 +15,7 @@ class BBCode:
         self.B_expression = B_expression
         self.safe_mode = safe_mode
         self.poly_variables = {}
+        self.create_poly_variables()
 
     def find_distance(self, H_x, H_z, n, k, distance_method):
         if distance_method == 1:
@@ -35,6 +36,10 @@ class BBCode:
         self.poly_variables["i"] = np.eye(self.l * self.m, dtype=int)
         self.poly_variables["x"] = np.kron(S_l, np.eye(self.m, dtype=int))
         self.poly_variables["y"] = np.kron(np.eye(self.l, dtype=int), S_m)
+
+        if self.safe_mode:
+            vd.validate_x_y_matrices(self.poly_variables["x"])
+            vd.validate_x_y_matrices(self.poly_variables["y"])
         pass
 
     def construct_matrix_from_expression(self, expression: list[str]):
@@ -56,9 +61,6 @@ class BBCode:
         return M
 
     def create_parity_check_matrices(self):
-        # Create x and y matrices
-        self.create_poly_variables()
-
         # Make A and B matrices
         A = self.construct_matrix_from_expression(self.A_expression)
         B = self.construct_matrix_from_expression(self.B_expression)
