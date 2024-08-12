@@ -1,6 +1,7 @@
 from src.core import BBCode
 from src.core_cached import BBCodeCached
 from src.propose_parameters import ProposeParameters
+import numpy as np
 import random
 import time
 
@@ -63,6 +64,56 @@ def benchmark_cache():
 
 
 
+
+def benchmark_matrix_construction_from_expression():
+    num_shots = 5000
+    l = 12
+    m = 12
+
+    #
+    parameters = ProposeParameters(l, m)
+    polynomials = [parameters.draw_bivariate_monomials(3) for _ in range(num_shots)]
+
+
+    code_cached = BBCodeCached(l, m)
+    method_1_verifications = {}
+    method_2_verifications = {}
+
+    # method 1
+
+    T1 = time.time()
+
+    for i in range(num_shots):
+        m = code_cached.construct_matrix_from_expression(polynomials[i])
+        if i % 100 == 0:
+            print(f"Method 1: {i} completed.")
+            method_1_verifications[i] = m
+
+    T2 = time.time()
+    print(f"Method 1: {T2 - T1}")
+
+
+    # method 2
+    T1 = time.time()
+
+    for i in range(num_shots):
+        m = code_cached.construct_matrix_from_expression_2(polynomials[i])
+        if i % 100 == 0:
+            print(f"Method 2: {i} completed.")
+            method_2_verifications[i] = m
+
+    T2 = time.time()
+    print(f"Method 2: {T2 - T1}")
+
+    for i in range(0, num_shots, 100):
+        m1 = method_1_verifications[i]
+        m2 = method_2_verifications[i]
+        print(f"equal: {np.array_equal(m1, m2)}")
+
+    pass
+
+
+
 if __name__ == "__main__":
-    benchmark_cache()
+    benchmark_matrix_construction_from_expression()
     pass

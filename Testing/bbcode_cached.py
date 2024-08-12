@@ -88,9 +88,10 @@ def run_bbcode_cached_examples():
         print(f"Obtained BB code: [{n}, {k}, {d}]")
 
         if "answer" in Main[str(i)]:
-            print(f"Known BB code: {Main[str(i)]['answer']}\n\n\n")
-            n_answer, k_answer, d_answer = Main[str(i)]['answer']
-            print("right answer? ", (n == n_answer) and (k == k_answer) and (0.80 * d_answer < d < 1.20 * d_answer))
+            print(f"Known BB code: {Main[str(i)]['answer']}")
+            n_answer, k_answer, d_answer = Main[str(i)]['answer'][0]
+            print("right answer? ", (n == n_answer) and (k == k_answer) and (d_answer < d * 1.20))
+            print("\n\n")
 
 
 

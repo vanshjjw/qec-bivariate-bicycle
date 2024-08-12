@@ -5,7 +5,7 @@ import src.distances.distance_from_brute_force as brute_force
 import src.distances.distance_from_generators as generators
 import src.distances.distance_from_gap as qdistrand
 import src.distances.distance_from_bposd as bposd
-
+from src.polynomials import PolynomialHelper
 
 class BBCodeCached:
     def __init__(self, l: int, m: int, safe_mode = False):
@@ -17,6 +17,7 @@ class BBCodeCached:
         self.H_x = None
         self.H_z = None
         self.poly_variables = {}
+        self.poly_help = PolynomialHelper(l, m)
         self.create_cache()
 
     def set_expressions(self, A_expression: list[str], B_expression: list[str]):
@@ -61,21 +62,18 @@ class BBCodeCached:
 
     def construct_matrix_from_expression(self, expression: list[str]):
         size = self.l * self.m
-        M = np.zeros((size, size), dtype=int)
+        Answer: np.ndarray = np.zeros((size, size), dtype=int)
+        powers: list[(int, int)] = self.poly_help.construct_powers_from_expression(expression)
 
-        for elements in expression:
-            p = np.eye(size, dtype=int)
+        for power in powers:
+            sub_matrix: np.ndarray = self.poly_variables["i1"]
+            if power[0] != 0:
+                sub_matrix = sub_matrix @ self.poly_variables[f"x{power[0]}"]
+            if power[1] != 0:
+                sub_matrix = sub_matrix @ self.poly_variables[f"y{power[1]}"]
+            Answer = (Answer + sub_matrix) % 2
 
-            for elem in elements.split("."):
-                if len(elem) == 1:
-                    p = p @ self.poly_variables[elem + "1"]
-                else:
-                    if elem[1:] != "0":
-                        p = p @ self.poly_variables[elem]
-
-            M = (M + p) % 2
-
-        return M
+        return Answer
 
 
     def create_parity_check_matrices(self):
