@@ -96,13 +96,13 @@ class BBCode:
         distance = self.find_distance(H_x, H_z, num_physical, num_logical, distance_method)
 
         if draw:
-            helper.make_graph(H_x, H_z, plot=True)
+            helper.make_graph_for_bbcode(H_x, H_z, plot=True)
 
         return num_physical, num_logical, distance
 
     def graph(self):
         Hx, Hz = self.create_parity_check_matrices()
-        return helper.make_graph(Hx, Hz, plot=False)
+        return helper.make_graph_for_bbcode(Hx, Hz, plot=False)
 
 
 def single_run():

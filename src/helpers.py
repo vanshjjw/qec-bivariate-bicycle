@@ -155,24 +155,23 @@ def is_connected(G: nx.Graph):
     return nx.is_connected(G)
 
 
-def make_graph(Hx: np.ndarray, Hz: np.ndarray, plot=False):
+def make_graph_for_bbcode(Hx: np.ndarray, Hz: np.ndarray, plot=False):
     G = nx.Graph()
+    m, n = len(Hx), len(Hx[0])
 
-    hx = ['x' + str(i) for i in range(len(Hx))]
-    hz = ['z' + str(i) for i in range(len(Hz))]
-    data = [str(i) for i in range(len(Hx[0]))]
+    hx = ['x' + str(i) for i in range(m)]
+    hz = ['z' + str(i) for i in range(m)]
+    data = [str(i) for i in range(n)]
 
     G.add_nodes_from(hx, is_x_check = True)
     G.add_nodes_from(hz, is_z_check = True)
     G.add_nodes_from(data, is_qubit = True)
 
-    for i in range(len(Hx)):
-        for j in range(len(Hx[i])):
+    # Hx and Hz have the same shape
+    for i in range(m):
+        for j in range(n):
             if Hx[i][j] != 0:
                 G.add_edge(hx[i], data[j])
-
-    for i in range(len(Hz)):
-        for j in range(len(Hz[i])):
             if Hz[i][j] != 0:
                 G.add_edge(hz[i], data[j])
 

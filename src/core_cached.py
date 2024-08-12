@@ -14,6 +14,8 @@ class BBCodeCached:
         self.safe_mode = safe_mode
         self.A_expression = None
         self.B_expression = None
+        self.H_x = None
+        self.H_z = None
         self.poly_variables = {}
         self.create_cache()
 
@@ -23,16 +25,16 @@ class BBCodeCached:
         return self
 
 
-    def find_distance(self, H_x, H_z, n, k, distance_method):
+    def find_distance(self, n, k, distance_method):
         distance_safe: bool = self.safe_mode and distance_method != 4
         if distance_method == 1:
-            return brute_force.calculate_distance(H_x, H_z, n, k, status_updates=distance_safe)
+            return brute_force.calculate_distance(self.H_x, self.H_z, n, k, status_updates=distance_safe)
         if distance_method == 2:
-            return generators.calculate_distance(H_x, H_z, n, k, status_updates=distance_safe)
+            return generators.calculate_distance(self.H_x, self.H_z, n, k, status_updates=distance_safe)
         if distance_method == 3:
-            return qdistrand.calculate_distance(H_x, H_z, status_updates=distance_safe)
+            return qdistrand.calculate_distance(self.H_x, self.H_z, status_updates=distance_safe)
         if distance_method == 4:
-            return bposd.calculate_distance(H_x, H_z, status_updates=distance_safe)
+            return bposd.calculate_distance(self.H_x, self.H_z, status_updates=distance_safe)
 
 
     def create_cache(self):
@@ -98,6 +100,8 @@ class BBCodeCached:
 
     def generate_bb_code(self, distance_method = 0):
         H_x, H_z = self.create_parity_check_matrices()
+        self.H_x = H_x
+        self.H_z = H_z
 
         rank_H_x = helper.binary_rank(H_x)
         rank_H_z = helper.binary_rank(H_z)
@@ -113,11 +117,12 @@ class BBCodeCached:
         if num_logical == 0 or distance_method == 0:
             return num_physical, num_logical, 0
 
-        distance = self.find_distance(H_x, H_z, num_physical, num_logical, distance_method)
+        distance = self.find_distance(num_physical, num_logical, distance_method)
 
         return num_physical, num_logical, distance
 
 
     def graph(self):
-        Hx, Hz = self.create_parity_check_matrices()
-        return helper.make_graph(Hx, Hz)
+        if self.H_x is None or self.H_z is None:
+            self.H_x, self.H_z = self.create_parity_check_matrices()
+        return helper.make_graph_for_bbcode(self.H_x, self.H_z)
