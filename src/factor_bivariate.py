@@ -34,9 +34,12 @@ def factor(P,l,m):
     Q_factors = [(Q(f), multiplicity) for f, multiplicity in factors]
 
     # Print the factors in the quotient ring
-    print(f"Factors in quotient ring:{Q_factors}")
+    Q=[]
     for factor, multiplicity in Q_factors:
-        print(f"Factor: {factor}, Multiplicity: {multiplicity}")
+        Q.append((str(factor).replace("bar", ""), multiplicity))
+
+
+
 
 if __name__ == '__main__':
     L=input()

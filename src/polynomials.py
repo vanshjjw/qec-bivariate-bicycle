@@ -240,3 +240,8 @@ class PolynomialToGraphs:
         if self.is_whole_group_generated(generators):
             return self.l * self.m
         return None
+
+# if __name__ == '__main__':
+#     poly_help=PolynomialHelper(8,8)
+#     A=["x2.y2", "i"]
+#     factors=poly_help.factorize_bivariate(A)
