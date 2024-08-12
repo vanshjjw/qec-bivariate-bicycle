@@ -1,8 +1,10 @@
 from src.propose_parameters import ProposeParameters
 from src.polynomials import PolynomialHelper
 from src.core import BBCode
+from src.core_cached import BBCodeCached
 import src.helpers as helper
 import random
+import time
 
 
 def multiply_random_polynomials():
@@ -10,12 +12,16 @@ def multiply_random_polynomials():
     # conclusion: the k value of the product polynomial is always >= k of original polynomials
     l = 9
     m = 9
-    num_shots = 1
+    num_shots = 250
     propose = ProposeParameters(l = l, m = m)
     poly_help = PolynomialHelper(l, m)
+    code_cached = BBCodeCached(l, m)
     print("\n")
 
     for i in range(num_shots):
+        if i % 10 == 0:
+            print(f"{i}/{num_shots} completed.")
+
         min_num = 2
         max_num = 4
 
@@ -28,11 +34,11 @@ def multiply_random_polynomials():
         A1, B1 = propose.distribute_monomials(propose.draw_random_monomials(num_x1, num_y1))
         A2, B2 = propose.distribute_monomials(propose.draw_random_monomials(num_x2, num_y2))
 
-        code1 = BBCode(l, m, A1, B1)
-        code2 = BBCode(l, m, A2, B2)
+        code_cached.set_expressions(A1, B1)
+        n1, k1, d1 = code_cached.generate_bb_code(distance_method=0)
 
-        n1, k1, d1 = code1.generate_bb_code(distance_method=0)
-        n2, k2, d2 = code2.generate_bb_code(distance_method=0)
+        code_cached.set_expressions(A2, B2)
+        n2, k2, d2 = code_cached.generate_bb_code(distance_method=0)
 
         # unnecessary cases
         if k1 == 0 and k2 == 0:
@@ -41,11 +47,11 @@ def multiply_random_polynomials():
         A3 = poly_help.multiply_polynomials(A1, A2)
         B3 = poly_help.multiply_polynomials(B1, B2)
 
-        code3 = BBCode(l, m, A3, B3)
+        code_cached.set_expressions(A3, B3)
+        n3, k3, d3 = code_cached.generate_bb_code(distance_method=0)
 
-        n3, k3, d3 = code3.generate_bb_code(distance_method=0)
-
-        if k3 >= k2 or k3 >= k1:
+        if k3 < k2 or k3 < k1:
+            print("Exceptional case.")
             print(f"Trial {i}: l = {l}, m = {m}")
             print(f"Results for code 1: [{n1}, {k1}, {d1}]")
             print(f"Results for code 2: [{n2}, {k2}, {d2}]")
@@ -55,13 +61,6 @@ def multiply_random_polynomials():
             print(f"Polynomials 2: {A2}, {B2}")
             print(f"Polynomials 3: {A3}, {B3}")
             print("\n\n")
-
-        if i % 1000 == 0:
-            print(f"Trial {i} completed.")
-            l = random.randint(8, 14)
-            m = random.randint(8, 14)
-
-        pass
 
 
 def square_polynomials():
@@ -89,7 +88,7 @@ def square_polynomials():
 
 
 if __name__ == "__main__":
-    square_polynomials()
+    multiply_random_polynomials()
     pass
 
 

@@ -1,6 +1,7 @@
 from src.propose_parameters import ProposeParameters
 from src.polynomials import PolynomialToGraphs
 from src.core import BBCode
+from src.core_cached import BBCodeCached
 import numpy as np
 import src.helpers as helper
 
@@ -10,9 +11,10 @@ def change_parameters():
     m = np.random.randint(8, 14)
     parameters = ProposeParameters(l, m)
     poly_graph = PolynomialToGraphs(l, m)
+    code_cached = BBCodeCached(l, m)
     print(f"New parameters: l = {l}, m = {m}")
     print("\n")
-    return parameters, poly_graph
+    return parameters, poly_graph, code_cached
 
 
 def square_connected_polynomials():
@@ -23,6 +25,7 @@ def square_connected_polynomials():
     num_y = 3
     parameters = ProposeParameters(l, m)
     poly_graph = PolynomialToGraphs(l, m)
+    code_cached = BBCodeCached(l, m)
 
     zero_k = 0
 
@@ -37,18 +40,17 @@ def square_connected_polynomials():
 
         # change parameters every 200 shots
         if i % 200 == 0 and i != 0:
-            parameters, poly_graph = change_parameters()
+            parameters, poly_graph, code_cached = change_parameters()
 
         # create base polynomials
         A, B = parameters.distribute_monomials(parameters.draw_random_monomials(num_x, num_y))
-        code_1 = BBCode(l, m, A, B, safe_mode=False)
-        n1, k1, d1 = code_1.generate_bb_code(distance_method=0)
+        n1, k1, d1 = code_cached.set_expressions(A, B).generate_bb_code(distance_method=4)
 
         if k1 == 0:
             zero_k += 1
             continue
 
-        graph_1 = code_1.graph()
+        graph_1 = code_cached.graph()
         num_components_1 = helper.num_connected_components(graph_1)
 
         # base polynomials gives non-zero k
@@ -61,10 +63,8 @@ def square_connected_polynomials():
         A2 = poly_graph.poly_help.multiply_polynomials(A, A)
         B2 = poly_graph.poly_help.multiply_polynomials(B, B)
 
-        code_2 = BBCode(l, m, A2, B2, safe_mode=False)
-        n2, k2, d2 = code_2.generate_bb_code(distance_method=0)
-
-        graph_2 = code_2.graph()
+        n2, k2, d2 = code_cached.set_expressions(A2, B2).generate_bb_code(distance_method=4)
+        graph_2 = code_cached.graph()
         num_components_2 = helper.num_connected_components(graph_2)
 
         # print squared polynomials results
