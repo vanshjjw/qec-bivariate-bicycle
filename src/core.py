@@ -105,7 +105,7 @@ class BBCode:
         return helper.make_graph_for_bbcode(Hx, Hz, plot=False)
 
 
-def single_run():
+def example():
     A = {
         "l": 6,
         "m": 9,
@@ -127,54 +127,7 @@ def single_run():
     pass
 
 
-
-def single_run_2():
-    A = {
-        'l': 10,
-        'm': 10,
-        'a': ['x0', 'x2', 'x4'],
-        'b': ['y0', 'y2', 'y4'],
-        'answer': [162, 24, 2]
-    }
-
-    print(f"l: {A['l']}, m: {A['m']}")
-    print(f"A: {A['a']}")
-    print(f"B: {A['b']}")
-
-    code = BBCode(A['l'], A['m'], A['a'], A['b'], safe_mode=True)
-    graph = code.graph()
-
-    print(graph)
-
-
-
-
-def single_run_3():
-    A = {
-        "l": 4,
-        "m": 4,
-        "a": ["x1", "y2"],
-        "b": ["x1", "y2"],
-    }
-
-    print(f"l: {A['l']}, m: {A['m']}")
-    print(f"A: {A['a']}")
-    print(f"B: {A['b']}")
-
-    code = BBCode(A['l'], A['m'], A['a'], A['b'], safe_mode=True)
-    n, k, d = code.generate_bb_code(distance_method=0)
-    code.graph()
-
-    print(f"\nRequired BB code: [{n}, {k}, {d}]")
-    if "answer" in A:
-        print(f"answer: {A['answer']}")
-
-    pass
-
-
 # Example input for polynomial expressions: ["x0", "x1", "y11", "x21.y21", "x3.y15"]
-if __name__ == "__main__":
-    single_run_2()
 
 
 
