@@ -1,5 +1,7 @@
-import src.core as code
-
+from src.core_cached import BBCodeCached
+from src.core import BBCode
+import src.helpers as helper
+import numpy as np
 
 def write_raw_data(Main: dict):
     Main["0"] = {
@@ -67,25 +69,30 @@ def write_raw_data(Main: dict):
     }
 
 
-def run_bbcode_examples():
+
+def run_bbcode_cached_examples():
     Main = {}
     write_raw_data(Main)
 
-    for i in range(6):
+    for i in range(len(Main)):
         print(f"Code {i}:")
         print(f"l: {Main[str(i)]['l']}, m: {Main[str(i)]['m']}")
         print(f"A: {Main[str(i)]['a']}")
         print(f"B: {Main[str(i)]['b']}")
         print()
 
-        obj = code.BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], safe_mode=False)
-        n, k, d = obj.generate_bb_code(distance_method=4)
+        code = BBCodeCached(Main[str(i)]['l'], Main[str(i)]['m'], safe_mode=True)
+        code.set_expressions(Main[str(i)]['a'], Main[str(i)]['b'])
+        n, k, d = code.generate_bb_code(distance_method=4)
 
         print(f"Obtained BB code: [{n}, {k}, {d}]")
 
         if "answer" in Main[str(i)]:
             print(f"Known BB code: {Main[str(i)]['answer']}\n\n\n")
+            n_answer, k_answer, d_answer = Main[str(i)]['answer']
+            print("right answer? ", (n == n_answer) and (k == k_answer) and (0.80 * d_answer < d < 1.20 * d_answer))
+
 
 
 if __name__ == "__main__":
-    run_bbcode_examples()
+    run_bbcode_cached_examples()

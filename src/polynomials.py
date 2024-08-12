@@ -240,4 +240,3 @@ class PolynomialToGraphs:
         if self.is_whole_group_generated(generators):
             return self.l * self.m
         return None
-
