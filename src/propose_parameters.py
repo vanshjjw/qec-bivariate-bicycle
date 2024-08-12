@@ -1,9 +1,10 @@
 from typing import Optional
 import numpy as np
 import random
+import math
 
 class ProposeParameters:
-    def __init__(self, l: int = 20, m: int = 20):
+    def __init__(self, l: int, m: int):
         self.l = l
         self.m = m
         self.validate_input()
@@ -37,6 +38,12 @@ class ProposeParameters:
                 return True
         return False
 
+    def draw_bivariate_monomials(self, num_monomials: int = 3):
+        x_exponents = np.random.choice(self.l, num_monomials, replace=False, p=None)
+        y_exponents = np.random.choice(self.m, num_monomials, replace=False, p=None)
+        monomials = [f"x{i}.y{j}" for i, j in zip(x_exponents, y_exponents)]
+        return monomials
+
     def draw_random_monomials(self, num_x_monomials: int = 3, num_y_monomials: int = 3):
         x_exponents = np.random.choice(self.l, num_x_monomials, replace=False, p=None)
         y_exponents = np.random.choice(self.m, num_y_monomials, replace=False, p=None)
@@ -44,6 +51,15 @@ class ProposeParameters:
         random.shuffle(monomials)
         return monomials
 
+
+    def draw_disconnected_monomials(self, num_x_monomials: int = 3, num_y_monomials: int = 3):
+        x_candidates = [i for i in range(1, self.l) if math.gcd(i, self.l) != 1]
+        y_candidates = [i for i in range(1, self.m) if math.gcd(i, self.m) != 1]
+        x_exponents = np.random.choice(x_candidates, num_x_monomials, replace=False, p=None)
+        y_exponents = np.random.choice(y_candidates, num_y_monomials, replace=False, p=None)
+        monomials = [f"x{i}" for i in x_exponents] + [f"y{i}" for i in y_exponents]
+        random.shuffle(monomials)
+        return monomials
 
     def draw_odd_exponents_monomials(self, num_x_monomials: int = 3, num_y_monomials: int = 3):
         x_candidates = [i for i in range(1, self.l, 2)]

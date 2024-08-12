@@ -109,7 +109,7 @@ def binary_rank(A):
     return rank(A)
 
 
-## ----------------- Miscellaneous ----------------- ##
+## ----------------- Tanner Graphs ----------------- ##
 
 def plot_graph(G : nx.Graph):
     hx = [node for node, attribute in G.nodes.data('is_x_check') if attribute]
@@ -148,9 +148,11 @@ def plot_graph(G : nx.Graph):
 
 
 
-def compute_sub_graphs(G: nx.Graph):
-    return [G.subgraph(c) for c in nx.connected_components(G)]
+def num_connected_components(G: nx.Graph):
+    return nx.number_connected_components(G)
 
+def is_connected(G: nx.Graph):
+    return nx.is_connected(G)
 
 
 def make_graph(Hx: np.ndarray, Hz: np.ndarray, plot=False):

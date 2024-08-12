@@ -1,4 +1,5 @@
 import math
+import galois
 
 class PolynomialHelper:
     def __init__(self, l, m):
@@ -77,54 +78,44 @@ class PolynomialHelper:
 
         return result
 
-    def check_toric(self, poly1: list[str], poly2: list[str]):
+    def galois_factors_to_expression(self, factors: list[galois.Poly], exponents: list[int], is_x : bool):
+        answer = []
+        answer_exp = []
+        for f, exp in zip(factors, exponents):
+            non_zero_degrees = f.nonzero_degrees
+            if len(non_zero_degrees) == 1:
+                continue
 
-        A_orders=[]
-        for i in range(len(poly1)):
-            pi = int(poly1[i][1:])
-            if poly1[i][0] == "x":
-                a=self.l/math.gcd(pi,self.l)
-            elif poly1[i][0] == "i":
-                a=0
-            else:
-                a = self.m / math.gcd(pi, self.m)
-            for j in range(i+1, len(poly1)):
-                if poly1[j][0]=="x":
-                    pj = self.l - int(poly1[j][1:])
-                    b=self.l/math.gcd(pj,self.l)
-                elif poly1[j][0] == "i":
-                    b=0
-                else:
-                    pj = self.m - int(poly1[j][1:])
-                    b=self.m / math.gcd(pj, self.m)
-                A_orders.append(math.lcm(a,b))
+            powers = [(d, 0) if is_x else (0, d) for d in non_zero_degrees]
+            polynomial = self.construct_expression_from_powers(powers)
 
-        B_orders = []
-        for i in range(len(poly2)):
-            pi = int(poly2[i][1:])
-            if poly2[i][0] == "x":
-                a = self.l / math.gcd(pi, self.l)
-            elif poly2[i][0] == "i":
-                a = 0
-            else:
-                a = self.m / math.gcd(pi, self.m)
-            for j in range(i + 1, len(poly2)):
-                if poly2[j][0] == "x":
-                    pj = self.l - int(poly2[j][1:])
-                    b = self.l / math.gcd(pj, self.l)
-                elif poly2[j][0] == "i":
-                    b = 0
-                else:
-                    pj = self.m - int(poly2[j][1:])
-                    b = self.m / math.gcd(pj, self.m)
-                B_orders.append(math.lcm(a, b))
+            answer.append(polynomial)
+            answer_exp.append(exp)
 
-        for x in A_orders:
-            for y in B_orders:
-                if x*y==self.l*self.m:
-                    return True
+        return answer, answer_exp
 
-        return False
+
+    def factorize(self, polynomial: list[str], is_x: bool, return_native = False):
+        GF2 = galois.GF(2)
+        powers = [p[0] if is_x else p[1] for p in self.construct_powers_from_expression(polynomial)]
+
+        # Construct the polynomial expression for galois
+        expression = [1 if i in powers else 0 for i in range(self.l if is_x else self.m, -1, -1)]
+        factors = galois.Poly(expression, field=GF2).factors()
+
+        if return_native:
+            return factors
+        else:
+            return self.galois_factors_to_expression(factors[0], factors[1], is_x)
+
+
+    def raise_polynomial_to_power(self, polynomial: list[str], power: int):
+        answer = ["i"]
+        for _ in range(power):
+            answer = self.multiply_polynomials(answer, polynomial)
+        return answer
+
+
 
 
 

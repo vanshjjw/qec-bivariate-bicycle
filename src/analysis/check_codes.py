@@ -63,11 +63,9 @@ def write_matrix(matrix, file):
 
 
 # TODO - wsl does not naturally have the path to results directory saved. Need to give it the relative path from root
-def run_and_save_results():
+def run_and_save_results(save_as_numpy = False):
     with open("known_codes", "r") as file:
         data = json.loads(file.read().replace("\'", "\""))
-
-    save_as_numpy = True
 
     for key in data:
         example = data[key]
