@@ -5,7 +5,7 @@ import src.distances.distance_from_brute_force as brute_force
 import src.distances.distance_from_generators as generators
 import src.distances.distance_from_gap as qdistrand
 import src.distances.distance_from_bposd as bposd
-from src.polynomials import PolynomialHelper
+from src.polynomial_helper import PolynomialHelper
 
 class BBCodeCached:
     def __init__(self, l: int, m: int, safe_mode = False):

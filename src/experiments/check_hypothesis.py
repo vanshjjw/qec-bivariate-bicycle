@@ -1,4 +1,4 @@
-from src.polynomials import PolynomialHelper
+from src.polynomial_helper import PolynomialHelper
 from src.propose_parameters import ProposeParameters
 from src.core import BBCode
 import math

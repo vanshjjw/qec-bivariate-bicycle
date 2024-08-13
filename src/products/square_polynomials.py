@@ -1,5 +1,5 @@
 from src.propose_parameters import ProposeParameters
-from src.polynomials import PolynomialToGraphs, PolynomialHelper
+from src.polynomial_helper import PolynomialHelper
 from src.core import BBCode
 from src.core_cached import BBCodeCached
 import numpy as np
@@ -10,11 +10,11 @@ def change_parameters():
     l = np.random.randint(8, 14)
     m = np.random.randint(8, 14)
     parameters = ProposeParameters(l, m)
-    poly_graph = PolynomialHelper(l, m)
+    poly_help = PolynomialHelper(l, m)
     code_cached = BBCodeCached(l, m)
     print(f"New parameters: l = {l}, m = {m}")
     print("\n")
-    return parameters, poly_graph, code_cached
+    return parameters, poly_help, code_cached
 
 
 def square_al_polynomials():

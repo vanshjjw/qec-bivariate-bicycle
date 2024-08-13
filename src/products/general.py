@@ -1,10 +1,9 @@
 from src.propose_parameters import ProposeParameters
-from src.polynomials import PolynomialHelper
+from src.polynomial_helper import PolynomialHelper
 from src.core import BBCode
 from src.core_cached import BBCodeCached
 import src.helpers as helper
 import random
-import time
 
 
 def multiply_random_polynomials():
