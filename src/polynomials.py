@@ -1,6 +1,9 @@
 import math
 import galois
 import subprocess
+import json
+import ast
+
 class PolynomialHelper:
     def __init__(self, l, m):
         self.l = l
@@ -117,19 +120,13 @@ class PolynomialHelper:
 
     def factorize_bivariate(self,P):
         P = self.construct_powers_from_expression(P)
-        L=[P, self.l, self.m]
-        try:
-            result = subprocess.run(['sage', '-python', 'factor_bivariate.py'], input=str(L), capture_output=True,
-                                    text=True, check=True)
+        P_str = json.dumps(P)
+        l_str = str(self.l)
+        m_str = str(self.m)
 
-            return result.stdout
-
-        except subprocess.CalledProcessError as e:
-            print("Error running Sage file:\n", e.stderr)
-            return None
-
-
-
+        result = subprocess.run(['sage', '-python', 'factor_bivariate.py', P_str, l_str, m_str], capture_output=True,
+                                text=True, check=True)
+        return ast.literal_eval(result.stdout.strip())
 
 class PolynomialToGraphs:
     def __init__(self, l, m):
@@ -238,8 +235,10 @@ class PolynomialToGraphs:
             return self.l * self.m
         return None
 
-if __name__ == '__main__':
-    poly_help=PolynomialHelper(8,8)
-    A=["x2.y2", "i"]
-    factors=poly_help.factorize_bivariate(A)
-    print(factors)
+# if __name__ == '__main__':
+#     poly_help=PolynomialHelper(12,12)
+#     A=["x2", "y2", "i"]
+#     B=["y8", "y9", "x5"]
+#     factorsA = poly_help.factorize_bivariate(A)
+#     factorsB = poly_help.factorize_bivariate(B)
+#     print(factorsA, factorsB)
