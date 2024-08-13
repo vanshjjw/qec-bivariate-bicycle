@@ -52,8 +52,8 @@ def factorize_disconnected_polynomials():
 
         # base polynomials gives non-zero encoding and a disconnected graph
 
-        A_Factors = poly_help.factorize(A, is_x=True)
-        B_Factors = poly_help.factorize(B, is_x=False)
+        A_Factors = poly_help.factorize_univariate(A, is_x=True)
+        B_Factors = poly_help.factorize_univariate(B, is_x=False)
 
         print(f"Original polynomials. A : {A}, B : {B}")
         print(f"Original code: [{n}, {k}, {d}]")
@@ -140,8 +140,8 @@ def factorize_connected_polynomials():
 
         # base polynomials gives non-zero encoding and connected graph
 
-        A_Factors = poly_help.factorize(A, is_x=True)
-        B_Factors = poly_help.factorize(B, is_x=False)
+        A_Factors = poly_help.factorize_univariate(A, is_x=True)
+        B_Factors = poly_help.factorize_univariate(B, is_x=False)
 
         print(f"Original polynomials. A : {A}, B : {B}")
         print(f"Original code: [{n}, {k}, {d}]")

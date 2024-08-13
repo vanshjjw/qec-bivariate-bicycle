@@ -1,7 +1,5 @@
 import galois
-import subprocess
-import json
-import ast
+import src.sage_functions as sage_functions
 
 class PolynomialHelper:
     def __init__(self, l, m):
@@ -26,21 +24,21 @@ class PolynomialHelper:
         y_power = 0
         for mu in monomial.split("."):
             if mu[0] == "x":
-                x_power += int(mu[1:])
+                x_power += int(mu[1:]) if len(mu) > 1 else 1
             if mu[0] == "y":
-                y_power += int(mu[1:])
+                y_power += int(mu[1:]) if len(mu) > 1 else 1
         return x_power % self.l, y_power % self.m
 
 
-    def construct_expression_from_powers(self, polynomial_powers: list[(int, int)]):
+    def construct_expression_from_powers(self, polynomial_powers: list[(int, int)]) -> list[str]:
         return [self.__construct_expression(x_power, y_power) for x_power, y_power in polynomial_powers]
 
 
-    def construct_powers_from_expression(self, polynomial_expression: list[str]):
+    def construct_powers_from_expression(self, polynomial_expression: list[str]) -> list[(int, int)]:
         return [self.__construct_powers(monomial) for monomial in polynomial_expression]
 
 
-    def multiply_m1_and_m2_inverse(self, m1: str, m2: str):
+    def multiply_m1_and_m2_inverse(self, m1: str, m2: str) -> (int, int):
         x_power, y_power = 0, 0
         
         for mu in m1.split("."):
@@ -58,7 +56,7 @@ class PolynomialHelper:
         return x_power % self.l, y_power % self.m
 
 
-    def multiply_polynomials(self, poly1: list[str], poly2: list[str]):
+    def multiply_polynomials(self, poly1: list[str], poly2: list[str]) -> list[str]:
         result = []
         for value1 in poly1:
             for value2 in poly2:
@@ -81,7 +79,7 @@ class PolynomialHelper:
         return result
 
 
-    def galois_factors_to_expression(self, factors: list[galois.Poly], exponents: list[int], is_x : bool):
+    def create_expression(self, factors: list[galois.Poly], exponents: list[int], is_x : bool) -> (list[str], list[int]):
         answer = []
         answer_exp = []
         for f, exp in zip(factors, exponents):
@@ -91,14 +89,13 @@ class PolynomialHelper:
 
             powers = [(d, 0) if is_x else (0, d) for d in non_zero_degrees]
             polynomial = self.construct_expression_from_powers(powers)
-
             answer.append(polynomial)
             answer_exp.append(exp)
 
         return answer, answer_exp
 
 
-    def factorize(self, polynomial: list[str], is_x: bool, return_native = False):
+    def factorize_univariate(self, polynomial: list[str], is_x: bool) -> (list[str], list[int]):
         GF2 = galois.GF(2)
         powers = [p[0] if is_x else p[1] for p in self.construct_powers_from_expression(polynomial)]
 
@@ -106,28 +103,30 @@ class PolynomialHelper:
         expression = [1 if i in powers else 0 for i in range(self.l if is_x else self.m, -1, -1)]
         factors = galois.Poly(expression, field=GF2).factors()
 
-        if return_native:
-            return factors
-        else:
-            return self.galois_factors_to_expression(factors[0], factors[1], is_x)
+        return self.create_expression(factors[0], factors[1], is_x)
 
 
-    def raise_polynomial_to_power(self, polynomial: list[str], power: int):
+    def raise_polynomial_to_power(self, polynomial: list[str], power: int) -> list[str]:
         answer = ["i"]
         for _ in range(power):
             answer = self.multiply_polynomials(answer, polynomial)
         return answer
 
 
-    def factorize_bivariate(self,P):
-        P = self.construct_powers_from_expression(P)
-        P_str = json.dumps(P)
-        l_str = str(self.l)
-        m_str = str(self.m)
-        try:
+    def factorize_bivariate(self, polynomial: list[str]) -> (list[str], list[int]):
+        polynomials_powers = self.construct_powers_from_expression(polynomial)
+        factors, factor_powers = sage_functions.factorise(polynomials_powers)
 
-            result = subprocess.run(['sage', '-python', 'factor_bivariate.py', P_str, l_str, m_str], capture_output=True,
-                                    text=True, check=True)
-            return result.stdout.strip()
-        except Exception as e:
-            print(f"Error running script: {e}")
+        answer = []
+        answer_exp = []
+
+        for factor, power in zip(factors, factor_powers):
+            values = factor.split(" + ")
+            if len(values) == 1:
+                continue
+            values = [v.replace("^","").replace("*", ".") for v in values]
+            values = [self.__construct_expression(*self.__construct_powers(v)) for v in values]
+            answer.append(values)
+            answer_exp.append(power)
+
+        return answer, factor_powers
