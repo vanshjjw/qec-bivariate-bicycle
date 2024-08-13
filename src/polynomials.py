@@ -123,10 +123,13 @@ class PolynomialHelper:
         P_str = json.dumps(P)
         l_str = str(self.l)
         m_str = str(self.m)
+        try:
 
-        result = subprocess.run(['sage', '-python', 'factor_bivariate.py', P_str, l_str, m_str], capture_output=True,
-                                text=True, check=True)
-        return ast.literal_eval(result.stdout.strip())
+            result = subprocess.run(['sage', '-python', 'factor_bivariate.py', P_str, l_str, m_str], capture_output=True,
+                                    text=True, check=True)
+            return result.stdout.strip()
+        except Exception as e:
+            print(f"Error running script: {e}")
 
 class PolynomialToGraphs:
     def __init__(self, l, m):
@@ -235,10 +238,10 @@ class PolynomialToGraphs:
             return self.l * self.m
         return None
 
-# if __name__ == '__main__':
-#     poly_help=PolynomialHelper(12,12)
-#     A=["x2", "y2", "i"]
-#     B=["y8", "y9", "x5"]
-#     factorsA = poly_help.factorize_bivariate(A)
-#     factorsB = poly_help.factorize_bivariate(B)
-#     print(factorsA, factorsB)
+if __name__ == '__main__':
+    poly_help=PolynomialHelper(14,14)
+    A=['x11', 'y5', 'y0']
+    B=["y12", "x12", "x10"]
+    factorsA = poly_help.factorize_bivariate(A)
+    factorsB = poly_help.factorize_bivariate(B)
+    print(factorsA, factorsB)

@@ -189,7 +189,42 @@ def factorize_connected_polynomials():
         print("-------------\n\n")
 
 
+def factorize_bivariate_polynomials():
+    l = 14
+    m = 14
+    parameters = ProposeParameters(l, m)
+    poly_help = PolynomialHelper(l, m)
+    code_cached = BBCodeCached(l, m)
+    num_shots = 50
+
+    zero_k = 0
+    connected = 0
+
+    A = parameters.draw_random_monomials(1,2)
+    B = parameters.draw_random_monomials(2,1)
+
+    n, k, d = code_cached.set_expressions(A, B).generate_bb_code(distance_method=4)
+
+    graph = code_cached.graph()
+    num_components = helper.num_connected_components(graph)
+    is_connected = helper.is_connected(graph)
+
+    # base polynomials gives non-zero encoding and a disconnected graph
+    print(A)
+    print(type(A))
+    A_Factors = poly_help.factorize_bivariate(A)
+    B_Factors = poly_help.factorize_bivariate(B)
+
+    print(f"Original polynomials. A : {A}, B : {B}")
+    print(f"Original code: [{n}, {k}, {d}]")
+    print(f"Number of components in original graph: {num_components}")
+    print(f"Factorization of A: {A_Factors}")
+    print(f"Factorization of B: {B_Factors}")
+    print("\n")
+    print("-------------\n\n")
+
+
 
 if __name__ == "__main__":
-    factorize_disconnected_polynomials()
+    factorize_bivariate_polynomials()
     pass
