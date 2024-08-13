@@ -12,25 +12,16 @@ def raw_data():
         "b": ["y3", "x2", "x4"],
         "answer": [108, 16, 6]
     }
-    add_codes["1"] = {
-        "l": 9,
-        "m": 9,
-        "a": ["x0", "x1", "y1"],
-        "b": ["x3", "y1", "y2"],
-        "answer": [162, 4, 16]
-    }
     return add_codes
-
 
 
 def save_raw_data_file(data):
     with open("known_codes", "w") as file:
-        file.write("{\n")
+        file.write("{")
         for i, key in enumerate(data):
             file.write(f"\"{key}\": {str(data[key])}")
             if i < len(data) - 1:
                 file.write(",")
-            file.write("\n")
         file.write("}")
         file.flush()
         file.close()
