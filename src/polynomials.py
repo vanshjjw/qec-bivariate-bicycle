@@ -238,10 +238,3 @@ class PolynomialToGraphs:
             return self.l * self.m
         return None
 
-if __name__ == '__main__':
-    poly_help=PolynomialHelper(14,14)
-    A=['x11', 'y5', 'y0']
-    B=["y12", "x12", "x10"]
-    factorsA = poly_help.factorize_bivariate(A)
-    factorsB = poly_help.factorize_bivariate(B)
-    print(factorsA, factorsB)

@@ -44,40 +44,7 @@ def convert_polynomial_to_list(polynomial):
         result.append(formatted_term)
 
     return result
-# def convert_polynomial_to_list(polynomial):
-#     # Split the polynomial string into terms
-#     terms = polynomial.split(' + ')
-#     result = []
-#
-#     # Regular expression patterns for matching terms
-#     x_pattern = re.compile(r'x\^(\d+)')
-#     y_pattern = re.compile(r'y\^(\d+)')
-#
-#     for term in terms:
-#         # Extract exponents of x and y
-#         x_match = x_pattern.search(term)
-#         y_match = y_pattern.search(term)
-#
-#         # Determine the exponent values, default to 0 if not found
-#         x_exp = x_match.group(1) if x_match else '0'
-#         y_exp = y_match.group(1) if y_match else '0'
-#
-#         if 'x' in term and 'y' in term:
-#             # Both x and y present
-#             formatted_term = f"x{x_exp}.y{y_exp}"
-#         elif 'x' in term:
-#             # Only x present
-#             formatted_term = f"x{x_exp}"
-#         elif 'y' in term:
-#             # Only y present
-#             formatted_term = f"y{y_exp}"
-#         else:
-#             # Neither x nor y present (constant term)
-#             formatted_term = "i"
-#
-#         result.append(formatted_term)
-#
-#     return result
+
 
 def factorise(P,l,m):
 
