@@ -4,17 +4,6 @@ from src.core import BBCode
 import math
 
 
-def checked_hypothesis():
-    # polynomials with only x and only y monomials have the same probability of non-zero k
-    # as mixed polynomials
-    pass
-
-
-def check_fully_connected_hypothesis():
-    # The co-prime conjecture was not fully accurate.
-    pass
-
-
 def check_gcd_hypothesis():
     for l in range(10, 1000):
         x_choices = [i for i in range(1, l) if math.gcd(i, l) != 1]
@@ -65,7 +54,7 @@ def check_equivalence_hypothesis():
 
 
 if __name__ == "__main__":
-    check_fully_connected_hypothesis()
+    check_equivalence_hypothesis()
     pass
 
 

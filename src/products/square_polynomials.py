@@ -17,7 +17,7 @@ def change_parameters():
     return parameters, poly_graph, code_cached
 
 
-def square_connected_polynomials():
+def square_al_polynomials():
     l = 12
     m = 12
     num_shots = 10000
@@ -85,53 +85,18 @@ def square_connected_polynomials():
 
 
 def cheeky_examples():
-    l = 8
-    m = 8
-    A = ['x', 'y2', 'i']
-    B = ['y', 'x2', 'i']
+    # A = ['x2', 'y11', 'x9']
+    # B = ['y8', 'y9', 'x5']
+    # code: [288, 12, 20]
+    # Number of components in original polynomials: 1
+    #
+    # new code: [288, 32, 6]
+    # Number of components in squared polynomials: 4
+    #
+    # k increased by : 2.6666666666666665: components increased by: 4.0
+    # Squared polynomials are disconnected: conjecture fails
+    pass
 
-    poly_help = PolynomialHelper(l, m)
-    code = BBCode(l, m, A, B)
-    n, k, d = code.generate_bb_code(distance_method=3)
-    print(f"A: {A}, B: {B}")
-    print(f"code: [{n}, {k}, {d}]")
-    print("\n")
-
-    l = 10
-    m = 10
-    A = ['x', 'y2', 'i']
-    B = ['y', 'x2', 'i']
-
-    poly_help = PolynomialHelper(l, m)
-    code = BBCode(l, m, A, B)
-    n, k, d = code.generate_bb_code(distance_method=3)
-    print(f"A: {A}, B: {B}")
-    print(f"code: [{n}, {k}, {d}]")
-    print("\n")
-
-    l = 12
-    m = 12
-    A = ['x', 'y2', 'i']
-    B = ['y', 'x2', 'i']
-
-    poly_help = PolynomialHelper(l, m)
-    code = BBCode(l, m, A, B)
-    n, k, d = code.generate_bb_code(distance_method=3)
-    print(f"A: {A}, B: {B}")
-    print(f"code: [{n}, {k}, {d}]")
-    print("\n")
-
-    l = 14
-    m = 14
-    A = ['x', 'y2', 'i']
-    B = ['y', 'x2', 'i']
-
-    poly_help = PolynomialHelper(l, m)
-    code = BBCode(l, m, A, B)
-    n, k, d = code.generate_bb_code(distance_method=3)
-    print(f"A: {A}, B: {B}")
-    print(f"code: [{n}, {k}, {d}]")
-    print("\n")
 
 
 if __name__ == "__main__":
@@ -142,14 +107,4 @@ if __name__ == "__main__":
 
 
 
-# A: ['x2', 'y11', 'x9'], B: ['y8', 'y9', 'x5']
-# code: [288, 12, 20]
-# Number of components in original polynomials: 1
-#
-#
-# new code: [288, 32, 6]
-# Number of components in squared polynomials: 4
-#
-#
-# k increased by : 2.6666666666666665: components increased by: 4.0
-# Squared polynomials are disconnected: conjecture fails
+
