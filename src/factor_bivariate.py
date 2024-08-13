@@ -1,6 +1,7 @@
 from sage.all import *
-import ast
 import re
+import sys
+import json
 
 
 def convert_polynomial_to_list(polynomial):
@@ -76,12 +77,26 @@ def factorise(P,l,m):
         pf=convert_polynomial_to_list(f)
         f_list.append((pf, multiplicity))
 
+    #print(f_list)
     return f_list
 
-if __name__ == '__main__':
-    L=input()
-    L = ast.literal_eval(L)
-    P=L[0]
-    l=int(L[1])
-    m=int(L[2])
-    factorise(P,l,m)
+def main():
+    # Get the input terms from the command line argument
+    P_str = sys.argv[1]
+    l_str = sys.argv[2]
+    m_str = sys.argv[3]
+
+    # Deserialize the JSON string to get the terms
+    P = json.loads(P_str)
+    # Convert the second argument to an integer
+    l = int(l_str)
+    # Convert the third argument to a float
+    m = int(m_str)
+
+    # Convert the terms to a polynomial and print with the integer and float
+    factors = factorise(P, l, m)
+    print(factors)
+
+
+if __name__ == "__main__":
+    main()
