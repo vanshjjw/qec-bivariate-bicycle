@@ -58,7 +58,7 @@ def benchmark_cache():
     print("\n\n")
     print(f"caching performance: {code_cached_performance}")
     print(f"code performance: {code_performance}")
-
+    print("\n\n")
     print(f"Total caching performance: {sum(code_cached_performance)}")
     print(f"Total code performance: {sum(code_performance)}")
 

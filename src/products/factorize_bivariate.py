@@ -1,6 +1,17 @@
 from src.polynomial_helper import PolynomialHelper
 from src.propose_parameters import ProposeParameters
 from src.core_cached import BBCodeCached
+import random
+
+
+def change_parameters():
+    l, m = random.randint(10, 20), random.randint(10, 20)
+    print(f"New parameters: l = {l}, m = {m}\n")
+    parameters = ProposeParameters(l, m)
+    poly_help = PolynomialHelper(l, m)
+    code_cached = BBCodeCached(l, m)
+    return parameters, poly_help, code_cached
+
 
 
 def factors_as_strings(factors):
@@ -19,26 +30,27 @@ def factorize_bivariate_polynomials():
     m = 14
     parameters = ProposeParameters(l, m)
     poly_help = PolynomialHelper(l, m)
+    code_cached = BBCodeCached(l, m)
+
+    num_shots = 500
 
 
     for i in range(10):
-        A, B = parameters.distribute_monomials(parameters.draw_random_monomials(3, 3))
-        C = parameters.draw_bivariate_monomials(4)
+        if i % 500 == 0:
+            print(f"{i}/{num_shots} completed.\n")
+            parameters, poly_help, code_cached = change_parameters()
 
-        A_Factors = poly_help.factorize_bivariate(A)
-        B_Factors = poly_help.factorize_bivariate(B)
-        C_Factors = poly_help.factorize_bivariate(C)
+        # Factorize Toric Polynomials
+        # A = i + x + x^{a}.y^{b}
+        # B = i + y + x^{c}.y^{d}
 
-        print("Original polynomials.")
-        print(f"A : {A}")
-        print(f"B : {B}")
-        print(f"C : {C}")
-        print("\n")
-        print("Factorized polynomials.")
-        print(f"A : {factors_as_strings(A_Factors)}")
-        print(f"B : {factors_as_strings(B_Factors)}")
-        print(f"C : {factors_as_strings(C_Factors)}")
-        print("\n\n")
+        bivariates = parameters.draw_bivariate_monomials(2)
+        A = ["i", "x"] + bivariates[0]
+        B = ["i", "y"] + bivariates[1]
+
+        n, k, d = code_cached.set_expressions(A, B).generate_bb_code(distance_method=4)
+
+
 
 
 

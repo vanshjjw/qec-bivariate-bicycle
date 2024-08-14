@@ -19,8 +19,19 @@ def check_custom_codes(codes: dict):
     }
 
 
+def display_code(example: dict, n: int, k: int, d: int):
+    print("Code Failed.")
+    print(f"l = {example['l']}, m = {example['m']}")
+    print(f"A = {example['a']}, B = {example['b']}")
+    print(f"Obtained code: [{n}, {k}, {d}]")
+    print(f"Known code: {example['answer']}")
+    return
+
+
 def run_bbcode_examples(custom_codes = False):
     Main = {}
+    distance_method = 4
+    distance_margin = 1.15 # 15% margin of error
 
     if custom_codes:
         check_custom_codes(Main)
@@ -33,23 +44,19 @@ def run_bbcode_examples(custom_codes = False):
             Main = json.loads(json_readable)
 
     for i in range(len(Main)):
-        print(f"Code {i}:")
-        print(f"l: {Main[str(i)]['l']}, m: {Main[str(i)]['m']}")
-        print(f"A: {Main[str(i)]['a']}")
-        print(f"B: {Main[str(i)]['b']}")
-        print()
+        example = Main[str(i)]
+        code = BBCode(example["l"], example["m"], example["a"], example["b"])
 
-        code = BBCode(Main[str(i)]['l'], Main[str(i)]['m'], Main[str(i)]['a'], Main[str(i)]['b'], safe_mode=False)
-        n, k, d = code.generate_bb_code(distance_method=4)
+        n, k, d = code.generate_bb_code(distance_method=distance_method)
+        n_known, k_known, d_known = example["answer"]
 
-        print(f"Obtained BB code: [{n}, {k}, {d}]")
+        passed = n == n_known and k == k_known and d_known <= d * distance_margin
 
-        if 'answer' in Main[str(i)]:
-            print(f"Known BB code: {Main[str(i)]['answer']}")
-            n_answer, k_answer, d_answer = Main[str(i)]['answer']
-            print("right answer? ", (n == n_answer) and (k == k_answer) and (d_answer < d * 1.20))
-            print("\n\n")
+        if not passed:
+            display_code(example, n, k, d)
+            exit(1)
 
+        print(f"Code {i} passed.")
 
 
 if __name__ == "__main__":
