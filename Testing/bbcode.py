@@ -1,4 +1,5 @@
 from src.core import BBCode
+import os
 import json
 
 def check_custom_codes(codes: dict):
@@ -24,7 +25,10 @@ def run_bbcode_examples(custom_codes = False):
     if custom_codes:
         check_custom_codes(Main)
     else:
-        with open("known_codes", "r") as file:
+        folder_path = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(folder_path, "known_codes")
+
+        with open(file_path, "r") as file:
             json_readable = file.read().replace("\'", "\"")
             Main = json.loads(json_readable)
 

@@ -1,6 +1,4 @@
 import json
-import numpy as np
-import src.core as core
 import os
 
 def raw_data():
@@ -28,7 +26,9 @@ def save_raw_data_file(data):
 
 
 def add_raw_data_to_json():
-    with open("known_codes", "r") as file:
+    folder_path = os.path.dirname(os.path.realpath(__file__))
+    file_path = os.path.join(folder_path, "known_codes")
+    with open(file_path, "r") as file:
         old_codes = json.loads(file.read().replace("\'", "\""))
         new_codes = raw_data()
 
