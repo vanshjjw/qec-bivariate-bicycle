@@ -42,9 +42,9 @@ def factorize_disconnected_polynomials():
             zero_k += 1
             continue
 
-        graph = code_cached.graph()
-        num_components = helper.num_connected_components(graph)
-        is_connected = helper.is_connected(graph)
+        graph = code_cached.make_graph()
+        num_components = graph.number_connected_components()
+        is_connected = graph.is_connected()
 
         if is_connected:
             connected += 1
@@ -70,7 +70,7 @@ def factorize_disconnected_polynomials():
             for j, b in enumerate(B_Factors[0]):
 
                 n2, k2, d2 = code_cached.set_expressions(a, b).generate_bb_code(distance_method=3)
-                num_components = helper.num_connected_components(code_cached.graph())
+                num_components = code_cached.make_graph().number_connected_components()
                 print(f"checking factors a{i} and b{j}: code [{n2}, {k2}, {d2}]: has {num_components} components.")
 
                 if k2 == 0:
@@ -88,7 +88,7 @@ def factorize_disconnected_polynomials():
                 b_raised = poly_help.raise_polynomial_to_power(b, b_power)
 
                 n3, k3, d3 = code_cached.set_expressions(a_raised, b_raised).generate_bb_code(distance_method=4)
-                num_components_3 = helper.num_connected_components(code_cached.graph())
+                num_components_3 = code_cached.make_graph().number_connected_components()
 
                 print(f"checking factors a{i}^{a_power} and b{j}^{b_power}: code [{n3}, {k3}, {d3}]:"
                       f" has {num_components_3} components.")
@@ -131,8 +131,8 @@ def factorize_connected_polynomials():
             zero_k += 1
             continue
 
-        graph = code_cached.graph()
-        is_connected = helper.is_connected(graph)
+        graph = code_cached.make_graph()
+        is_connected = graph.is_connected()
 
         if not is_connected:
             disconnected += 1
@@ -157,7 +157,7 @@ def factorize_connected_polynomials():
             for j, b in enumerate(B_Factors[0]):
 
                 n2, k2, d2 = code_cached.set_expressions(a, b).generate_bb_code(distance_method=4)
-                num_components_2 = helper.num_connected_components(code_cached.graph())
+                num_components_2 = code_cached.make_graph().number_connected_components()
                 print(f"checking factors a{i} and b{j}: code [{n2}, {k2}, {d2}]: has {num_components_2} components.")
 
                 if k2 == 0:
@@ -174,7 +174,7 @@ def factorize_connected_polynomials():
                 b_raised = poly_help.raise_polynomial_to_power(b, b_power)
 
                 n3, k3, d3 = code_cached.set_expressions(a_raised, b_raised).generate_bb_code(distance_method=4)
-                num_components_3 = helper.num_connected_components(code_cached.graph())
+                num_components_3 = code_cached.make_graph().number_connected_components()
                 print(f"checking factors a{i}^{a_power} and b{j}^{b_power}: code [{n3}, {k3}, {d3}]:"
                       f" has {num_components_3} components.")
                 print(f"num_components_2 and powers: {num_components_3 == (a_power * b_power)}")
@@ -190,5 +190,5 @@ def factorize_connected_polynomials():
 
 
 if __name__ == "__main__":
-    factorize_bivariate_polynomials()
+    factorize_disconnected_polynomials()
     pass

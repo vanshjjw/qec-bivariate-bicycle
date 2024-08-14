@@ -50,16 +50,16 @@ def square_al_polynomials():
             zero_k += 1
             continue
 
-        graph_1 = code_cached.graph()
-        num_components_1 = helper.num_connected_components(graph_1)
+        graph_1 = code_cached.make_graph()
+        num_components_1 = graph_1.number_connected_components()
 
         ### square polynomials
         A2 = poly_help.multiply_polynomials(A, A)
         B2 = poly_help.multiply_polynomials(B, B)
 
         n2, k2, d2 = code_cached.set_expressions(A2, B2).generate_bb_code(distance_method=3)
-        graph_2 = code_cached.graph()
-        num_components_2 = helper.num_connected_components(graph_2)
+        graph_2 = code_cached.make_graph()
+        num_components_2 = graph_2.number_connected_components()
 
         increase_equally = (k2 / k1) == (num_components_2 / num_components_1)
 

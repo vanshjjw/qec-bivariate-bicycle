@@ -5,6 +5,7 @@ import src.distances.distance_from_brute_force as brute_force
 import src.distances.distance_from_generators as generators
 import src.distances.distance_from_gap as qdistrand
 import src.distances.distance_from_bposd as bposd
+from src.graph_helper import TannerGraph
 
 
 class BBCode:
@@ -100,9 +101,11 @@ class BBCode:
 
         return num_physical, num_logical, distance
 
-    def graph(self):
+    def make_graph(self):
         Hx, Hz = self.create_parity_check_matrices()
-        return helper.make_graph_for_bbcode(Hx, Hz, plot=False)
+        Graph = TannerGraph(Hx, Hz)
+        Graph.make_graph()
+        return Graph
 
 
 def example():

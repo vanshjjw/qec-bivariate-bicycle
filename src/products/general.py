@@ -74,7 +74,7 @@ def square_polynomials():
     for i in range(1, 10):
         code = BBCode(l, m, A, B, safe_mode=False)
         n, k, d = code.generate_bb_code(distance_method=0)
-        num_components = helper.num_connected_components(code.graph())
+        num_components = code.make_graph().number_connected_components()
 
         print(f"A : {A}: \nB: {B} \n")
         print(f"code: [{n}, {k}, {d}]")

@@ -6,6 +6,7 @@ import src.distances.distance_from_generators as generators
 import src.distances.distance_from_gap as qdistrand
 import src.distances.distance_from_bposd as bposd
 from src.polynomial_helper import PolynomialHelper
+from src.graph_helper import TannerGraph
 
 class BBCodeCached:
     def __init__(self, l: int, m: int, safe_mode = False):
@@ -120,7 +121,10 @@ class BBCodeCached:
         return num_physical, num_logical, distance
 
 
-    def graph(self):
+    def make_graph(self):
         if self.H_x is None or self.H_z is None:
             self.H_x, self.H_z = self.create_parity_check_matrices()
-        return helper.make_graph_for_bbcode(self.H_x, self.H_z)
+
+        Graph = TannerGraph(self.H_x, self.H_z)
+        Graph.make_graph()
+        return Graph

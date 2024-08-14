@@ -1,9 +1,6 @@
-import networkx as nx
 import numpy as np
 from ldpc.mod2 import reduced_row_echelon, rank
 from copy import deepcopy
-
-from matplotlib import pyplot as plt
 
 
 ## ----------------- QEC Specific Helpers ----------------- ##
@@ -107,77 +104,3 @@ def create_matrix_S(size):
 
 def binary_rank(A):
     return rank(A)
-
-
-## ----------------- Tanner Graphs ----------------- ##
-
-def plot_graph(G : nx.Graph):
-    hx = [node for node, attribute in G.nodes.data('is_x_check') if attribute]
-    hz = [node for node, attribute in G.nodes.data('is_z_check') if attribute]
-    d = [node for node, attribute in G.nodes.data('is_qubit') if attribute]
-
-    pos = {}
-    pos_hx = {}
-    x = 0.100
-    const = 0.100
-    y = 1.0
-
-    for i in range(len(hx)):
-        pos_hx[hx[i]] = [x, y - i * const]
-
-    xb = 0.900
-    pos_hz = {}
-    for i in range(len(hz)):
-        pos_hz[hz[i]] = [xb, y - i * const]
-
-    xd = 0.500
-    pos_d = {}
-    for i in range(len(d)):
-        pos_d[d[i]] = [xd, y - i * const]
-
-    nx.draw_networkx_nodes(G, pos_hx, nodelist=hx, node_color='r', node_size=300, alpha=0.8)
-    nx.draw_networkx_nodes(G, pos_hz, nodelist=hz, node_color='b', node_size=300, alpha=0.8)
-    nx.draw_networkx_nodes(G, pos_d, nodelist=d, node_color='g', node_size=300, alpha=0.8)
-    pos.update(pos_hx)
-    pos.update(pos_hz)
-    pos.update(pos_d)
-    nx.draw_networkx_edges(G,pos,edgelist=nx.edges(G),width=1,alpha=0.8,edge_color='k')
-    nx.draw_networkx_labels(G, pos, font_size=10, font_family='sans-serif')
-
-    plt.show()
-
-
-
-def num_connected_components(G: nx.Graph):
-    return nx.number_connected_components(G)
-
-def is_connected(G: nx.Graph):
-    return nx.is_connected(G)
-
-
-def make_graph_for_bbcode(Hx: np.ndarray, Hz: np.ndarray, plot=False):
-    G = nx.Graph()
-    m, n = len(Hx), len(Hx[0])
-
-    hx = ['x' + str(i) for i in range(m)]
-    hz = ['z' + str(i) for i in range(m)]
-    data = [str(i) for i in range(n)]
-
-    G.add_nodes_from(hx, is_x_check = True)
-    G.add_nodes_from(hz, is_z_check = True)
-    G.add_nodes_from(data, is_qubit = True)
-
-    # Hx and Hz have the same shape
-    for i in range(m):
-        for j in range(n):
-            if Hx[i][j] != 0:
-                G.add_edge(hx[i], data[j])
-            if Hz[i][j] != 0:
-                G.add_edge(hz[i], data[j])
-
-    if plot:
-        plot_graph(G)
-    else:
-        return G
-
-
