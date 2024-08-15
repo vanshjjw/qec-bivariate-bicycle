@@ -1,15 +1,16 @@
-#%%
 from sage.all import *
 import numpy as np
 import re
 
-def convert_string_to_expression(rel,x,y):
+
+def convert_string_to_expression(exp: list[str], x, y):
+    """
+    x, y: generators of the group
+
+    The strings in exp are converted to expressions in x and y.
+    """
     expression = []
-    if '+' in rel:
-        list=rel.strip().split('+')
-    else:
-        list=rel
-    for exp in list:
+    for exp in exp:
         # Replace '^' with '**Integer(' and close the parenthesis
         exp = re.sub(r'\^', '**Integer(', exp)
         # Add closing parenthesis for Integer exponents
@@ -19,7 +20,7 @@ def convert_string_to_expression(rel,x,y):
         expression.append(eval(exp))
     return expression
 
-def make_group(gen, rel, a, b):
+def make_group(gen: list[str], rel: list[str], a: list[str], b: list[str]):
     F = FreeGroup(gen)
     x, y = F._first_ngens(2)
     rel = convert_string_to_expression(rel,x,y)
@@ -37,7 +38,7 @@ def make_group(gen, rel, a, b):
     return G, a, b
 
 
-def block_matrix(G, alg, action):
+def block_matrix(G, alg, action: str):
     elms=G.list()
     m=len(elms)
     M=np.ones(shape=(m,m))
@@ -57,52 +58,25 @@ def block_matrix(G, alg, action):
 
     return M
 
-gen = ['x', 'y']
-rel = ['x^3', 'y^2', 'x*y^-1*x*y']
-a = '1+x+x*y'
-b = '1+y+y*x^2'
 
+## ----------------- Inputs ----------------- ##
+gen = ['x', 'y'] #list of group generators (two generators for Symmetric groups).
+rel = ['x^3', 'y^2', 'x*y^-1*x*y'] #group relators, must use the same generator names defined in gen.
+
+#group algebra elements used to make A and B matrices.
+a = ['1','x','x*y']
+b = ['1','y','y*x^2']
+
+## ----------------- Parity Check Matrices ----------------- ##
 G, a, b = make_group(gen, rel, a, b)
 
+#A always has action == 'left' and B always has action == right
 A=block_matrix(G, a, 'left')
 B=block_matrix(G, b, 'right')
 
 H_x = np.hstack((A, B))
 H_z = np.hstack((B.T, A.T))
-M = H_x @ H_z.T %2
-print(M)
-
-
-
-
-
-#%%
-
-# S3 = SymmetricGroup(Integer(3))
-#
-# cayley=S3.cayley_table()
-#
-# products=cayley.table()
-#
-# G=len(products)
-# a=[1,1,0,1,0,0]
-# b=[1,0,1,0,0,1]
-# A=np.ones(shape=(G,G))
-# B=np.ones(shape=(G,G))
-# for i in range(G):
-#     for j in range(G):
-#         for k in range(G):
-#             if products[0][i] == products[k][j]:
-#                 A[i][j]=(A[i][j]+a[k])%2
-#             if products[0][i] == products[j][k]:
-#                 B[i][j]=(B[i][j]+b[k])%2
-#
-# H_x = np.hstack((A, B))
-# H_z = np.hstack((B.T, A.T))
-# M = H_x @ H_z.T %2
-# print(M)
-
-
+print(H_x)
 
 
 
