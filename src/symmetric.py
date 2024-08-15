@@ -10,14 +10,14 @@ def convert_string_to_expression(exp: list[str], x, y):
     The strings in exp are converted to expressions in x and y.
     """
     expression = []
-    for exp in exp:
+    for string in exp:
         # Replace '^' with '**Integer(' and close the parenthesis
-        exp = re.sub(r'\^', '**Integer(', exp)
+        string = re.sub(r'\^', '**Integer(', string)
         # Add closing parenthesis for Integer exponents
-        exp = re.sub(r'(\*\*Integer\(\-?\d+)', r'\1)', exp)
+        string = re.sub(r'(\*\*Integer\(\-?\d+)', r'\1)', string)
         # Add Integer for standalone exponents like `y^-1`
-        exp = re.sub(r'([xy])(\-?\d+)', r'\1**Integer(\2)', exp)
-        expression.append(eval(exp))
+        string = re.sub(r'([xy])(\-?\d+)', r'\1**Integer(\2)', string)
+        expression.append(eval(string))
     return expression
 
 def make_group(gen: list[str], rel: list[str], a: list[str], b: list[str]):
@@ -76,8 +76,7 @@ B=block_matrix(G, b, 'right')
 
 H_x = np.hstack((A, B))
 H_z = np.hstack((B.T, A.T))
-print(H_x)
-
+print((H_x @H_z.T)%2)
 
 
 
