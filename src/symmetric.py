@@ -1,6 +1,7 @@
 from sage.all import *
 import numpy as np
 import re
+import string
 
 
 def convert_string_to_expression(exp: list[str], x, y):
@@ -22,7 +23,7 @@ def convert_string_to_expression(exp: list[str], x, y):
 
 def make_group(gen: list[str], rel: list[str], a: list[str], b: list[str]):
     F = FreeGroup(gen)
-    x, y = F._first_ngens(2)
+    x, y = F._first_ngens(len(gen))
     rel = convert_string_to_expression(rel,x,y)
     G = F / rel
     x,y=G.gens()
@@ -60,13 +61,17 @@ def block_matrix(G, alg, action: str):
 
 
 ## ----------------- Inputs ----------------- ##
-gen = ['x', 'y'] #list of group generators (two generators for Symmetric groups).
-rel = ['x^3', 'y^2', 'x*y^-1*x*y'] #group relators, must use the same generator names defined in gen.
+# gen = ['x', 'y'] #list of group generators (two generators for Symmetric groups).
+# rel = ['x^3', 'y^2', 'x*y^-1*x*y'] #group relators, must use the same generator names defined in gen.
+#
+# #group algebra elements used to make A and B matrices.
+# a = ['1','x','x*y']
+# b = ['1','y','y*x^2']
 
-#group algebra elements used to make A and B matrices.
-a = ['1','x','x*y']
-b = ['1','y','y*x^2']
-
+gen = ['x','y'] #list of group generators (two generators for Symmetric groups).
+rel = ['x^9', 'y^4', 'y^-1*x*y*x']
+a = ['1','x','y','y*x^6']
+b = ['1','y^2*x','y^2*x^6','x^2']
 ## ----------------- Parity Check Matrices ----------------- ##
 G, a, b = make_group(gen, rel, a, b)
 
@@ -76,7 +81,7 @@ B=block_matrix(G, b, 'right')
 
 H_x = np.hstack((A, B))
 H_z = np.hstack((B.T, A.T))
-print((H_x @H_z.T)%2)
+print(H_x)
 
 
 
