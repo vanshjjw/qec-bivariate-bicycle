@@ -80,15 +80,15 @@ def block_matrix(G, alg, action: str):
 # l = ?
 # m = ?
 # if BB:
-# generators = ['r', 's']
+# generators = ['s', 'r']
 # relators = [f"s^{l}", f"r^{m}", 's^-1*r*s*r^-1']
 
 generators = ['x', 'y'] # list of group generators (two generators for Symmetric groups).
-relators = ['y^6', 'x^8', 'x^-1*y*x*y'] # group relators, must use the same generator names defined in gen.
+relators = ['x^3', 'y^2', 'x*y^-1*x*y'] # group relators, must use the same generator names defined in gen.
 
 # Group algebra elements used to make A and B matrices.
-a = ['1', 'x', 'y^3*x^2', 'y^2*x^3']
-b = ['1', 'x', 'y^4*x^6', 'y^5*x^3']
+a = ['1', 'x', 'x*y']
+b = ['1', 'y', 'y*x^2']
 
 ## ----------------- Parity Check Matrices ----------------- ##
 
