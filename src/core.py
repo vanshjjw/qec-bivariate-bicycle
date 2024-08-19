@@ -77,7 +77,7 @@ class BBCode:
 
         return H_x, H_z
 
-    def generate_bb_code(self, distance_method = 0, draw = False):
+    def generate_bb_code(self, distance_method = 0):
         H_x, H_z = self.create_parity_check_matrices()
 
         rank_H_x = helper.binary_rank(H_x)
@@ -95,9 +95,6 @@ class BBCode:
             return num_physical, num_logical, 0
 
         distance = self.find_distance(H_x, H_z, num_physical, num_logical, distance_method)
-
-        if draw:
-            helper.make_graph_for_bbcode(H_x, H_z, plot=True)
 
         return num_physical, num_logical, distance
 
