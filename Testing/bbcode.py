@@ -30,7 +30,7 @@ def display_code(example: dict, n: int, k: int, d: int):
 
 def run_bbcode_examples(custom_codes = False):
     Main = {}
-    distance_method = 3
+    distance_method = 1
     distance_margin = 1.15 # 15% margin of error
 
     if custom_codes:
