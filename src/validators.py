@@ -1,6 +1,6 @@
 import numpy as np
 
-def validate_parity_matrix(H_x, H_z):
+def validate_parity_matrices(H_x, H_z):
     # check matrices are binary
     assert np.array_equal(H_x, H_x % 2)
     assert np.array_equal(H_z, H_z % 2)

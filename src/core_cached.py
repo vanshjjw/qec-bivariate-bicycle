@@ -91,7 +91,7 @@ class BBCodeCached:
         if self.safe_mode:
             vd.validate_A_B_matrices(A, self.A_expression)
             vd.validate_A_B_matrices(B, self.B_expression)
-            vd.validate_parity_matrix(H_x, H_z)
+            vd.validate_parity_matrices(H_x, H_z)
             pass
 
         return H_x, H_z

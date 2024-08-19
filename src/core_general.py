@@ -16,6 +16,8 @@ class BBCodeGeneral:
         self.safe_mode = safe_mode
         self.A_expression: list[str] = []
         self.B_expression: list[str] = []
+        if self.safe_mode:
+            self.validate_relators()
 
     def __int__(self, relators: list[str], safe_mode: bool = False):
         self.generators = ["x", "y"]
@@ -23,6 +25,8 @@ class BBCodeGeneral:
         self.safe_mode = safe_mode
         self.A_expression: list[str] = []
         self.B_expression: list[str] = []
+        if self.safe_mode:
+            self.validate_relators()
 
 
     def validate_relators(self):
@@ -55,10 +59,9 @@ class BBCodeGeneral:
         group_generators = group.gens()
 
         poly_variables = {}
-        poly_variables["i"] = group(group.relations()[0])
+        poly_variables["i"] = group([])
         for i, gen in enumerate(self.generators):
             poly_variables[gen] = group_generators[i]
-
 
         A_algebra_elements = group_help.make_elements_from_expressions(self.A_expression, poly_variables)
         B_algebra_elements = group_help.make_elements_from_expressions(self.B_expression, poly_variables)
@@ -70,12 +73,17 @@ class BBCodeGeneral:
 
     def create_parity_check_matrices(self):
         A, B = self.make_A_B_matrices()
-        H_x = np.concatenate((A, np.eye(A.shape[0])), axis=1)
-        H_z = np.concatenate((np.eye(B.shape[0]), B), axis=1)
+
+        H_x = np.concatenate((A, B), axis=1)
+        H_z = np.concatenate((B.T, A.T), axis=1)
+
+        if self.safe_mode:
+            vd.validate_parity_matrices(H_x, H_z)
+
         return H_x, H_z
 
 
-    def generate_bb_code(self, distance_method = 0, draw = False):
+    def generate_bb_code(self, distance_method = 0):
         H_x, H_z = self.create_parity_check_matrices()
 
         rank_H_x = helper.binary_rank(H_x)
