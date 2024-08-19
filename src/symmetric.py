@@ -41,7 +41,7 @@ def make_group(generators: list[str], rel: list[str], a: list[str], b: list[str]
     relators = convert_string_to_expression(rel, F_generators)
     G = F / relators
     G_generators = G.gens()
-    identity = G(G.relations()[0])
+    identity = G_generators[0]**Integer(0)
     a = convert_string_to_expression(a, G_generators)
     b = convert_string_to_expression(b, G_generators)
 
@@ -83,12 +83,12 @@ def block_matrix(G, alg, action: str):
 # generators = ['r', 's']
 # relators = [f"s^{l}", f"r^{m}", 's^-1*r*s*r^-1']
 
-generators = ['r', 's'] # list of group generators (two generators for Symmetric groups).
-relators = ['s^6', 'r^6', 's^-1*r*s*r^-1'] # group relators, must use the same generator names defined in gen.
+generators = ['x', 'y'] # list of group generators (two generators for Symmetric groups).
+relators = ['y^6', 'x^8', 'x^-1*y*x*y'] # group relators, must use the same generator names defined in gen.
 
 # Group algebra elements used to make A and B matrices.
-a = ['s^3','r','r^2']
-b = ['r^3','s','s^2']
+a = ['1', 'x', 'y^3*x^2', 'y^2*x^3']
+b = ['1', 'x', 'y^4*x^6', 'y^5*x^3']
 
 ## ----------------- Parity Check Matrices ----------------- ##
 
