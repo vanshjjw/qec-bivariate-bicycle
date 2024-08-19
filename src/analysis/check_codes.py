@@ -60,7 +60,7 @@ def run_and_save_results(save_numpy_matrices = False, display_results = True):
 
         if save_numpy_matrices:
             folder_path = os.path.dirname(os.path.realpath(__file__))
-            file_path = os.path.join(folder_path, 'results_numpy', f"[[{n}.{k},{d}]].txt")
+            file_path = os.path.join(folder_path, 'results_numpy', f"[[{n},{k},{d}]].npz")
             H_x, H_z = code.create_parity_check_matrices()
             with open(file_path, 'wb') as file:
                 np.savez(file, Hx=H_x, Hz=H_z)
