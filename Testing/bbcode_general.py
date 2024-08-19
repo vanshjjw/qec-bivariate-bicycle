@@ -51,6 +51,13 @@ def raw_codes(codes: dict):
         "b": ['i', 'x', 'y4.x6', 'y5.x3'],
         "answer": [96,12,10]
     }
+    codes["7"] = {
+        "gen": ['x', 'y'],
+        "rel": ['y4', 'x10', 'x.y.x.y'],
+        "a": ['i', 'y.x5', 'x5', 'y.x6'],
+        "b": ['i', 'y2', 'x', 'y2.x3'],
+        "answer": [80, 9, 9]
+    }
     return codes
 
 
@@ -71,7 +78,7 @@ def run_bbcode_general_examples():
 
     Main = raw_codes(Main)
 
-    for i in range(len(Main)):
+    for i in range(7, len(Main)):
         example = Main[str(i)]
         code = BBCodeGeneral(example["gen"], example["rel"], safe_mode=True).set_expression(example["a"], example["b"])
 
@@ -85,7 +92,7 @@ def run_bbcode_general_examples():
         else:
             print(f"\n\nCode {i} failed. Details:")
             display_code(example, n, k, d)
-            return
+            print("\n\n")
 
 
 
