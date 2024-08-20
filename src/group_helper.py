@@ -1,15 +1,14 @@
-from sage.all import *
+from sage.all import FreeGroup, Integer, groups
 import numpy as np
-import re
 
-def make_symmetric_group(ord):
-    if type(ord) == int:
-        C = groups.presentation.Symmetric(Integer(ord))
+def make_symmetric_group(order, product_of_symmetric_groups: bool =  False):
+    if not product_of_symmetric_groups:
+        S = groups.presentation.Symmetric(Integer(order))
     else:
-        Sl = groups.presentation.Symmetric(Integer(ord[0]))
-        Sm = groups.presentation.Symmetric(Integer(ord[1]))
-        C = Sl.direct_product(Sm)
-    return C
+        S1 = groups.presentation.Symmetric(Integer(order[0]))
+        S2 = groups.presentation.Symmetric(Integer(order[1]))
+        S = S1.direct_product(S2)
+    return S
 
 
 def make_base_group(generators: list[str], rel: list[str]):

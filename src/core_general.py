@@ -6,46 +6,33 @@ import src.distances.distance_from_brute_force as brute_force
 import src.distances.distance_from_generators as generators
 import src.distances.distance_from_gap as qdistrand
 import src.distances.distance_from_bposd as bposd
-from src.graph_helper import TannerGraph
 
 
 class BBCodeGeneral:
-    def __init__(self, generators: list[str] = None, relators: list[str] = None, group: tuple = None, safe_mode: bool = False):
-        self.safe_mode = safe_mode
+    def __init__(self, generators: list[str] = None, relators: list[str] = None, safe_mode: bool = False):
+        if relators is not None:
+            self.generators = generators or ["x", "y"]
+            self.group = group_help.make_base_group(self.generators, relators)
+
         self.A_expression: list[str] = []
         self.B_expression: list[str] = []
-        self.generators = generators
-        if group == None:
-            self.relators = relators
-            self.group = group_help.make_base_group(generators, relators)
-        else:
-            self.group = group_help.make_symmetric_group(group)
-        if self.safe_mode:
-            self.validate_relators()
-
-    def __int__(self, relators: list[str], safe_mode: bool = False):
-        self.generators = ["x", "y"]
-        self.relators = relators
         self.safe_mode = safe_mode
-        self.A_expression: list[str] = []
-        self.B_expression: list[str] = []
-        if self.safe_mode:
-            self.validate_relators()
 
-
-    def validate_relators(self):
-        extended_generators = self.generators + ["i"]
-        for relator in self.relators:
+    def validate_relators(self, generators: list[str], relators: list[str]):
+        extended_generators = generators + ["i"]
+        for relator in relators:
             if all([r not in extended_generators for r in relator]):
                 raise ValueError("Relator must contain at least one generator")
         return self
-
 
     def set_expression(self, A_expression: list[str], B_expression: list[str]):
         self.A_expression = A_expression
         self.B_expression = B_expression
         return self
 
+    def set_symmetric_base_group(self, order, product_of_groups: bool = False):
+        self.group = group_help.make_symmetric_group(order, product_of_groups)
+        return self
 
     def find_distance(self, H_x, H_z, n, k, distance_method):
         if distance_method == 1:
@@ -59,7 +46,11 @@ class BBCodeGeneral:
 
 
     def make_A_B_matrices(self):
-        #group = group_help.make_base_group(self.generators, self.relators)
+        if self.group is None:
+            raise ValueError("Group must be set before generating matrices")
+        if not self.A_expression or not self.B_expression:
+            raise ValueError("Expressions must be set before generating matrices")
+
         group_generators = self.group.gens()
 
         poly_variables = {}
@@ -77,7 +68,6 @@ class BBCodeGeneral:
 
     def create_parity_check_matrices(self):
         A, B = self.make_A_B_matrices()
-
         H_x = np.concatenate((A, B), axis=1)
         H_z = np.concatenate((B.T, A.T), axis=1)
 
@@ -105,23 +95,7 @@ class BBCodeGeneral:
             return num_physical, num_logical, 0
 
         distance = self.find_distance(H_x, H_z, num_physical, num_logical, distance_method)
-
         return num_physical, num_logical, distance
-
-
-    def make_graph(self):
-        Hx, Hz = self.create_parity_check_matrices()
-        Graph = TannerGraph(Hx, Hz)
-        Graph.make_graph()
-        return Graph
-
-
-
-
-# Example input for polynomial expressions: ["x0", "x1", "y11", "x21.y21", "x3.y15"]
-
-
-
 
 
 
