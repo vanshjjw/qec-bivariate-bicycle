@@ -1,4 +1,4 @@
-from src.polynomial_helper import PolynomialHelper
+from src.helpers.polynomials import PolynomialHelper
 import math
 
 class PolynomialToGraphs:

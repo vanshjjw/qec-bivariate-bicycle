@@ -1,6 +1,5 @@
 import numpy as np
-import src.helpers as helper
-from copy import deepcopy
+import src.helpers.linalg_helpers as linalg_help
 
 
 # Find all possible combinations of logical operators, multiplied by stabilizers
@@ -29,10 +28,10 @@ def calculate_distance(H_x, H_z, n:int, k: int, status_updates=False):
     #
     # For BB codes, rank_x = rank_z
 
-    rank_x = helper.binary_rank(H_x)
+    rank_x = linalg_help.binary_rank(H_x)
 
-    G_standard = helper.standard_form(H_x, H_z)
-    Lx, Lz = helper.find_logical_generators(G_standard, rank_x)
+    G_standard = linalg_help.standard_form(H_x, H_z)
+    Lx, Lz = linalg_help.find_logical_generators(G_standard, rank_x)
 
     complete_matrix = np.vstack((G_standard, Lx, Lz))
 
@@ -54,7 +53,7 @@ def calculate_distance(H_x, H_z, n:int, k: int, status_updates=False):
             if value == 1:
                 product = [(product[j] + complete_matrix[index][j]) % 2 for j in range(2 * n)]
 
-        min_distance = min(min_distance, helper.hamming_weight(product))
+        min_distance = min(min_distance, linalg_help.hamming_weight(product))
 
     if status_updates:
         print(f"Checked {c} operators. \nSearch complete.\n")

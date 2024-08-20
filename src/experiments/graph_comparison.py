@@ -1,5 +1,3 @@
-from src.polynomial_helper import PolynomialHelper
-from src.propose_parameters import ProposeParameters
 from src.core import BBCode
 
 def raw_data():

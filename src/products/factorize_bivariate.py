@@ -1,5 +1,5 @@
-from src.polynomial_helper import PolynomialHelper
-from src.propose_parameters import ProposeParameters
+from src.helpers.polynomials import PolynomialHelper
+from src.helpers.parameters import ProposeParameters
 from src.core_cached import BBCodeCached
 import random
 

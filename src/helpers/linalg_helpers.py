@@ -3,9 +3,6 @@ from ldpc.mod2 import reduced_row_echelon, rank
 from copy import deepcopy
 
 
-## ----------------- QEC Specific Helpers ----------------- ##
-
-
 def generators(G_standard):
     G1=G_standard[:][:G_standard.shape[1]//2]
     G2=G_standard[:][G_standard.shape[1]//2:]
@@ -58,9 +55,6 @@ def find_logical_generators(G_standard, rank_x: int) -> list[np.ndarray]:
     Lz = np.hstack((zero_l, zero_m, zero_r, A2.T, zero_m, identity))
 
     return Lx, Lz
-
-
-## ----------------- Linear Algebra Helpers ----------------- ##
 
 
 def display(M, middle_line = False):

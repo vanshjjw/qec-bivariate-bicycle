@@ -1,9 +1,7 @@
-from src.propose_parameters import ProposeParameters
-from src.polynomial_helper import PolynomialHelper
-from src.core import BBCode
+from src.helpers.parameters import ProposeParameters
+from src.helpers.polynomials import PolynomialHelper
 from src.core_cached import BBCodeCached
 import numpy as np
-import src.helpers as helper
 
 
 def change_parameters():

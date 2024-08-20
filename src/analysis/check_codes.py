@@ -1,5 +1,5 @@
 from src.core import BBCode
-from src.polynomial_helper import PolynomialHelper
+from src.helpers.polynomials import PolynomialHelper
 import numpy as np
 import os
 

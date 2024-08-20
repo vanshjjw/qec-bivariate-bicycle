@@ -1,5 +1,5 @@
 import galois
-import src.sage_functions as sage_functions
+import src.misc.sage_functions as sage_functions
 
 class PolynomialHelper:
     def __init__(self, l, m):

@@ -1,11 +1,11 @@
 import numpy as np
-import src.helpers as helper
-import src.validators as vd
+import src.helpers.linalg_helpers as linalg_help
+import src.misc.validators as vd
 import src.distances.distance_from_brute_force as brute_force
 import src.distances.distance_from_generators as generators
 import src.distances.distance_from_gap as qdistrand
 import src.distances.distance_from_bposd as bposd
-from src.graph_helper import TannerGraph
+from src.helpers.graphs import TannerGraph
 
 
 class BBCode:
@@ -30,8 +30,8 @@ class BBCode:
 
     def create_poly_variables(self):
         # currently using the cyclic groups, and bivariate polynomials
-        S_l = helper.create_matrix_S(self.l)
-        S_m = helper.create_matrix_S(self.m)
+        S_l = linalg_help.create_matrix_S(self.l)
+        S_m = linalg_help.create_matrix_S(self.m)
 
         # Make x and y matrices
         self.poly_variables["i"] = np.eye(self.l * self.m, dtype=int)
@@ -80,8 +80,8 @@ class BBCode:
     def generate_bb_code(self, distance_method = 0):
         H_x, H_z = self.create_parity_check_matrices()
 
-        rank_H_x = helper.binary_rank(H_x)
-        rank_H_z = helper.binary_rank(H_z)
+        rank_H_x = linalg_help.binary_rank(H_x)
+        rank_H_z = linalg_help.binary_rank(H_z)
 
         if self.safe_mode:
             vd.validate_ranks(rank_H_x, rank_H_z)

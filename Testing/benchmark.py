@@ -1,7 +1,6 @@
 from src.core import BBCode
 from src.core_cached import BBCodeCached
-from src.propose_parameters import ProposeParameters
-import numpy as np
+from src.helpers.parameters import ProposeParameters
 import random
 import time
 

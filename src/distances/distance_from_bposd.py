@@ -1,7 +1,6 @@
-import numpy
 from ldpc import bposd_decoder
 import numpy as np
-import src.helpers as helper
+import src.helpers.linalg_helpers as linalg_help
 
 
 def bposd_decode_distance_estimate(stabilizers, logicals, status_updates = False) -> int:
@@ -37,11 +36,11 @@ def bposd_decode_distance_estimate(stabilizers, logicals, status_updates = False
 
 
 def calculate_distance(H_x, H_z, status_updates = False) -> int:
-    stabilizers = helper.standard_form(H_x, H_z)
+    stabilizers = linalg_help.standard_form(H_x, H_z)
 
-    Lx, Lz = helper.find_logical_generators(
+    Lx, Lz = linalg_help.find_logical_generators(
         stabilizers,
-        helper.binary_rank(H_x)
+        linalg_help.binary_rank(H_x)
     )
     logicals = np.vstack((Lx, Lz))
 
