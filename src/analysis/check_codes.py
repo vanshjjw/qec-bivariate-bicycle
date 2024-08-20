@@ -29,6 +29,13 @@ def raw_data_one():
         "a": poly_help.multiply_polynomials(A, A),
         "b": poly_help.multiply_polynomials(B, B)
     }
+    codes["3"] = {
+        'l': 9,
+        'm': 9,
+        'a': ['x0', 'x1', 'y1'],
+        'b': ['x3', 'y1', 'y2'],
+        'answer': [162, 4, 16]
+    }
     return codes
 
 
@@ -70,5 +77,5 @@ def run_and_save_results(save_numpy_matrices = False, display_results = True):
 
 
 if __name__ == "__main__":
-    run_and_save_results(save_numpy_matrices=True, display_results=False)
+    run_and_save_results(save_numpy_matrices=False, display_results=True)
     pass
