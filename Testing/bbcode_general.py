@@ -55,8 +55,20 @@ def raw_codes(codes: dict):
 
 def compare(codes: dict):
     codes["0"] = {
-
+        "gen": ['x','y'],
+        "rel": None,
+        "group": 5,
+        "a": ['x3', 'y2','y7'],
+        "b": ['y3','x', 'x2']
     }
+    codes["1"] = {
+        "gen": ['x', 'y'],
+        "rel": ['x12', 'y10', 'y-1.x.y.x-1'],
+        "group": None,
+        "a": ['i', 'y', 'x.y7'],
+        "b": ['i', 'x', 'x10.y4']
+    }
+    return codes
 
 def display_code(code, n, k, d):
     print(f"Generators: {code['gen']}")
@@ -77,7 +89,7 @@ def run_bbcode_general_examples():
 
     for i in range(len(Main)):
         example = Main[str(i)]
-        code = BBCodeGeneral(example["gen"], example["rel"], safe_mode=True).set_expression(example["a"], example["b"])
+        code = BBCodeGeneral(example["gen"], example["rel"], example["group"], safe_mode=True).set_expression(example["a"], example["b"])
 
         n, k, d = code.generate_bb_code(distance_method=distance_method)
         n_known, k_known, d_known = example["answer"]
@@ -96,25 +108,25 @@ def compare_groups():
     distance_method = 3
     distance_margin = 1.15 # 15% margin of error
 
-    Main = raw_codes(Main)
+    Main = compare(Main)
 
     for i in range(len(Main)):
         example = Main[str(i)]
-        code = BBCodeGeneral(example["gen"], example["rel"], safe_mode=True).set_expression(example["a"], example["b"])
+        code = BBCodeGeneral(example["gen"], example["rel"], example["group"], safe_mode=False).set_expression(example["a"], example["b"])
 
         n, k, d = code.generate_bb_code(distance_method=distance_method)
-        n_known, k_known, d_known = example["answer"]
-
-        passed = n == n_known and k == k_known and d_known <= d * distance_margin
-
-        if passed:
-            print(f"Code {i} passed.")
-        else:
-            print(f"\n\nCode {i} failed. Details:")
-            display_code(example, n, k, d)
-            return
+        # n_known, k_known, d_known = example["answer"]
+        #
+        # passed = n == n_known and k == k_known and d_known <= d * distance_margin
+        print(f"[[{n},{k},{d}]]")
+        # if passed:
+        #     print(f"[[{n},{k},{d}]]")
+        # else:
+        #     print(f"\n\nCode {i} failed. Details:")
+        #     display_code(example, n, k, d)
+        #     return
 
 
 
 if __name__ == "__main__":
-    run_bbcode_general_examples()
+    compare_groups()

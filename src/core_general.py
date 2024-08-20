@@ -10,12 +10,16 @@ from src.graph_helper import TannerGraph
 
 
 class BBCodeGeneral:
-    def __init__(self, generators: list[str], relators: list[str], safe_mode: bool = False):
-        self.relators = relators
-        self.generators = generators
+    def __init__(self, generators: list[str] = None, relators: list[str] = None, group: tuple = None, safe_mode: bool = False):
         self.safe_mode = safe_mode
         self.A_expression: list[str] = []
         self.B_expression: list[str] = []
+        self.generators = generators
+        if group == None:
+            self.relators = relators
+            self.group = group_help.make_base_group(generators, relators)
+        else:
+            self.group = group_help.make_symmetric_group(group)
         if self.safe_mode:
             self.validate_relators()
 
@@ -55,19 +59,19 @@ class BBCodeGeneral:
 
 
     def make_A_B_matrices(self):
-        group = group_help.make_base_group(self.generators, self.relators)
-        group_generators = group.gens()
+        #group = group_help.make_base_group(self.generators, self.relators)
+        group_generators = self.group.gens()
 
         poly_variables = {}
-        poly_variables["i"] = group([])
+        poly_variables["i"] = self.group([])
         for i, gen in enumerate(self.generators):
             poly_variables[gen] = group_generators[i]
 
         A_algebra_elements = group_help.make_elements_from_expressions(self.A_expression, poly_variables)
         B_algebra_elements = group_help.make_elements_from_expressions(self.B_expression, poly_variables)
 
-        A_matrix = group_help.make_block_matrix(group, A_algebra_elements, action_is_right=False)
-        B_matrix = group_help.make_block_matrix(group, B_algebra_elements, action_is_right=True)
+        A_matrix = group_help.make_block_matrix(self.group, A_algebra_elements, action_is_right=False)
+        B_matrix = group_help.make_block_matrix(self.group, B_algebra_elements, action_is_right=True)
         return A_matrix, B_matrix
 
 

@@ -1,6 +1,16 @@
-from sage.all import FreeGroup, Integer
+from sage.all import *
 import numpy as np
 import re
+
+def make_symmetric_group(ord):
+    if type(ord) == int:
+        C = groups.presentation.Symmetric(Integer(ord))
+    else:
+        Sl = groups.presentation.Symmetric(Integer(ord[0]))
+        Sm = groups.presentation.Symmetric(Integer(ord[1]))
+        C = Sl.direct_product(Sm)
+    return C
+
 
 def make_base_group(generators: list[str], rel: list[str]):
     F = FreeGroup(generators)
