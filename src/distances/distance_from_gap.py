@@ -19,8 +19,8 @@ def convert_to_gap_matrix(mat1, mat2):
 def define_commands(H_x, H_z):
     a = 'LoadPackage("guava");;'
     b = 'LoadPackage("QDistRnd");;'
-    c= convert_to_gap_matrix(H_x, H_z)
-    d= 'F := GF(2);;  Hx := One(F) * Hx;;  Hz := One(F) * Hz;; d := DistRandCSS(Hz, Hx, 100, 0, 2 : field:=F);'
+    c = convert_to_gap_matrix(H_x, H_z)
+    d = 'F := GF(2);;  Hx := One(F) * Hx;;  Hz := One(F) * Hz;; d := DistRandCSS(Hz, Hx, 100, 0, 2 : field:=F);'
     return a + b + c + d
 
 
