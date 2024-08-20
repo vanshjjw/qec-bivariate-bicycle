@@ -1,42 +1,35 @@
 from src.core import BBCode
+from src.helpers.parameters import ProposeParameters
+from src.helpers.graphs import Category
 
-def raw_data():
-    l = 12
-    m = 12
-    A1 = ["i", "x", "x2"]
-    B1 = ["i", "y", "y2"]
 
-    A2 = ["i", "x", "y2"]
-    B2 = ["i", "y", "x2"]
+def remake_polynomials():
+    l = 8
+    m = 8
+    parameter = ProposeParameters(l, m)
+    for i in range(10):
+        A, B = parameter.draw_random_monomials(3, 3)
+        code = BBCode(l, m, A, B)
+        graph1 = code.generate_bb_code()
 
-    a = {
-        "l": l,
-        "m": m,
-        "a": A1,
-        "b": B1
-    }
-    b = {
-        "l": l,
-        "m": m,
-        "a": A2,
-        "b": B2
-    }
-    return a, b
+        a, b = graph1.deconstruct_polynomials("l0")
+        print(f"A: {a}, B: {b}")
+        a, b = graph1.deconstruct_polynomials("l1")
+        print(f"A: {a}, B: {b}")
+        a, b = graph1.deconstruct_polynomials("l2")
+        print(f"A: {a}, B: {b}")
+        a, b = graph1.deconstruct_polynomials("r3")
+        print(f"A: {a}, B: {b}")
 
 
 
-def compare_graphs():
-    d1, d2 = raw_data()
 
-    code1 = BBCode(d1["l"], d1["m"], d1["a"], d1["b"], safe_mode=False)
-    code2 = BBCode(d2["l"], d2["m"], d2["a"], d2["b"], safe_mode=False)
 
-    graph1 = code1.make_graph()
-    graph2 = code2.make_graph()
-    pass
+
+
 
 
 
 
 if __name__ == "__main__":
-    compare_graphs()
+    remake_polynomials()
