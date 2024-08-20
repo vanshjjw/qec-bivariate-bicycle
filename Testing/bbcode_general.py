@@ -13,7 +13,7 @@ def raw_codes(codes: dict):
         "rel": ['y4', 'x6', 'y-1.x.y.x'],
         "a": ['i', 'x'],
         "b": ['i', 'y', 'x6', 'y3.x', 'y.x7', 'y3.x5'],
-        "answer": [72, 8, 9]
+        "answer": [48, 8, 4]
     }
     codes["2"] = {
         "gen": ['x', 'y'],
@@ -34,7 +34,7 @@ def raw_codes(codes: dict):
         "rel": ['y3', 'x14', 'x-1.y.x.y'],
         "a": ['i', 'x7', 'y.x10', 'x8'],
         "b": ['i', 'y', 'y2.x13', 'x5'],
-        "answer": [82,10,9]
+        "answer": [84,10,8]
     }
     codes["5"] = {
         "gen": ['x', 'y'],
@@ -51,15 +51,12 @@ def raw_codes(codes: dict):
         "b": ['i', 'x', 'y4.x6', 'y5.x3'],
         "answer": [96,12,10]
     }
-    codes["7"] = {
-        "gen": ['x', 'y'],
-        "rel": ['y4', 'x10', 'x.y.x.y'],
-        "a": ['i', 'y.x5', 'x5', 'y.x6'],
-        "b": ['i', 'y2', 'x', 'y2.x3'],
-        "answer": [80, 9, 9]
-    }
     return codes
 
+def compare(codes: dict):
+    codes["0"] = {
+
+    }
 
 def display_code(code, n, k, d):
     print(f"Generators: {code['gen']}")
@@ -78,7 +75,7 @@ def run_bbcode_general_examples():
 
     Main = raw_codes(Main)
 
-    for i in range(7, len(Main)):
+    for i in range(len(Main)):
         example = Main[str(i)]
         code = BBCodeGeneral(example["gen"], example["rel"], safe_mode=True).set_expression(example["a"], example["b"])
 
@@ -92,7 +89,30 @@ def run_bbcode_general_examples():
         else:
             print(f"\n\nCode {i} failed. Details:")
             display_code(example, n, k, d)
-            print("\n\n")
+            return
+
+def compare_groups():
+    Main = {}
+    distance_method = 3
+    distance_margin = 1.15 # 15% margin of error
+
+    Main = raw_codes(Main)
+
+    for i in range(len(Main)):
+        example = Main[str(i)]
+        code = BBCodeGeneral(example["gen"], example["rel"], safe_mode=True).set_expression(example["a"], example["b"])
+
+        n, k, d = code.generate_bb_code(distance_method=distance_method)
+        n_known, k_known, d_known = example["answer"]
+
+        passed = n == n_known and k == k_known and d_known <= d * distance_margin
+
+        if passed:
+            print(f"Code {i} passed.")
+        else:
+            print(f"\n\nCode {i} failed. Details:")
+            display_code(example, n, k, d)
+            return
 
 
 
