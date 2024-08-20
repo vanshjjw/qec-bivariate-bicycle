@@ -125,6 +125,6 @@ class BBCodeCached:
         if self.H_x is None or self.H_z is None:
             self.H_x, self.H_z = self.create_parity_check_matrices()
 
-        Graph = TannerGraph(self.H_x, self.H_z)
-        Graph.make_graph()
+        Graph = TannerGraph(self.H_x, self.H_z).set_l_and_m(self.l, self.m)
+        Graph.add_nodes_and_edges()
         return Graph

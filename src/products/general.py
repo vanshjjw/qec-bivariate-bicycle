@@ -65,8 +65,8 @@ def multiply_random_polynomials():
 def square_polynomials():
     # square a polynomial and check if the resulting code has a larger k value
     # conclusion: the k value increases by the same factor as the number of connected components
-    l = 32
-    m = 32
+    l = 16
+    m = 16
     poly_help = PolynomialHelper(l, m)
     A = ["i", "x"]
     B = ["i", "y"]
@@ -74,7 +74,7 @@ def square_polynomials():
     for i in range(1, 10):
         code = BBCode(l, m, A, B, safe_mode=False)
         n, k, d = code.generate_bb_code(distance_method=0)
-        num_components = code.make_graph().number_connected_components()
+        num_components = code.make_graph().num_connected_components()
 
         print(f"A : {A}: \nB: {B} \n")
         print(f"code: [{n}, {k}, {d}]")
@@ -87,7 +87,7 @@ def square_polynomials():
 
 
 if __name__ == "__main__":
-    multiply_random_polynomials()
+    square_polynomials()
     pass
 
 

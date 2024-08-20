@@ -43,15 +43,15 @@ class PolynomialHelper:
         
         for mu in m1.split("."):
             if mu[0] == "x":
-                x_power += int(mu[1:])
+                x_power += int(mu[1:]) if len(mu) > 1 else 1
             if mu[0] == "y":
-                y_power += int(mu[1:])
+                y_power += int(mu[1:]) if len(mu) > 1 else 1
 
         for mu in m2.split("."):
             if mu[0] == "x":
-                x_power -= int(mu[1:])
+                x_power -= int(mu[1:]) if len(mu) > 1 else 1
             if mu[0] == "y":
-                y_power -= int(mu[1:])
+                y_power -= int(mu[1:]) if len(mu) > 1 else 1
 
         return x_power % self.l, y_power % self.m
 
@@ -66,9 +66,9 @@ class PolynomialHelper:
 
                 for mu in multiplicands:
                     if mu[0] == "x":
-                        x_power += int(mu[1:])
+                        x_power += int(mu[1:]) if len(mu) > 1 else 1
                     if mu[0] == "y":
-                        y_power += int(mu[1:])
+                        y_power += int(mu[1:]) if len(mu) > 1 else 1
 
                 answer = self.__construct_expression(x_power, y_power)
                 if answer in result:

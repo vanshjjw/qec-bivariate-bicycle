@@ -17,7 +17,7 @@ def change_parameters():
     return parameters, poly_help, code_cached
 
 
-def square_al_polynomials():
+def square_all_polynomials():
     l = 12
     m = 12
     num_shots = 10000
@@ -51,7 +51,7 @@ def square_al_polynomials():
             continue
 
         graph_1 = code_cached.make_graph()
-        num_components_1 = graph_1.number_connected_components()
+        num_components_1 = graph_1.num_connected_components()
 
         ### square polynomials
         A2 = poly_help.multiply_polynomials(A, A)
@@ -59,7 +59,7 @@ def square_al_polynomials():
 
         n2, k2, d2 = code_cached.set_expressions(A2, B2).generate_bb_code(distance_method=3)
         graph_2 = code_cached.make_graph()
-        num_components_2 = graph_2.number_connected_components()
+        num_components_2 = graph_2.num_connected_components()
 
         increase_equally = (k2 / k1) == (num_components_2 / num_components_1)
 

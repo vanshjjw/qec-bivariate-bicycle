@@ -100,8 +100,8 @@ class BBCode:
 
     def make_graph(self):
         Hx, Hz = self.create_parity_check_matrices()
-        Graph = TannerGraph(Hx, Hz)
-        Graph.make_graph()
+        Graph = TannerGraph(Hx, Hz).set_l_and_m(self.l, self.m)
+        Graph.add_nodes_and_edges()
         return Graph
 
 
