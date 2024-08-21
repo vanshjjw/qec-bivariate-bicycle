@@ -1,4 +1,3 @@
-from typing import Optional
 import numpy as np
 import random
 import math
@@ -18,7 +17,7 @@ class ProposeParameters:
         pass
 
     @staticmethod
-    def distribute_monomials(all_monomials: list[str], num_A: Optional[int] = None):
+    def distribute_monomials(all_monomials: list[str], num_A: int = None):
         num_monomials = len(all_monomials)
         if num_A is None:
             num_A = num_monomials // 2
@@ -39,8 +38,9 @@ class ProposeParameters:
         return False
 
     def draw_bivariate_monomials(self, num_monomials: int = 3):
-        x_exponents = np.random.choice(self.l, num_monomials, replace=False, p=None)
-        y_exponents = np.random.choice(self.m, num_monomials, replace=False, p=None)
+        monomial_indices = np.random.choice(self.l * self.m, num_monomials, replace=False, p=None)
+        x_exponents = monomial_indices // self.m
+        y_exponents = monomial_indices % self.m
         monomials = [f"x{i}.y{j}" for i, j in zip(x_exponents, y_exponents)]
         return monomials
 
@@ -102,3 +102,7 @@ class ProposeParameters:
 
 
 
+if __name__ == "__main__":
+    propose = ProposeParameters(12, 12)
+    for i in range(10):
+        print(propose.draw_bivariate_monomials(4))
