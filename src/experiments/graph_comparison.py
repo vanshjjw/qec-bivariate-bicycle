@@ -1,25 +1,27 @@
 from src.core import BBCode
-from src.helpers.parameters import ProposeParameters
-from src.helpers.graphs import Category
+from src.helpers.polynomials import PolynomialHelper
 
 
 def remake_polynomials():
-    l = 8
-    m = 8
-    parameter = ProposeParameters(l, m)
-    for i in range(10):
-        A, B = parameter.draw_random_monomials(3, 3)
+    l = 16
+    m = 16
+    A = ['i', f'x']
+    B = ['i', f'y']
+    poly_help = PolynomialHelper(l, m)
+    for i in range(1, 5):
         code = BBCode(l, m, A, B)
-        graph1 = code.generate_bb_code()
+        n, k, d = code.generate_bb_code(distance_method=3)
 
-        a, b = graph1.deconstruct_polynomials("l0")
-        print(f"A: {a}, B: {b}")
-        a, b = graph1.deconstruct_polynomials("l1")
-        print(f"A: {a}, B: {b}")
-        a, b = graph1.deconstruct_polynomials("l2")
-        print(f"A: {a}, B: {b}")
-        a, b = graph1.deconstruct_polynomials("r3")
-        print(f"A: {a}, B: {b}")
+        print(f"A : {A}: \nB: {B} \n")
+        print(f"code: [{n}, {k}, {d}]")
+        print("\n\n")
+
+        A = poly_help.multiply_polynomials(A, A)
+        B = poly_help.multiply_polynomials(B, B)
+
+
+
+
 
 
 

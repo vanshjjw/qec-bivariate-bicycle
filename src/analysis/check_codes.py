@@ -9,15 +9,15 @@ def raw_data_more():
 
 
 def raw_data_one():
-    l = 12
-    m = 12
+    l = 14
+    m = 14
     poly_help = PolynomialHelper(l, m)
 
-    A = ["i", "x", "x2"]
-    B = ["i", "y", "y2"]
+    A = ["x3", "x5", "x13"]
+    B = ["y2", "y4", "y8"]
 
-    A2 = ["i", "x", "y2"]
-    B2 = ["i", "y", "x2"]
+    A2 = ["i", "x", "x5"]
+    B2 = ["i", "y", "y3"]
 
     codes = {}
     codes["0"] = {
@@ -29,15 +29,8 @@ def raw_data_one():
     codes["1"] = {
         "l": l,
         "m": m,
-        "a": A2,
-        "b": B2,
-    }
-    codes["3"] = {
-        'l': 9,
-        'm': 9,
-        'a': ['x0', 'x1', 'y1'],
-        'b': ['x3', 'y1', 'y2'],
-        'answer': [162, 4, 16]
+        "a": poly_help.multiply_polynomials(A2, A2),
+        "b": poly_help.multiply_polynomials(B2, B2),
     }
     return codes
 
