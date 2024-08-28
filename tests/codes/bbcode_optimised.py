@@ -1,4 +1,4 @@
-from src.core_cached import BBCodeCached
+from src.core_optimised import BBCodeOptimised
 import json
 import os
 
@@ -39,7 +39,7 @@ def run_bbcode_cached_examples(custom_codes, distance_method, distance_margin):
 
     for i in range(len(Main)):
         example = Main[str(i)]
-        code = BBCodeCached(example["l"], example["m"])
+        code = BBCodeOptimised(example["l"], example["m"])
 
         n, k, d = code.set_expressions(example["a"], example["b"]).generate_bb_code(distance_method = distance_method)
         n_known, k_known, d_known = example["answer"]

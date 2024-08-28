@@ -1,4 +1,4 @@
-from src.core_general import BBCodeGeneral
+from src.core_generalised import GeneralGroupAlgebraCodes
 
 def raw_codes():
     codes = {}
@@ -70,7 +70,7 @@ def run_bbcode_general_examples(distance_method, distance_margin):
 
     for i in range(len(Main)):
         example = Main[str(i)]
-        code = BBCodeGeneral(example["gen"], example["rel"], safe_mode=True).set_expression(example["a"], example["b"])
+        code = GeneralGroupAlgebraCodes(example["gen"], example["rel"], safe_mode=True).set_expression(example["a"], example["b"])
 
         n, k, d = code.generate_bb_code(distance_method=distance_method)
         n_known, k_known, d_known = example["answer"]

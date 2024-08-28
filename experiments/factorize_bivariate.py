@@ -1,6 +1,6 @@
 from src.helpers.bivariates import BivariatePolynomialHelper
 from src.helpers.parameters import ProposeParameters
-from src.core_cached import BBCodeCached
+from src.core_optimised import BBCodeOptimised
 import random
 
 
@@ -9,7 +9,7 @@ def change_parameters():
     print(f"New parameters: l = {l}, m = {m}\n")
     parameters = ProposeParameters(l, m)
     bivar_help = BivariatePolynomialHelper(l, m)
-    code_cached = BBCodeCached(l, m)
+    code_cached = BBCodeOptimised(l, m)
     return parameters, bivar_help, code_cached
 
 
@@ -30,7 +30,7 @@ def factorize_bivariate_polynomials():
     m = 12
     parameters = ProposeParameters(l, m)
     bivar_help = BivariatePolynomialHelper(l, m)
-    code_cached = BBCodeCached(l, m)
+    code_cached = BBCodeOptimised(l, m)
 
     num_shots = 10000
 

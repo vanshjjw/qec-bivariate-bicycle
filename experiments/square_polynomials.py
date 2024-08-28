@@ -1,6 +1,6 @@
 from src.helpers.parameters import ProposeParameters
 from src.helpers.polynomials import PolynomialHelper
-from src.core_cached import BBCodeCached
+from src.core_optimised import BBCodeOptimised
 import numpy as np
 
 
@@ -9,7 +9,7 @@ def change_parameters():
     m = np.random.randint(8, 14)
     parameters = ProposeParameters(l, m)
     poly_help = PolynomialHelper(l, m)
-    code_cached = BBCodeCached(l, m)
+    code_cached = BBCodeOptimised(l, m)
     print(f"New parameters: l = {l}, m = {m}")
     print("\n")
     return parameters, poly_help, code_cached
@@ -23,7 +23,7 @@ def square_all_polynomials():
     num_y = 3
     parameters = ProposeParameters(l, m)
     poly_help = PolynomialHelper(l, m)
-    code_cached = BBCodeCached(l, m)
+    code_cached = BBCodeOptimised(l, m)
 
     zero_k = 0
 

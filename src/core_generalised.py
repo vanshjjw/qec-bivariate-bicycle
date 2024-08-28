@@ -8,7 +8,7 @@ import src.distances.distance_from_gap as qdistrand
 import src.distances.distance_from_bposd as bposd
 
 
-class BBCodeGeneral:
+class GeneralGroupAlgebraCodes:
     def __init__(self, generators: list[str] = None, relators: list[str] = None, safe_mode: bool = False):
         if relators is not None:
             self.generators = generators or ["x", "y"]
@@ -82,9 +82,6 @@ class BBCodeGeneral:
 
         rank_H_x = linalg_help.binary_rank(H_x)
         rank_H_z = linalg_help.binary_rank(H_z)
-
-        if self.safe_mode:
-            vd.validate_ranks(rank_H_x, rank_H_z)
 
         # code parameters
         num_physical = 2 * len(H_x)

@@ -8,11 +8,10 @@ import src.distances.distance_from_bposd as bposd
 from src.helpers.polynomials import PolynomialHelper
 from src.helpers.graphs import TannerGraph
 
-class BBCodeCached:
-    def __init__(self, l: int, m: int, safe_mode = False):
+class BBCodeOptimised:
+    def __init__(self, l: int, m: int):
         self.l = l
         self.m = m
-        self.safe_mode = safe_mode
         self.A_expression = None
         self.B_expression = None
         self.H_x = None
@@ -28,15 +27,14 @@ class BBCodeCached:
 
 
     def find_distance(self, n, k, distance_method):
-        distance_safe: bool = self.safe_mode and distance_method != 4
         if distance_method == 1:
-            return brute_force.calculate_distance(self.H_x, self.H_z, n, k, status_updates=distance_safe)
+            return brute_force.calculate_distance(self.H_x, self.H_z, n, k)
         if distance_method == 2:
-            return generators.calculate_distance(self.H_x, self.H_z, n, k, status_updates=distance_safe)
+            return generators.calculate_distance(self.H_x, self.H_z, n, k)
         if distance_method == 3:
-            return qdistrand.calculate_distance(self.H_x, self.H_z, status_updates=distance_safe)
+            return qdistrand.calculate_distance(self.H_x, self.H_z)
         if distance_method == 4:
-            return bposd.calculate_distance(self.H_x, self.H_z, status_updates=distance_safe)
+            return bposd.calculate_distance(self.H_x, self.H_z)
 
 
     def create_cache(self):
@@ -54,11 +52,6 @@ class BBCodeCached:
             self.poly_variables[f"x{i}"] = self.poly_variables[f"x{i-1}"] @ self.poly_variables["x1"]
         for i in range(2, self.m):
             self.poly_variables[f"y{i}"] = self.poly_variables[f"y{i-1}"] @ self.poly_variables["y1"]
-
-        if self.safe_mode:
-            for key, value in self.poly_variables.items():
-                vd.validate_x_y_matrices(value)
-        pass
 
 
     def construct_matrix_from_expression(self, expression: list[str]):
@@ -87,13 +80,6 @@ class BBCodeCached:
 
         H_x = np.concatenate((A, B), axis=1)
         H_z = np.concatenate((B.T, A.T), axis=1)
-
-        if self.safe_mode:
-            vd.validate_A_B_matrices(A, self.A_expression)
-            vd.validate_A_B_matrices(B, self.B_expression)
-            vd.validate_parity_matrices(H_x, H_z)
-            pass
-
         return H_x, H_z
 
 

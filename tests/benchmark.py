@@ -1,5 +1,5 @@
 from src.core import BBCode
-from src.core_cached import BBCodeCached
+from src.core_optimised import BBCodeOptimised
 from src.helpers.parameters import ProposeParameters
 import random
 import time
@@ -26,7 +26,7 @@ def benchmark_cache():
 
         print(f"Benchmarking code cache for l = {l}, m = {m}")
         T1 = time.time()
-        code_cached = BBCodeCached(l, m)
+        code_cached = BBCodeOptimised(l, m)
         for j in range(num_inner_shots):
             A = A_exps[j]
             B = B_exps[j]

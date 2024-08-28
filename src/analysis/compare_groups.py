@@ -1,4 +1,4 @@
-from src.core_general import BBCodeGeneral
+from src.core_generalised import GeneralGroupAlgebraCodes
 
 def codes(codes: dict):
     codes["0"] = {
@@ -21,7 +21,7 @@ def compare_groups():
 
     for i in range(len(Main)):
         example = Main[str(i)]
-        code = BBCodeGeneral().set_expression(example["a"], example["b"]).set_symmetric_base_group(example["order"])
+        code = GeneralGroupAlgebraCodes().set_expression(example["a"], example["b"]).set_symmetric_base_group(example["order"])
 
         n, k, d = code.generate_bb_code(distance_method=distance_method)
 

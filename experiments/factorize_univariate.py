@@ -1,6 +1,6 @@
 from src.helpers.polynomials import PolynomialHelper
 from src.helpers.parameters import ProposeParameters
-from src.core_cached import BBCodeCached
+from src.core_optimised import BBCodeOptimised
 
 
 def factors_as_strings(factors):
@@ -20,9 +20,8 @@ def factorize_disconnected_polynomials():
     m = 14
     parameters = ProposeParameters(l, m)
     poly_help = PolynomialHelper(l, m)
-    code_cached = BBCodeCached(l, m)
+    code_optimised = BBCodeOptimised(l, m)
     num_shots = 50
-
     zero_k = 0
     connected = 0
 
@@ -36,13 +35,13 @@ def factorize_disconnected_polynomials():
         A = parameters.draw_random_monomials(3, 0)
         B = parameters.draw_random_monomials(0, 3)
 
-        n, k, d = code_cached.set_expressions(A, B).generate_bb_code(distance_method=4)
+        n, k, d = code_optimised.set_expressions(A, B).generate_bb_code(distance_method=4)
 
         if k == 0:
             zero_k += 1
             continue
 
-        graph = code_cached.make_graph()
+        graph = code_optimised.make_graph()
         num_components = graph.num_connected_components()
         is_connected = graph.is_connected()
 
@@ -69,8 +68,8 @@ def factorize_disconnected_polynomials():
         for i, a in enumerate(A_Factors[0]):
             for j, b in enumerate(B_Factors[0]):
 
-                n2, k2, d2 = code_cached.set_expressions(a, b).generate_bb_code(distance_method=3)
-                num_components = code_cached.make_graph().num_connected_components()
+                n2, k2, d2 = code_optimised.set_expressions(a, b).generate_bb_code(distance_method=3)
+                num_components = code_optimised.make_graph().num_connected_components()
                 print(f"checking factors a{i} and b{j}: code [{n2}, {k2}, {d2}]: has {num_components} components.")
 
                 if k2 == 0:
@@ -87,8 +86,8 @@ def factorize_disconnected_polynomials():
                 a_raised = poly_help.raise_polynomial_to_power(a, a_power)
                 b_raised = poly_help.raise_polynomial_to_power(b, b_power)
 
-                n3, k3, d3 = code_cached.set_expressions(a_raised, b_raised).generate_bb_code(distance_method=4)
-                num_components_3 = code_cached.make_graph().num_connected_components()
+                n3, k3, d3 = code_optimised.set_expressions(a_raised, b_raised).generate_bb_code(distance_method=4)
+                num_components_3 = code_optimised.make_graph().num_connected_components()
 
                 print(f"checking factors a{i}^{a_power} and b{j}^{b_power}: code [{n3}, {k3}, {d3}]:"
                       f" has {num_components_3} components.")
@@ -109,7 +108,7 @@ def factorize_connected_polynomials():
     m = 14
     parameters = ProposeParameters(l, m)
     poly_help = PolynomialHelper(l, m)
-    code_cached = BBCodeCached(l, m)
+    code_cached = BBCodeOptimised(l, m)
     num_shots = 50
 
     zero_k = 0

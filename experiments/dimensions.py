@@ -1,5 +1,5 @@
 from src.helpers.parameters import ProposeParameters
-from src.core_cached import BBCodeCached
+from src.core_optimised import BBCodeOptimised
 
 
 def search_dimensions():
@@ -19,7 +19,7 @@ def search_dimensions():
             l = i
             m = i
             propose = ProposeParameters(l, m)
-            code_cached = BBCodeCached(l, m)
+            code_cached = BBCodeOptimised(l, m)
 
             average_k = 0
             average_d = 0
