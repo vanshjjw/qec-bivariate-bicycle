@@ -91,9 +91,6 @@ class BBCodeOptimised:
         rank_H_x = linalg_help.binary_rank(H_x)
         rank_H_z = linalg_help.binary_rank(H_z)
 
-        if self.safe_mode:
-            vd.validate_ranks(rank_H_x, rank_H_z)
-
         # code parameters
         num_physical : int = 2 * self.l * self.m
         num_logical : int = num_physical - 2 * rank_H_x

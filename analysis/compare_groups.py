@@ -13,7 +13,6 @@ def codes(codes: dict):
     return codes
 
 
-
 def compare_groups():
     Main = {}
     distance_method = 3
