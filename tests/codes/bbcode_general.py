@@ -1,6 +1,7 @@
 from src.core_general import BBCodeGeneral
 
-def raw_codes(codes: dict):
+def raw_codes():
+    codes = {}
     codes["0"] = {
         "gen": ['x', 'y'],
         "rel": ['y4', 'x6', 'y-1.x.y.x'],
@@ -64,12 +65,8 @@ def display_code(code, n, k, d):
     return
 
 
-def run_bbcode_general_examples():
-    Main = {}
-    distance_method = 3
-    distance_margin = 1.15 # 15% margin of error
-
-    Main = raw_codes(Main)
+def run_bbcode_general_examples(distance_method, distance_margin):
+    Main = raw_codes()
 
     for i in range(len(Main)):
         example = Main[str(i)]
@@ -90,4 +87,6 @@ def run_bbcode_general_examples():
 
 
 if __name__ == "__main__":
-    run_bbcode_general_examples()
+    distance_method = 3
+    distance_margin = 0.5
+    run_bbcode_general_examples(distance_method, distance_margin)

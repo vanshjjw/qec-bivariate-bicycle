@@ -1,12 +1,11 @@
 import galois
-import src.misc.sage_functions as sage_functions
 
 class PolynomialHelper:
     def __init__(self, l, m):
         self.l = l
         self.m = m
     
-    def __construct_expression(self, x_power: int, y_power: int):
+    def _construct_expression(self, x_power: int, y_power: int):
         x_power = x_power % self.l
         y_power = y_power % self.m
         
@@ -19,7 +18,7 @@ class PolynomialHelper:
         return f"x{x_power}.y{y_power}"
 
 
-    def __construct_powers(self, monomial: str):
+    def _construct_powers(self, monomial: str):
         x_power = 0
         y_power = 0
         for mu in monomial.split("."):
@@ -31,11 +30,11 @@ class PolynomialHelper:
 
 
     def construct_expression_from_powers(self, polynomial_powers: list[(int, int)]) -> list[str]:
-        return [self.__construct_expression(x_power, y_power) for x_power, y_power in polynomial_powers]
+        return [self._construct_expression(x_power, y_power) for x_power, y_power in polynomial_powers]
 
 
     def construct_powers_from_expression(self, polynomial_expression: list[str]) -> list[(int, int)]:
-        return [self.__construct_powers(monomial) for monomial in polynomial_expression]
+        return [self._construct_powers(monomial) for monomial in polynomial_expression]
 
 
     def multiply_m1_and_m2_inverse(self, m1: str, m2: str) -> (int, int):
@@ -70,7 +69,7 @@ class PolynomialHelper:
                     if mu[0] == "y":
                         y_power += int(mu[1:]) if len(mu) > 1 else 1
 
-                answer = self.__construct_expression(x_power, y_power)
+                answer = self._construct_expression(x_power, y_power)
                 if answer in result:
                     result.remove(answer)
                 else:
@@ -113,20 +112,20 @@ class PolynomialHelper:
         return answer
 
 
-    def factorize_bivariate(self, polynomial: list[str]) -> (list[str], list[int]):
-        polynomials_powers = self.construct_powers_from_expression(polynomial)
-        factors, factor_powers = sage_functions.factorise(polynomials_powers)
-
-        answer = []
-        answer_exp = []
-
-        for factor, power in zip(factors, factor_powers):
-            values = factor.split(" + ")
-            if len(values) == 1:
-                continue
-            values = [v.replace("^","").replace("*", ".") for v in values]
-            values = [self.__construct_expression(*self.__construct_powers(v)) for v in values]
-            answer.append(values)
-            answer_exp.append(power)
-
-        return answer, factor_powers
+    # def factorize_bivariate(self, polynomial: list[str]) -> (list[str], list[int]):
+    #     polynomials_powers = self.construct_powers_from_expression(polynomial)
+    #     factors, factor_powers = sage_functions.factorise(polynomials_powers)
+    #
+    #     answer = []
+    #     answer_exp = []
+    #
+    #     for factor, power in zip(factors, factor_powers):
+    #         values = factor.split(" + ")
+    #         if len(values) == 1:
+    #             continue
+    #         values = [v.replace("^","").replace("*", ".") for v in values]
+    #         values = [self.__construct_expression(*self.__construct_powers(v)) for v in values]
+    #         answer.append(values)
+    #         answer_exp.append(power)
+    #
+    #     return answer, factor_powers

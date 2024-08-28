@@ -9,5 +9,6 @@ setup(
         'matplotlib==3.4.3',
         'numpy==1.26.2',
         'networkx==3.2.1',
+        'galois==0.4.1'
     ],
 )

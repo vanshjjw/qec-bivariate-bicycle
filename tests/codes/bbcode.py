@@ -28,10 +28,8 @@ def display_code(example: dict, n: int, k: int, d: int):
     return
 
 
-def run_bbcode_examples(custom_codes = False):
+def run_bbcode_examples(distance_method, distance_margin, custom_codes):
     Main = {}
-    distance_method = 3
-    distance_margin = 1.15 # 15% margin of error
 
     if custom_codes:
         check_custom_codes(Main)
@@ -60,4 +58,7 @@ def run_bbcode_examples(custom_codes = False):
 
 
 if __name__ == "__main__":
-    run_bbcode_examples(False)
+    distance_method = 3
+    distance_margin = 1.15
+    custom_codes = False
+    run_bbcode_examples(distance_method, distance_margin, custom_codes)

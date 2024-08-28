@@ -1,16 +1,18 @@
 import json
 import os
 
+
+# Add new codes to include in the tests
 def raw_data():
-    add_codes = {}
-    add_codes["0"] = {
+    new_codes = {}
+    new_codes["0"] = {
         "l": 6,
         "m": 9,
         "a": ["x0", "y1", "y2"],
         "b": ["y3", "x2", "x4"],
         "answer": [108, 16, 6]
     }
-    return add_codes
+    return new_codes
 
 
 def save_raw_data_file(data):

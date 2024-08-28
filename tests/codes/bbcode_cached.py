@@ -24,14 +24,10 @@ def display_code(example: dict, n: int, k: int, d: int):
     print(f"A = {example['a']}, B = {example['b']}")
     print(f"Obtained code: [{n}, {k}, {d}]")
     print(f"Known code: {example['answer']}")
-    exit(1)
 
 
-def run_bbcode_cached_examples(custom_codes = False):
+def run_bbcode_cached_examples(custom_codes, distance_method, distance_margin):
     Main = {}
-    distance_method = 4
-    distance_margin = 1.15 # 15% margin of error
-
     if custom_codes:
         check_custom_codes(Main)
     else:
@@ -52,10 +48,14 @@ def run_bbcode_cached_examples(custom_codes = False):
 
         if not passed:
             display_code(example, n, k, d)
+            exit(1)
 
         print(f"Code {i} passed.")
 
 
 
 if __name__ == "__main__":
-    run_bbcode_cached_examples()
+    custom_codes = False
+    distance_margin = 1.15
+    distance_method = 3
+    run_bbcode_cached_examples(custom_codes, distance_method, distance_margin)

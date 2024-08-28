@@ -12,12 +12,19 @@ def remake_polynomials():
         code = BBCode(l, m, A, B)
         n, k, d = code.generate_bb_code(distance_method=3)
 
+        graph = code.make_graph()
+
+        A, B = graph.deconstruct_polynomials(base_node="r0")
+
         print(f"A : {A}: \nB: {B} \n")
         print(f"code: [{n}, {k}, {d}]")
         print("\n\n")
+        print(f"Deconstructed polynomials: \nA: {A} \nB: {B}")
 
         A = poly_help.multiply_polynomials(A, A)
         B = poly_help.multiply_polynomials(B, B)
+
+
 
 
 

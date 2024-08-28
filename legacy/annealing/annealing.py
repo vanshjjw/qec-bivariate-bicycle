@@ -2,7 +2,7 @@ import numpy as np
 from numpy import random
 from typing import Callable
 import src.core as core
-from legacy.proposal import Proposal
+from legacy.annealing.proposal import Proposal
 
 
 def bbcode_optimisation__function(p : Proposal):
