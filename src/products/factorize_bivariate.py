@@ -1,4 +1,4 @@
-from src.helpers.polynomials import PolynomialHelper
+from src.helpers.bivariates import BivariatePolynomialHelper
 from src.helpers.parameters import ProposeParameters
 from src.core_cached import BBCodeCached
 import random
@@ -8,9 +8,9 @@ def change_parameters():
     l, m = random.randint(10, 20), random.randint(10, 20)
     print(f"New parameters: l = {l}, m = {m}\n")
     parameters = ProposeParameters(l, m)
-    poly_help = PolynomialHelper(l, m)
+    bivar_help = BivariatePolynomialHelper(l, m)
     code_cached = BBCodeCached(l, m)
-    return parameters, poly_help, code_cached
+    return parameters, bivar_help, code_cached
 
 
 
@@ -29,7 +29,7 @@ def factorize_bivariate_polynomials():
     l = 12
     m = 12
     parameters = ProposeParameters(l, m)
-    poly_help = PolynomialHelper(l, m)
+    bivar_help = BivariatePolynomialHelper(l, m)
     code_cached = BBCodeCached(l, m)
 
     num_shots = 10000
@@ -39,7 +39,7 @@ def factorize_bivariate_polynomials():
             print(f"{i}/{num_shots} completed.")
             print("\n")
         if i % 200 == 0 and i != 0:
-            parameters, poly_help, code_cached = change_parameters()
+            parameters, bivar_help, code_cached = change_parameters()
 
         # Factorize Toric Polynomials
         # A = i + x + x^{a}.y^{b}
@@ -59,8 +59,8 @@ def factorize_bivariate_polynomials():
         print(f"Code: [{n}, {k}, {d}]\n")
         print(f"Number of connected components: {num_components}\n")
 
-        A_Factors = poly_help.factorize_bivariate(A)
-        B_Factors = poly_help.factorize_bivariate(B)
+        A_Factors = bivar_help.factorize_bivariate(A)
+        B_Factors = bivar_help.factorize_bivariate(B)
 
         if len(A_Factors[0]) == 1 and len(B_Factors[0]) == 1 and A_Factors[1][0] == 1 and B_Factors[1][0] == 1:
             print("No factorization possible.")
@@ -90,8 +90,8 @@ def factorize_bivariate_polynomials():
                 if a_power == 1 and b_power == 1:
                     continue
 
-                a_raised = poly_help.raise_polynomial_to_power(a, a_power)
-                b_raised = poly_help.raise_polynomial_to_power(b, b_power)
+                a_raised = bivar_help.poly_help.raise_polynomial_to_power(a, a_power)
+                b_raised = bivar_help.poly_help.raise_polynomial_to_power(b, b_power)
 
                 n3, k3, d3 = code_cached.set_expressions(a_raised, b_raised).generate_bb_code(distance_method=4)
                 num_components = code_cached.make_graph().num_connected_components()

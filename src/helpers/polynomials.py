@@ -110,22 +110,3 @@ class PolynomialHelper:
         for _ in range(power):
             answer = self.multiply_polynomials(answer, polynomial)
         return answer
-
-
-    # def factorize_bivariate(self, polynomial: list[str]) -> (list[str], list[int]):
-    #     polynomials_powers = self.construct_powers_from_expression(polynomial)
-    #     factors, factor_powers = sage_functions.factorise(polynomials_powers)
-    #
-    #     answer = []
-    #     answer_exp = []
-    #
-    #     for factor, power in zip(factors, factor_powers):
-    #         values = factor.split(" + ")
-    #         if len(values) == 1:
-    #             continue
-    #         values = [v.replace("^","").replace("*", ".") for v in values]
-    #         values = [self.__construct_expression(*self.__construct_powers(v)) for v in values]
-    #         answer.append(values)
-    #         answer_exp.append(power)
-    #
-    #     return answer, factor_powers
