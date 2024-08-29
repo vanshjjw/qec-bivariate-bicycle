@@ -1,6 +1,8 @@
 
 # BBCode Class Documentation
 
+Code for the `BBCode` class can be found in `src\core.py`.
+
 The class uses the following fields:
 
 *   `l`: The order of the cyclic variable `x`.
