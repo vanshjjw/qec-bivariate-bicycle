@@ -1,5 +1,5 @@
 
-# BBCode Class Documentation
+# BBCode Class
 
 Code for the `BBCode` class can be found in `src\core.py`.
 
@@ -80,8 +80,59 @@ A_prime, B_prime = G.deconstruct_polynomials()
 ```
 
 
+-----------------------------------
+
+# BBCodeOptimised Class
+
+Code for the `BBCodeOptimised` class can be found in `src\core_optimised.py`.
+
+This class is similar to the `BBCode` class but is more efficient for generating multiple codes with the same `l` and `m`. It caches the values of `x` and `y` in the polynomial ring.
+
+Example usage:
+
+```python
+
+from src.helpers.parameters import ProposeParameters
+from src.core_optimised import BBCodeOptimised
+
+# generate 10 different codes with the same l and m
+l = 10
+m = 8
+num_codes = 50
+
+# create an instance of BBCodeOptimised. Only set l and m once
+code = BBCodeOptimised(l, m)
+
+# Help generate random A and B expressions
+# See `src\helpers\parameters.py` for more information
+parameters = ProposeParameters(l, m)
 
 
+# generate codes
+codes = []
+for _ in range(num_codes):
+    # generate random A and B expressions using some method. 
+    # The variables x and y have the l and m for all iterations.
+    A = parameters.draw_bivariate_monomials(num_monomials=3)
+    B = parameters.draw_bivariate_monomials(num_monomials=3)
+    
+    # generate code
+    code.set_expressions(A_expression=A, B_expression=B)
+    n, k, d = code.find_distance(distance_method=3)
+    
+    # analysis for the polynomials and the code parameters
+    ...
+    ...
+    
+# For roughly for l, m < 50, and number of codes > 20, BBCodeOptimised works 2-3X faster than BBCode
+```
 
+-----------------------------------
+
+# GeneralGroupAlgebraCodes Class
+
+Code for the `GeneralGroupAlgebraCodes` class can be found in `src\core_generalised.py`.
+
+Documentation to be added. Look at `tests\codes\bbcode_generalised.py` for input and usage examples.
 
 
