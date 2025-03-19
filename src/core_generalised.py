@@ -1,11 +1,11 @@
 import numpy as np
-import src.helpers.linalg_helpers as linalg_help
-import src.helpers.group_helpers as group_help
-import src.misc.validators as vd
-import src.distances.distance_from_brute_force as brute_force
-import src.distances.distance_from_generators as generators
-import src.distances.distance_from_gap as qdistrand
-import src.distances.distance_from_bposd as bposd
+from .helpers import linalg_helpers as linalg_help
+from .helpers import group_helpers as group_help
+from .misc import validators as vd
+from .distances import distance_from_brute_force as brute_force
+from .distances import distance_from_generators as generators
+from .distances import distance_from_gap as qdistrand
+from .distances import distance_from_bposd as bposd
 
 
 class GeneralGroupAlgebraCodes:

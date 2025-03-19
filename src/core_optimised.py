@@ -1,12 +1,12 @@
 import numpy as np
-import src.helpers.linalg_helpers as linalg_help
-import src.misc.validators as vd
-import src.distances.distance_from_brute_force as brute_force
-import src.distances.distance_from_generators as generators
-import src.distances.distance_from_gap as qdistrand
-import src.distances.distance_from_bposd as bposd
-from src.helpers.polynomials import PolynomialHelper
-from src.helpers.graphs import TannerGraph
+from .helpers import linalg_helpers as linalg_help
+from .misc import validators as vd
+from .distances import distance_from_brute_force as brute_force
+from .distances import distance_from_generators as generators
+from .distances import distance_from_gap as qdistrand
+from .distances import distance_from_bposd as bposd
+from .helpers.polynomials import PolynomialHelper
+from .helpers.graphs import TannerGraph
 
 class BBCodeOptimised:
     def __init__(self, l: int, m: int):

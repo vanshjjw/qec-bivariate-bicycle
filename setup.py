@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='qec-bicycle-bivariate',
-    version='0.1',
+    name='qec-bb',
+    version='1.1.1',
     packages=find_packages(),
     install_requires=[
         'ldpc==0.1.50',
@@ -11,4 +11,18 @@ setup(
         'networkx==3.2.1',
         'galois==0.4.1'
     ],
+    author='Vansh Jhunjhunwala',
+    author_email='vanshjh@gmail.com',
+    description='A package for quantum error correction with bivariate bicycle codes',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
+    url='https://github.com/vanshjjw/qec-bicycle-bivariate',
+    classifiers=[
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Topic :: Scientific/Engineering :: Physics',
+        'Intended Audience :: Science/Research',
+    ],
+    python_requires='>=3.8',
 )
